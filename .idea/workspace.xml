@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e7cc51e-5b1c-492d-8331-00af7e62840b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/files/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/files/centralstation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/__main__.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -174,7 +169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581519795536</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="database backup. started fleshing out main module and placeholder classes">
+      <created>1581526854857</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1581526854857</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -197,6 +199,7 @@
     <MESSAGE value="installed database (not sure if this will migrate well.)" />
     <MESSAGE value="installed database (trying to remove physical dbdump from git.)" />
     <MESSAGE value="installed database (still trying to remove physical dbdump from git.)" />
-    <option name="LAST_COMMIT_MESSAGE" value="installed database (still trying to remove physical dbdump from git.)" />
+    <MESSAGE value="database backup. started fleshing out main module and placeholder classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="database backup. started fleshing out main module and placeholder classes" />
   </component>
 </project>
