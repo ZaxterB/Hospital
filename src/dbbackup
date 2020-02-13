@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.1
--- Dumped by pg_dump version 12.0
+-- Dumped from database version 10.11 (Ubuntu 10.11-1.pgdg18.04+1)
+-- Dumped by pg_dump version 10.11 (Ubuntu 10.11-1.pgdg18.04+1)
 
--- Started on 2020-02-13 16:55:20 GMT
+-- Started on 2020-02-13 20:59:15 GMT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,43 +20,43 @@ SET row_security = off;
 
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
--- TOC entry 207 (class 1259 OID 16428)
--- Name: BedEvent; Type: TABLE; Schema: public; Owner: zbeed
+-- TOC entry 196 (class 1259 OID 1957649029)
+-- Name: BedEvent; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public."BedEvent" (
     bedeventid bigint NOT NULL,
-    eventtime timestamp without time zone,
-    type smallint,
-    patientid bigint,
-    bed smallint,
-    monitortype bigint
+    eventtime timestamp without time zone NOT NULL,
+    type smallint NOT NULL,
+    patientid bigint NOT NULL,
+    bedid smallint NOT NULL,
+    monitortype bigint NOT NULL
 );
 
 
-ALTER TABLE public."BedEvent" OWNER TO zbeed;
+ALTER TABLE public."BedEvent" OWNER TO timc;
 
 --
--- TOC entry 205 (class 1259 OID 16406)
--- Name: StaffEvent; Type: TABLE; Schema: public; Owner: zbeed
+-- TOC entry 197 (class 1259 OID 1957649032)
+-- Name: StaffEvent; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public."StaffEvent" (
     staffeventid bigint NOT NULL,
-    eventtime timestamp without time zone,
-    type smallint,
-    staffid integer
+    eventtime timestamp without time zone NOT NULL,
+    type smallint NOT NULL,
+    staffid integer NOT NULL
 );
 
 
-ALTER TABLE public."StaffEvent" OWNER TO zbeed;
+ALTER TABLE public."StaffEvent" OWNER TO timc;
 
 --
--- TOC entry 208 (class 1259 OID 16433)
--- Name: AllEvents; Type: VIEW; Schema: public; Owner: zbeed
+-- TOC entry 198 (class 1259 OID 1957649035)
+-- Name: AllEvents; Type: VIEW; Schema: public; Owner: timc
 --
 
 CREATE VIEW public."AllEvents" AS
@@ -64,7 +64,7 @@ CREATE VIEW public."AllEvents" AS
     "BedEvent".type,
     "BedEvent".bedeventid,
     "BedEvent".patientid,
-    "BedEvent".bed,
+    "BedEvent".bedid AS bed,
     "BedEvent".monitortype,
     "StaffEvent".staffeventid,
     "StaffEvent".staffid
@@ -72,128 +72,68 @@ CREATE VIEW public."AllEvents" AS
      JOIN public."StaffEvent" USING (eventtime, type));
 
 
-ALTER TABLE public."AllEvents" OWNER TO zbeed;
+ALTER TABLE public."AllEvents" OWNER TO timc;
 
 --
--- TOC entry 202 (class 1259 OID 16385)
--- Name: Bed; Type: TABLE; Schema: public; Owner: zbeed
+-- TOC entry 199 (class 1259 OID 1957649039)
+-- Name: Bed; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public."Bed" (
     bedid integer NOT NULL,
-    number integer
+    number integer NOT NULL
 );
 
 
-ALTER TABLE public."Bed" OWNER TO zbeed;
+ALTER TABLE public."Bed" OWNER TO timc;
 
 --
--- TOC entry 206 (class 1259 OID 16416)
--- Name: Monitortype; Type: TABLE; Schema: public; Owner: zbeed
+-- TOC entry 200 (class 1259 OID 1957649042)
+-- Name: Monitortype; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public."Monitortype" (
     monitortypeid bigint NOT NULL,
-    name character varying,
-    defaultmax integer,
-    defaultmin integer,
-    dangermax integer,
-    dangermin integer
+    name character varying NOT NULL,
+    defaultmax integer NOT NULL,
+    defaultmin integer NOT NULL,
+    dangermax integer NOT NULL,
+    dangermin integer NOT NULL
 );
 
 
-ALTER TABLE public."Monitortype" OWNER TO zbeed;
+ALTER TABLE public."Monitortype" OWNER TO timc;
 
 --
--- TOC entry 204 (class 1259 OID 16398)
--- Name: Patient; Type: TABLE; Schema: public; Owner: zbeed
+-- TOC entry 201 (class 1259 OID 1957649048)
+-- Name: Patient; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public."Patient" (
     patientid bigint NOT NULL,
-    name character varying
+    name character varying NOT NULL
 );
 
 
-ALTER TABLE public."Patient" OWNER TO zbeed;
+ALTER TABLE public."Patient" OWNER TO timc;
 
 --
--- TOC entry 203 (class 1259 OID 16390)
--- Name: Staff; Type: TABLE; Schema: public; Owner: zbeed
+-- TOC entry 202 (class 1259 OID 1957649054)
+-- Name: Staff; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public."Staff" (
     staffid integer NOT NULL,
-    name character varying,
-    type smallint
+    name character varying NOT NULL,
+    type smallint NOT NULL
 );
 
 
-ALTER TABLE public."Staff" OWNER TO zbeed;
+ALTER TABLE public."Staff" OWNER TO timc;
 
 --
--- TOC entry 3222 (class 0 OID 16385)
--- Dependencies: 202
--- Data for Name: Bed; Type: TABLE DATA; Schema: public; Owner: zbeed
---
-
-COPY public."Bed" (bedid, number) FROM stdin;
-\.
-
-
---
--- TOC entry 3227 (class 0 OID 16428)
--- Dependencies: 207
--- Data for Name: BedEvent; Type: TABLE DATA; Schema: public; Owner: zbeed
---
-
-COPY public."BedEvent" (bedeventid, eventtime, type, patientid, bed, monitortype) FROM stdin;
-\.
-
-
---
--- TOC entry 3226 (class 0 OID 16416)
--- Dependencies: 206
--- Data for Name: Monitortype; Type: TABLE DATA; Schema: public; Owner: zbeed
---
-
-COPY public."Monitortype" (monitortypeid, name, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
-\.
-
-
---
--- TOC entry 3224 (class 0 OID 16398)
--- Dependencies: 204
--- Data for Name: Patient; Type: TABLE DATA; Schema: public; Owner: zbeed
---
-
-COPY public."Patient" (patientid, name) FROM stdin;
-\.
-
-
---
--- TOC entry 3223 (class 0 OID 16390)
--- Dependencies: 203
--- Data for Name: Staff; Type: TABLE DATA; Schema: public; Owner: zbeed
---
-
-COPY public."Staff" (staffid, name, type) FROM stdin;
-\.
-
-
---
--- TOC entry 3225 (class 0 OID 16406)
--- Dependencies: 205
--- Data for Name: StaffEvent; Type: TABLE DATA; Schema: public; Owner: zbeed
---
-
-COPY public."StaffEvent" (staffeventid, eventtime, type, staffid) FROM stdin;
-\.
-
-
---
--- TOC entry 3093 (class 2606 OID 16432)
--- Name: BedEvent BedEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: zbeed
+-- TOC entry 2810 (class 2606 OID 1957649061)
+-- Name: BedEvent BedEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public."BedEvent"
@@ -201,8 +141,8 @@ ALTER TABLE ONLY public."BedEvent"
 
 
 --
--- TOC entry 3083 (class 2606 OID 16389)
--- Name: Bed Bed_pkey; Type: CONSTRAINT; Schema: public; Owner: zbeed
+-- TOC entry 2814 (class 2606 OID 1957649063)
+-- Name: Bed Bed_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public."Bed"
@@ -210,8 +150,8 @@ ALTER TABLE ONLY public."Bed"
 
 
 --
--- TOC entry 3091 (class 2606 OID 16423)
--- Name: Monitortype Monitortype_pkey; Type: CONSTRAINT; Schema: public; Owner: zbeed
+-- TOC entry 2816 (class 2606 OID 1957649065)
+-- Name: Monitortype Monitortype_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public."Monitortype"
@@ -219,8 +159,8 @@ ALTER TABLE ONLY public."Monitortype"
 
 
 --
--- TOC entry 3087 (class 2606 OID 16405)
--- Name: Patient Patient_pkey; Type: CONSTRAINT; Schema: public; Owner: zbeed
+-- TOC entry 2818 (class 2606 OID 1957649067)
+-- Name: Patient Patient_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public."Patient"
@@ -228,8 +168,8 @@ ALTER TABLE ONLY public."Patient"
 
 
 --
--- TOC entry 3089 (class 2606 OID 16410)
--- Name: StaffEvent StaffEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: zbeed
+-- TOC entry 2812 (class 2606 OID 1957649069)
+-- Name: StaffEvent StaffEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public."StaffEvent"
@@ -237,8 +177,8 @@ ALTER TABLE ONLY public."StaffEvent"
 
 
 --
--- TOC entry 3085 (class 2606 OID 16397)
--- Name: Staff Staff_pkey; Type: CONSTRAINT; Schema: public; Owner: zbeed
+-- TOC entry 2820 (class 2606 OID 1957649071)
+-- Name: Staff Staff_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public."Staff"
@@ -246,15 +186,42 @@ ALTER TABLE ONLY public."Staff"
 
 
 --
--- TOC entry 3094 (class 2606 OID 16411)
--- Name: StaffEvent staffid; Type: FK CONSTRAINT; Schema: public; Owner: zbeed
+-- TOC entry 2821 (class 2606 OID 1957649077)
+-- Name: BedEvent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+--
+
+ALTER TABLE ONLY public."BedEvent"
+    ADD CONSTRAINT bedevent_fk FOREIGN KEY (bedid) REFERENCES public."Bed"(bedid);
+
+
+--
+-- TOC entry 2823 (class 2606 OID 1957649092)
+-- Name: BedEvent monitortype_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+--
+
+ALTER TABLE ONLY public."BedEvent"
+    ADD CONSTRAINT monitortype_fk FOREIGN KEY (monitortype) REFERENCES public."Monitortype"(monitortypeid);
+
+
+--
+-- TOC entry 2822 (class 2606 OID 1957649082)
+-- Name: BedEvent patient_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+--
+
+ALTER TABLE ONLY public."BedEvent"
+    ADD CONSTRAINT patient_fk FOREIGN KEY (patientid) REFERENCES public."Patient"(patientid);
+
+
+--
+-- TOC entry 2824 (class 2606 OID 1957649097)
+-- Name: StaffEvent staffevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public."StaffEvent"
-    ADD CONSTRAINT staffid FOREIGN KEY (staffid) REFERENCES public."Staff"(staffid);
+    ADD CONSTRAINT staffevent_fk FOREIGN KEY (staffid) REFERENCES public."Staff"(staffid);
 
 
--- Completed on 2020-02-13 16:55:20 GMT
+-- Completed on 2020-02-13 20:59:15 GMT
 
 --
 -- PostgreSQL database dump complete
