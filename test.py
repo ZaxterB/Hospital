@@ -26,10 +26,10 @@ test.py
 import sys
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QPushButton, \
-     QLabel, QTableWidget, QTableWidgetItem, QInputDialog
-from PyQt5.QtGui import QPainter, QBrush, QColor
+     QLabel, QTableWidget, QTableWidgetItem, QInputDialog, QSizeGrip
+from PyQt5.QtGui import QPainter, QBrush, QColor, QIcon
 from PyQt5.QtCore import Qt, QPoint 
-# from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon
 # from PyQt5.QtCore import pyqtSlot
 
 
@@ -61,6 +61,7 @@ def open_calculator():
 
 if __name__ == '__main__':
    app = QApplication([])
+   app.setStyle('Windows')
 
    window = QMainWindow()
 
@@ -106,6 +107,7 @@ if __name__ == '__main__':
    window.setWindowTitle('Hospital Bed Monitor')
    window.setMinimumSize(500, 200)
 
+   window.showMaximized()
    window.show()
 
    sys.exit(app.exec_())
