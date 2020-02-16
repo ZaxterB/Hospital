@@ -30,7 +30,7 @@
      <attribute name="title">
       <string>Shifts</string>
      </attribute>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="tblShifts">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -136,7 +136,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QTableWidget" name="tableWidget_2">
+     <widget class="QTableWidget" name="tblIncidents">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -214,7 +214,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QTableWidget" name="tableWidget_3">
+     <widget class="QTableWidget" name="tblStaff">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -292,7 +292,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QTableWidget" name="tableWidget_4">
+     <widget class="QTableWidget" name="tblBays">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -360,7 +360,7 @@
        <string>Sort:</string>
       </property>
      </widget>
-     <widget class="QTableWidget" name="tableWidget_5">
+     <widget class="QTableWidget" name="tblModules">
       <property name="geometry">
        <rect>
         <x>50</x>
