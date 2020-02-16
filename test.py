@@ -25,23 +25,18 @@ test.py
 
 import sys
 from PyQt5 import QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QPushButton, \
-     QLabel, QTableWidget, QTableWidgetItem, QInputDialog
-from PyQt5.QtGui import QPainter, QBrush, QColor
-from PyQt5.QtCore import Qt, QPoint 
-# from PyQt5.QtGui import QIcon
-# from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
 
 class mine(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
-        uic.loadUi('/tmp/qttest/mainwindow.ui', self)
+        uic.loadUi('mainwindow.ui', self)
 
 if __name__ == '__main__':
-   app = QApplication([])
+    app = QApplication([])
 
-   window = mine()
-   window.show()
+    window = mine()
+    window.show()
 
-   sys.exit(app.exec_())
+    sys.exit(app.exec_())
