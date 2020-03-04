@@ -2,10 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.11 (Ubuntu 10.11-1.pgdg18.04+1)
--- Dumped by pg_dump version 10.11 (Ubuntu 10.11-1.pgdg18.04+1)
-
--- Started on 2020-02-13 20:59:15 GMT
+-- Dumped from database version 10.12 (Ubuntu 10.12-2.pgdg18.04+1)
+-- Dumped by pg_dump version 10.12 (Ubuntu 10.12-2.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -23,11 +21,10 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 196 (class 1259 OID 1957649029)
--- Name: BedEvent; Type: TABLE; Schema: public; Owner: timc
+-- Name: bedevent; Type: TABLE; Schema: public; Owner: timc
 --
 
-CREATE TABLE public."BedEvent" (
+CREATE TABLE public.bedevent (
     bedeventid bigint NOT NULL,
     eventtime timestamp without time zone NOT NULL,
     type smallint NOT NULL,
@@ -37,14 +34,13 @@ CREATE TABLE public."BedEvent" (
 );
 
 
-ALTER TABLE public."BedEvent" OWNER TO timc;
+ALTER TABLE public.bedevent OWNER TO timc;
 
 --
--- TOC entry 197 (class 1259 OID 1957649032)
--- Name: StaffEvent; Type: TABLE; Schema: public; Owner: timc
+-- Name: staffevent; Type: TABLE; Schema: public; Owner: timc
 --
 
-CREATE TABLE public."StaffEvent" (
+CREATE TABLE public.staffevent (
     staffeventid bigint NOT NULL,
     eventtime timestamp without time zone NOT NULL,
     type smallint NOT NULL,
@@ -52,47 +48,44 @@ CREATE TABLE public."StaffEvent" (
 );
 
 
-ALTER TABLE public."StaffEvent" OWNER TO timc;
+ALTER TABLE public.staffevent OWNER TO timc;
 
 --
--- TOC entry 198 (class 1259 OID 1957649035)
 -- Name: AllEvents; Type: VIEW; Schema: public; Owner: timc
 --
 
 CREATE VIEW public."AllEvents" AS
- SELECT "BedEvent".eventtime,
-    "BedEvent".type,
-    "BedEvent".bedeventid,
-    "BedEvent".patientid,
-    "BedEvent".bedid AS bed,
-    "BedEvent".monitortype,
-    "StaffEvent".staffeventid,
-    "StaffEvent".staffid
-   FROM (public."BedEvent"
-     JOIN public."StaffEvent" USING (eventtime, type));
+ SELECT bedevent.eventtime,
+    bedevent.type,
+    bedevent.bedeventid,
+    bedevent.patientid,
+    bedevent.bedid AS bed,
+    bedevent.monitortype,
+    staffevent.staffeventid,
+    staffevent.staffid
+   FROM (public.bedevent
+     JOIN public.staffevent USING (eventtime, type));
 
 
 ALTER TABLE public."AllEvents" OWNER TO timc;
 
 --
--- TOC entry 199 (class 1259 OID 1957649039)
--- Name: Bed; Type: TABLE; Schema: public; Owner: timc
+-- Name: bed; Type: TABLE; Schema: public; Owner: timc
 --
 
-CREATE TABLE public."Bed" (
+CREATE TABLE public.bed (
     bedid integer NOT NULL,
     number integer NOT NULL
 );
 
 
-ALTER TABLE public."Bed" OWNER TO timc;
+ALTER TABLE public.bed OWNER TO timc;
 
 --
--- TOC entry 200 (class 1259 OID 1957649042)
--- Name: Monitortype; Type: TABLE; Schema: public; Owner: timc
+-- Name: monitortype; Type: TABLE; Schema: public; Owner: timc
 --
 
-CREATE TABLE public."Monitortype" (
+CREATE TABLE public.monitortype (
     monitortypeid bigint NOT NULL,
     name character varying NOT NULL,
     defaultmax integer NOT NULL,
@@ -102,126 +95,112 @@ CREATE TABLE public."Monitortype" (
 );
 
 
-ALTER TABLE public."Monitortype" OWNER TO timc;
+ALTER TABLE public.monitortype OWNER TO timc;
 
 --
--- TOC entry 201 (class 1259 OID 1957649048)
--- Name: Patient; Type: TABLE; Schema: public; Owner: timc
+-- Name: patient; Type: TABLE; Schema: public; Owner: timc
 --
 
-CREATE TABLE public."Patient" (
+CREATE TABLE public.patient (
     patientid bigint NOT NULL,
     name character varying NOT NULL
 );
 
 
-ALTER TABLE public."Patient" OWNER TO timc;
+ALTER TABLE public.patient OWNER TO timc;
 
 --
--- TOC entry 202 (class 1259 OID 1957649054)
--- Name: Staff; Type: TABLE; Schema: public; Owner: timc
+-- Name: staff; Type: TABLE; Schema: public; Owner: timc
 --
 
-CREATE TABLE public."Staff" (
+CREATE TABLE public.staff (
     staffid integer NOT NULL,
     name character varying NOT NULL,
     type smallint NOT NULL
 );
 
 
-ALTER TABLE public."Staff" OWNER TO timc;
+ALTER TABLE public.staff OWNER TO timc;
 
 --
--- TOC entry 2810 (class 2606 OID 1957649061)
--- Name: BedEvent BedEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent BedEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."BedEvent"
+ALTER TABLE ONLY public.bedevent
     ADD CONSTRAINT "BedEvent_pkey" PRIMARY KEY (bedeventid);
 
 
 --
--- TOC entry 2814 (class 2606 OID 1957649063)
--- Name: Bed Bed_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: bed Bed_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."Bed"
+ALTER TABLE ONLY public.bed
     ADD CONSTRAINT "Bed_pkey" PRIMARY KEY (bedid);
 
 
 --
--- TOC entry 2816 (class 2606 OID 1957649065)
--- Name: Monitortype Monitortype_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: monitortype Monitortype_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."Monitortype"
+ALTER TABLE ONLY public.monitortype
     ADD CONSTRAINT "Monitortype_pkey" PRIMARY KEY (monitortypeid);
 
 
 --
--- TOC entry 2818 (class 2606 OID 1957649067)
--- Name: Patient Patient_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: patient Patient_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."Patient"
+ALTER TABLE ONLY public.patient
     ADD CONSTRAINT "Patient_pkey" PRIMARY KEY (patientid);
 
 
 --
--- TOC entry 2812 (class 2606 OID 1957649069)
--- Name: StaffEvent StaffEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: staffevent StaffEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."StaffEvent"
+ALTER TABLE ONLY public.staffevent
     ADD CONSTRAINT "StaffEvent_pkey" PRIMARY KEY (staffeventid);
 
 
 --
--- TOC entry 2820 (class 2606 OID 1957649071)
--- Name: Staff Staff_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: staff Staff_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."Staff"
+ALTER TABLE ONLY public.staff
     ADD CONSTRAINT "Staff_pkey" PRIMARY KEY (staffid);
 
 
 --
--- TOC entry 2821 (class 2606 OID 1957649077)
--- Name: BedEvent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."BedEvent"
-    ADD CONSTRAINT bedevent_fk FOREIGN KEY (bedid) REFERENCES public."Bed"(bedid);
-
-
---
--- TOC entry 2823 (class 2606 OID 1957649092)
--- Name: BedEvent monitortype_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
---
-
-ALTER TABLE ONLY public."BedEvent"
-    ADD CONSTRAINT monitortype_fk FOREIGN KEY (monitortype) REFERENCES public."Monitortype"(monitortypeid);
+ALTER TABLE ONLY public.bedevent
+    ADD CONSTRAINT bedevent_fk FOREIGN KEY (bedid) REFERENCES public.bed(bedid);
 
 
 --
--- TOC entry 2822 (class 2606 OID 1957649082)
--- Name: BedEvent patient_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent monitortype_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."BedEvent"
-    ADD CONSTRAINT patient_fk FOREIGN KEY (patientid) REFERENCES public."Patient"(patientid);
+ALTER TABLE ONLY public.bedevent
+    ADD CONSTRAINT monitortype_fk FOREIGN KEY (monitortype) REFERENCES public.monitortype(monitortypeid);
 
 
 --
--- TOC entry 2824 (class 2606 OID 1957649097)
--- Name: StaffEvent staffevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent patient_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public."StaffEvent"
-    ADD CONSTRAINT staffevent_fk FOREIGN KEY (staffid) REFERENCES public."Staff"(staffid);
+ALTER TABLE ONLY public.bedevent
+    ADD CONSTRAINT patient_fk FOREIGN KEY (patientid) REFERENCES public.patient(patientid);
 
 
--- Completed on 2020-02-13 20:59:15 GMT
+--
+-- Name: staffevent staffevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+--
+
+ALTER TABLE ONLY public.staffevent
+    ADD CONSTRAINT staffevent_fk FOREIGN KEY (staffid) REFERENCES public.staff(staffid);
+
 
 --
 -- PostgreSQL database dump complete
