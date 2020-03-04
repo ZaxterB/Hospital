@@ -56,11 +56,12 @@ class Db(object):
             if self.__cursor__.rowcount < 1:
                 return None
             else:
-                return self.__cursor__.fetchall()
+                # get column names from query
+                colnames = [desc[0] for desc in self.__cursor__.description]
+                return colnames, self.__cursor__.fetchall()
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             raise RuntimeError("Error in {0}.{1}(): {2} at line {3}".
                                format(self.__modulename__, __functionname__,
                                       str(exc_value),
                                       str(exc_traceback.tb_lineno)))
-            return
