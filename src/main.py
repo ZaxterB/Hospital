@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 import sys
 # app-specific database interface class
@@ -13,7 +13,7 @@ from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget
 
 """
-test.py
+main.py
 
   created by:   Tim Clarke
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     window = mine()
     window.show()
 
-    db.query('SET SEARCH_PATH TO public;')
-    db.query('select * from "Bed" where bedid = %s', [1])
+    db.query('set search_path to public;')
+    retval = db.query('select * from bed where bedid = %s', [1])
 
     sys.exit(app.exec_())
