@@ -7,6 +7,8 @@ __license__ = "Private"
 __version__ = "0.0.4"
 
 import sys
+# app-specific constants
+import constants
 # app-specific database interface class
 from db import Db
 from PyQt5 import QtGui, uic
@@ -50,7 +52,7 @@ class mine(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication([])
-    db = Db('localhost', 'hospital')
+    db = Db(constants.DBLOCATION, constants.DBNAME)
 
     window = mine()
     window.show()
