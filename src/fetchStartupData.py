@@ -26,6 +26,13 @@ def fetchStartupData():
         # initialise database connection class
         db = Db(constants.DBLOCATION, constants.DBNAME)
 
+        db.query('set search_path to public;')
+        beds = db.query('select * from bed', None)
+        bedevent = db.query('select * from bedevent', None)
+        monitortypes = db.query('select * from monitortype', None)
+        patient = db.query('select * from patient', None)
+        staff = db.query('select * from staff', None)
+        staffevent = db.query('select * from staffevent', None)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print("Error in fetchStartupData(): {0} at line {1}".format(str(exc_value),
