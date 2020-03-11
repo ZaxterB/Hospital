@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 import sys
 # app-specific constants
@@ -15,9 +15,8 @@ from db import Db
 from fetchStartupData import fetchStartupData
 # core application window class
 from coreWindow import coreWindow
-# PyQt libraries
-from PyQt5 import QtGui, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget
+# main PyQt library
+from PyQt5.QtWidgets import QApplication
 
 """
 main.py
@@ -35,7 +34,7 @@ if __name__ == '__main__':
     try:
         # start a Qt windowing application
         app = QApplication([])
-        
+
         # initialise database connection class
         db = Db(constants.DBLOCATION, constants.DBNAME)
         fetchStartupData()
@@ -44,10 +43,11 @@ if __name__ == '__main__':
         window = coreWindow()
         window.show()
 
-    except Exception as e:
+    except Exception:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print("Error in main(): {0} at line {1}".format(str(exc_value),
-                                                        str(exc_traceback.tb_lineno)))
+        print("Error in main(): {0} at line {1}".
+              format(str(exc_value),
+                     str(exc_traceback.tb_lineno)))
         quit()
 
     sys.exit(app.exec_())

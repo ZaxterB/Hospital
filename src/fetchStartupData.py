@@ -4,13 +4,18 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 import sys
 # app-specific constants
 import constants
 # app-specific database interface class
 from db import Db
+# app model classes
+from bed import Bed
+from module import Module
+from monitortype import Monitortype
+from patient import Patient
 
 """
 fetchStartupData.py
