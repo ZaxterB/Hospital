@@ -11,6 +11,7 @@ import sys
 import constants
 # app-specific database interface class
 from db import Db
+# PyQt libraries
 from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget
 
@@ -26,38 +27,22 @@ main.py
 """
 
 
-# TODO useful in debugging, remove for live
-def dump(obj):
-    for attr in dir(obj):
-        print("obj.%s = %r" % (attr, getattr(obj, attr)))
-
-
-class mine(QMainWindow):
-    def __init__(self, parent=None):
-        QMainWindow.__init__(self, parent)
-        uic.loadUi('files/mainwindow.ui', self)
-        self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
-        self.setHandlers()
-
-    def setHandlers(self):
-        tblWidget = self.findChild(QTableWidget, 'tblShifts')
-        if tblWidget is not None:
-            tblWidget.setEnabled(False)
-            tblWidget.clicked.connect(self.alert)
-
-    def alert(self, index):
-        """ argments: self=MainWindow, index=QModelIndex of clicked """
-        print(index.row(), index.column())
-
-
 if __name__ == '__main__':
-    app = QApplication([])
-    db = Db(constants.DBLOCATION, constants.DBNAME)
+    try:
+        # start a Qt windowing application
+        app = QApplication([])
+        
+        # initialise database connection class
+        db = Db(constants.DBLOCATION, constants.DBNAME)
+        fetchStartupData()
 
-    window = mine()
-    window.show()
+        # show the main window
+        window = coreWindow()
+        window.show()
 
-    db.query('set search_path to public;')
-    retval = db.query('select * from bed where bedid = %s', [1])
+    except Exception as e:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print("Error in main(): {0} at line {1}".format(str(exc_value),
+                                                        str(exc_traceback.tb_lineno)))
 
     sys.exit(app.exec_())

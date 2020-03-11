@@ -23,9 +23,17 @@
       <height>481</height>
      </rect>
     </property>
-    <property name="currentIndex">
-     <number>0</number>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
     </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="tabMonitor">
+     <attribute name="title">
+      <string>Monitor</string>
+     </attribute>
+    </widget>
     <widget class="QWidget" name="tabShifts">
      <attribute name="title">
       <string>Shifts</string>
@@ -265,7 +273,12 @@
       </column>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="tabBeds">
+     <attribute name="title">
+      <string>Beds</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tabBays">
      <attribute name="title">
       <string>Bays</string>
      </attribute>
@@ -422,28 +435,6 @@
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuMOD005622_Hospital_Monitoring_System">
-    <property name="title">
-     <string>Monitor</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuConfigure">
-    <property name="title">
-     <string>Configure</string>
-    </property>
-   </widget>
-   <addaction name="menuMOD005622_Hospital_Monitoring_System"/>
-   <addaction name="menuConfigure"/>
-  </widget>
  </widget>
  <resources/>
  <connections/>
