@@ -7,6 +7,7 @@ __license__ = "Private"
 __version__ = "0.0.6"
 
 import sys
+import os
 # app-specific constants
 import constants
 # app-specific database interface class
@@ -32,6 +33,11 @@ main.py
 
 if __name__ == '__main__':
     try:
+        # change to the application directory so we can get all files
+        appDir = os.path.dirname(os.path.realpath(__file__))
+        if appDir != os.getcwd():
+            os.chdir(appDir)
+
         # start a Qt windowing application
         app = QApplication([])
 
