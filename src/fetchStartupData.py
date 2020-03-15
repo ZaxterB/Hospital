@@ -23,6 +23,8 @@ fetchStartupData.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      read all data from database required for system initialisation
+  arguments:    none
+  returns:      nothing
 """
 
 
@@ -40,6 +42,6 @@ def fetchStartupData():
         staffevent = db.query('select * from staffevent', None)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print("Error in fetchStartupData(): {0} at line {1}".format(str(exc_value),
-                                                                    str(exc_traceback.tb_lineno)))
+        raise RuntimeError("Error in fetchStartupData(): {0} at line {1}".
+                           format(str(exc_value), str(exc_traceback.tb_lineno)))
         quit()

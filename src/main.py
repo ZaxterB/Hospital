@@ -45,9 +45,7 @@ if __name__ == '__main__':
 
     except Exception:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print("Error in main(): {0} at line {1}".
-              format(str(exc_value),
-                     str(exc_traceback.tb_lineno)))
-        quit()
+        raise RuntimeError("Error in main(): {0} at line {1}".
+                           format(str(exc_value), str(exc_traceback.tb_lineno)))
 
     sys.exit(app.exec_())

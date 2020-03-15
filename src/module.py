@@ -12,6 +12,8 @@ module.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      module class
+  arguments:
+  returns:
 """
 
 

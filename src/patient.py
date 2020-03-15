@@ -12,6 +12,8 @@ patient.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      patient class
+  arguments:
+  returns:
 """
 
 

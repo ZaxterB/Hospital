@@ -21,6 +21,8 @@ coreWindow.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      main window control module
+  arguments:    instantion: none
+  returns:      (see methods)
 """
 
 

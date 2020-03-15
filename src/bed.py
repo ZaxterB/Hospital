@@ -12,6 +12,8 @@ bed.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      bed class
+  arguments:
+  returns:
 """
 
 

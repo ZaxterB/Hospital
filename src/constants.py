@@ -13,6 +13,8 @@ constants.py
 
   date:         4mar2020
   purpose:      application constants
+  arguments:
+  returns:
 """
 
 DBLOCATION = 'localhost'

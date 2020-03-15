@@ -17,6 +17,8 @@ db.py
 
   date:         29feb2020
   purpose:      singleton database connection and query execution
+  arguments:    instantion: host and database strings
+  returns:      (see methods)
 """
 
 
