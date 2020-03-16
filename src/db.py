@@ -48,7 +48,9 @@ class Db(object):
                                       str(exc_traceback.tb_lineno)))
 
     def query(self, sql, *args):
-        """execute sql statement with variable number of arguments"""
+        """execute sql statement with variable number of arguments
+            returns: list of column names, list of lists of row data
+            """
         __functionname__ = 'query'
 
         try:
@@ -56,7 +58,7 @@ class Db(object):
                 raise RuntimeError('Empty query statement given')
             self.__cursor__.execute(sql, *args)
             if self.__cursor__.rowcount < 1:
-                return None
+                return None, None
             else:
                 # get column names from query
                 colnames = [desc[0] for desc in self.__cursor__.description]

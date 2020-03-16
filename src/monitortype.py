@@ -23,5 +23,5 @@ class MonitorType():
 
     def __init__(self, db):
         colnames, data = db.query('select * from monitortype', None)
-        self.__beds__ = colnames
-        self.__beds__.append(data)
+        self.__monitortypes__ = colnames
+        self.__monitortypes__.append(data)
