@@ -18,5 +18,10 @@ patient.py
 
 
 class Patient():
-    def __init__(self):
-        pass
+    """private list of patients"""
+    __patients__ = []
+
+    def __init__(self, db):
+        colnames, data = db.query('select * from patient', None)
+        self.__patients__ = colnames
+        self.__patients__.append(data)

@@ -17,6 +17,11 @@ monitortype.py
 """
 
 
-class Monitortype():
-    def __init__(self):
-        pass
+class MonitorType():
+    """private list of monitor types"""
+    __monitortypes__ = []
+
+    def __init__(self, db):
+        colnames, data = db.query('select * from monitortype', None)
+        self.__beds__ = colnames
+        self.__beds__.append(data)

@@ -13,18 +13,18 @@ from db import Db
 bed.py
 
   created by:   Tim Clarke
-  date:         11mar2020
-  purpose:      bed class
+  date:         16mar2020
+  purpose:      staff class
   arguments:
   returns:
 """
 
 
-class Bed():
-    """private list of beds"""
-    __beds__ = []
+class Staff():
+    """private list of staff"""
+    __staff__ = []
 
     def __init__(self, db):
-        colnames, data = db.query('select * from bed', None)
-        self.__beds__ = colnames
-        self.__beds__.append(data)
+        colnames, data = db.query('select * from staff', None)
+        self.__staff__ = colnames
+        self.__staff__.append(data)

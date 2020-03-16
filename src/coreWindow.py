@@ -11,6 +11,11 @@ import sys
 import constants
 # app-specific database interface class
 from db import Db
+# app-specific objects
+from bed import Bed
+from monitortype import MonitorType
+from patient import Patient
+from staff import Staff
 # PyQt libraries
 from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget
@@ -25,6 +30,10 @@ coreWindow.py
   returns:      (see methods)
 """
 
+beds = None
+monitorTypes = None
+patients = None
+staff = None
 
 class coreWindow(QMainWindow):
     def __init__(self, parent=None):

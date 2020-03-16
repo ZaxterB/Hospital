@@ -12,8 +12,11 @@ import os
 import constants
 # app-specific database interface class
 from db import Db
-# read all data from database required for system initialisation
-from fetchStartupData import fetchStartupData
+# app-specific objects
+from bed import Bed
+from monitortype import MonitorType
+from patient import Patient
+from staff import Staff
 # core application window class
 from coreWindow import coreWindow
 # main PyQt library
@@ -43,7 +46,13 @@ if __name__ == '__main__':
 
         # initialise database connection class
         db = Db(constants.DBLOCATION, constants.DBNAME)
-        fetchStartupData()
+        db.query('set search_path to public;')
+
+        # initialise load all classes from database
+        coreWindow.beds = Bed(db)
+        coreWindow.monitortypes = MonitorType(db)
+        coreWindow.patients = Patient(db)
+        coreWindow.staff = Staff(db)
 
         # show the main window
         window = coreWindow()
