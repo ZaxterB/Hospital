@@ -48,14 +48,16 @@ if __name__ == '__main__':
         db = Db(constants.DBLOCATION, constants.DBNAME)
         db.query('set search_path to public;')
 
-        # initialise load all classes from database
-        coreWindow.beds = Bed(db)
-        coreWindow.monitortypes = MonitorType(db)
-        coreWindow.patients = Patient(db)
-        coreWindow.staff = Staff(db)
+        window = coreWindow()
+
+        # initially load all classes from database
+        window.beds = Bed(db).getBeds()
+        window.monitortypes = MonitorType(db).getMonitorTypes()
+        window.patients = Patient(db).getPatients()
+        window.staff = Staff(db).getStaff()
+        window.populateTables()
 
         # show the main window
-        window = coreWindow()
         window.show()
 
     except Exception:

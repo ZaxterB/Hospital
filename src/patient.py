@@ -13,15 +13,19 @@ patient.py
   date:         11mar2020
   purpose:      patient class
   arguments:
-  returns:
+  returns:      TODO
 """
 
 
 class Patient():
     """private list of patients"""
-    __patients__ = []
+    __patients__ = {}
 
     def __init__(self, db):
         colnames, data = db.query('select * from patient', None)
-        self.__patients__ = colnames
-        self.__patients__.append(data)
+        if colnames is not None:
+            self.__patients__['colnames'] = colnames
+            self.__patients__['data'] = data
+
+    def getPatients(self):
+        return self.__patients__

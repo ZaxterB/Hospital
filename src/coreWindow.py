@@ -18,7 +18,7 @@ from patient import Patient
 from staff import Staff
 # PyQt libraries
 from PyQt5 import QtGui, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 
 """
 coreWindow.py
@@ -26,22 +26,43 @@ coreWindow.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      main window control module
-  arguments:    instantion: none
-  returns:      (see methods)
+  arguments:    TODO instantion: none
+  returns:      (TODO see methods)
 """
 
-beds = None
-monitorTypes = None
-patients = None
-staff = None
+"""TODO"""
+class QtTablePopulate():
+    def __init__(self, widget, data):
+        if data is not None and len(data):
+            widget.setHorizontalHeaderLabels(data['colnames'])
+            for rowNum, row in enumerate(data['data']):
+                for colNum, element in enumerate(row):
+                    item = QTableWidgetItem(element)
+                    widget.setItem(colNum, rowNum, item)
+            widget.resizeColumnsToContents()
 
 class coreWindow(QMainWindow):
+    beds = None
+    monitorTypes = None
+    modules = None
+    patients = None
+    staff = None
+
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
         uic.loadUi('files/mainwindow.ui', self)
         self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
         self.setHandlers()
 
+    """initial load of all database data into display tables"""
+    def populateTables(self):
+        QtTablePopulate(self.findChild(QTableWidget, "tblBed"), self.beds)
+        QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self.monitortypes)
+        QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self.modules)
+        QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self.patients)
+        QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self.staff)
+
+    """set up the window event handler functions"""
     def setHandlers(self):
         tblWidget = self.findChild(QTableWidget, 'tblShifts')
         if tblWidget is not None:

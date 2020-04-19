@@ -13,15 +13,19 @@ monitortype.py
   date:         11mar2020
   purpose:      monitortype class
   arguments:
-  returns:
+  returns:      TODO
 """
 
 
 class MonitorType():
     """private list of monitor types"""
-    __monitortypes__ = []
+    __monitortypes__ = {}
 
     def __init__(self, db):
         colnames, data = db.query('select * from monitortype', None)
-        self.__monitortypes__ = colnames
-        self.__monitortypes__.append(data)
+        if colnames is not None:
+            self.__monitortypes__['colnames'] = colnames
+            self.__monitortypes__['data'] = data
+
+    def getMonitorTypes(self):
+        return self.__monitortypes__

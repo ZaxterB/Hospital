@@ -16,15 +16,19 @@ bed.py
   date:         16mar2020
   purpose:      staff class
   arguments:
-  returns:
+  returns:      TODO
 """
 
 
 class Staff():
     """private list of staff"""
-    __staff__ = []
+    __staff__ = {}
 
     def __init__(self, db):
         colnames, data = db.query('select * from staff', None)
-        self.__staff__ = colnames
-        self.__staff__.append(data)
+        if colnames is not None:
+            self.__staff__['colnames'] = colnames
+            self.__staff__['data'] = data
+
+    def getStaff(self):
+        return self.__staff__

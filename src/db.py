@@ -39,7 +39,6 @@ class Db(object):
         try:
             self.__conn__ = psycopg2.connect(host=host, database=database)
             self.__cursor__ = self.__conn__.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            return
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             raise RuntimeError("Error in {0}.{1}(): {2} at line {3}".
