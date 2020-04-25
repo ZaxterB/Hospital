@@ -22,10 +22,14 @@ class Bed():
     __beds__ = {}
 
     def __init__(self, db):
-        colnames, data = db.query('select * from bed', None)
+        colnames, data = db.query("""
+          select bedid, number
+          from bed
+          order by bedid""", None)
         if colnames is not None:
-            self.__beds__['colnames'] = colnames
+            self.__beds__['colnames'] = ['id', 'Bed Number']
             self.__beds__['data'] = data
 
-    def getBeds(self):
+    """return all records for mass operations"""
+    def getAllBeds(self):
         return self.__beds__

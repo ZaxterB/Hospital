@@ -19,3 +19,5 @@ constants.py
 
 DBLOCATION = 'localhost'
 DBNAME = 'hospital'
+
+MAX_BEDS_PER_BAY = 8

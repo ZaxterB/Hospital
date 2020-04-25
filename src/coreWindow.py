@@ -36,9 +36,10 @@ class QtTablePopulate():
         if data is not None and len(data):
             widget.setHorizontalHeaderLabels(data['colnames'])
             for rowNum, row in enumerate(data['data']):
+                widget.setRowCount(widget.rowCount() + 1)
                 for colNum, element in enumerate(row):
-                    item = QTableWidgetItem(element)
-                    widget.setItem(colNum, rowNum, item)
+                    item = QTableWidgetItem(str(element))
+                    widget.setItem(rowNum, colNum, item)
             widget.resizeColumnsToContents()
 
 class coreWindow(QMainWindow):
@@ -48,11 +49,23 @@ class coreWindow(QMainWindow):
     patients = None
     staff = None
 
-    def __init__(self, parent=None):
+    def __init__(self, db, parent=None):
         QMainWindow.__init__(self, parent)
         uic.loadUi('files/mainwindow.ui', self)
         self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
+        # initially load all classes from database
+        self.loadTables(db)
+        # show them to the user
+        self.populateTables()
+        # set up user interaction mechanisms
         self.setHandlers()
+
+    """initial load of all database data"""
+    def loadTables(self, db):
+        self.beds = Bed(db).getAllBeds()
+        self.monitortypes = MonitorType(db).getAllMonitorTypes()
+        self.patients = Patient(db).getAllPatients()
+        self.staff = Staff(db).getAllStaff()
 
     """initial load of all database data into display tables"""
     def populateTables(self):

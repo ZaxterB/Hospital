@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.12 (Ubuntu 10.12-2.pgdg18.04+1)
--- Dumped by pg_dump version 10.12 (Ubuntu 10.12-2.pgdg18.04+1)
+-- Dumped from database version 12.2 (Ubuntu 12.2-2.pgdg19.10+1)
+-- Dumped by pg_dump version 12.2 (Ubuntu 12.2-2.pgdg19.10+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -18,7 +18,7 @@ SET row_security = off;
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: bedevent; Type: TABLE; Schema: public; Owner: timc
@@ -82,16 +82,29 @@ CREATE TABLE public.bed (
 ALTER TABLE public.bed OWNER TO timc;
 
 --
+-- Name: module; Type: TABLE; Schema: public; Owner: timc
+--
+
+CREATE TABLE public.module (
+    moduleid integer NOT NULL,
+    bedid integer NOT NULL
+);
+
+
+ALTER TABLE public.module OWNER TO timc;
+
+--
 -- Name: monitortype; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public.monitortype (
     monitortypeid bigint NOT NULL,
     name character varying NOT NULL,
-    defaultmax integer NOT NULL,
-    defaultmin integer NOT NULL,
-    dangermax integer NOT NULL,
-    dangermin integer NOT NULL
+    unit character varying NOT NULL,
+    defaultmax numeric(5,2) NOT NULL,
+    defaultmin numeric(5,2) NOT NULL,
+    dangermax numeric(5,2) NOT NULL,
+    dangermin numeric(5,2) NOT NULL
 );
 
 
@@ -116,11 +129,82 @@ ALTER TABLE public.patient OWNER TO timc;
 CREATE TABLE public.staff (
     staffid integer NOT NULL,
     name character varying NOT NULL,
+    email character varying,
+    number character varying,
     type smallint NOT NULL
 );
 
 
 ALTER TABLE public.staff OWNER TO timc;
+
+--
+-- Data for Name: bed; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.bed (bedid, number) FROM stdin;
+1	1
+2	2
+3	3
+4	4
+\.
+
+
+--
+-- Data for Name: bedevent; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.bedevent (bedeventid, eventtime, type, patientid, bedid, monitortype) FROM stdin;
+\.
+
+
+--
+-- Data for Name: module; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.module (moduleid, bedid) FROM stdin;
+\.
+
+
+--
+-- Data for Name: monitortype; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.monitortype (monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
+1	Pulse rate	Bps	78.00	66.00	100.00	54.00
+3	Systolic pressure	mmHg	120.00	80.00	180.00	60.00
+4	Diastolic pressure	mmHg	80.00	60.00	110.00	50.00
+5	Temperature	degC	37.50	35.50	38.00	35.00
+2	Breathing rate	Bpm	38.00	36.00	40.00	35.00
+\.
+
+
+--
+-- Data for Name: patient; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.patient (patientid, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: staff; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.staff (staffid, name, email, number, type) FROM stdin;
+1	Edward Brown	ed.brown@nhs.net	+44 4040 234984	1
+2	Evelyn Entwhistle	evelyn.entwhistle@nhs.net	+44 9823 943731	2
+3	Bob Ball	bob.ball@nhs.net	+44 3765 736250	1
+4	Steve Black	steve.black@nhs.net	+44 6565 968130	1
+\.
+
+
+--
+-- Data for Name: staffevent; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.staffevent (staffeventid, eventtime, type, staffid) FROM stdin;
+\.
+
 
 --
 -- Name: bedevent BedEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
@@ -171,11 +255,27 @@ ALTER TABLE ONLY public.staff
 
 
 --
+-- Name: module module_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+--
+
+ALTER TABLE ONLY public.module
+    ADD CONSTRAINT module_pkey PRIMARY KEY (moduleid);
+
+
+--
 -- Name: bedevent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
 --
 
 ALTER TABLE ONLY public.bedevent
     ADD CONSTRAINT bedevent_fk FOREIGN KEY (bedid) REFERENCES public.bed(bedid);
+
+
+--
+-- Name: module bedid; Type: FK CONSTRAINT; Schema: public; Owner: timc
+--
+
+ALTER TABLE ONLY public.module
+    ADD CONSTRAINT bedid FOREIGN KEY (bedid) REFERENCES public.bed(bedid);
 
 
 --

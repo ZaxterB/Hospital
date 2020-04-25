@@ -12,11 +12,6 @@ import os
 import constants
 # app-specific database interface class
 from db import Db
-# app-specific objects
-from bed import Bed
-from monitortype import MonitorType
-from patient import Patient
-from staff import Staff
 # core application window class
 from coreWindow import coreWindow
 # main PyQt library
@@ -48,14 +43,7 @@ if __name__ == '__main__':
         db = Db(constants.DBLOCATION, constants.DBNAME)
         db.query('set search_path to public;')
 
-        window = coreWindow()
-
-        # initially load all classes from database
-        window.beds = Bed(db).getBeds()
-        window.monitortypes = MonitorType(db).getMonitorTypes()
-        window.patients = Patient(db).getPatients()
-        window.staff = Staff(db).getStaff()
-        window.populateTables()
+        window = coreWindow(db)
 
         # show the main window
         window.show()

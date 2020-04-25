@@ -22,10 +22,14 @@ class MonitorType():
     __monitortypes__ = {}
 
     def __init__(self, db):
-        colnames, data = db.query('select * from monitortype', None)
+        colnames, data = db.query("""
+          select monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
+          from monitortype
+          order by monitortypeid""", None)
         if colnames is not None:
-            self.__monitortypes__['colnames'] = colnames
+            self.__monitortypes__['colnames'] = ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
             self.__monitortypes__['data'] = data
 
-    def getMonitorTypes(self):
+    """return all records for mass operations"""
+    def getAllMonitorTypes(self):
         return self.__monitortypes__

@@ -22,10 +22,14 @@ class Patient():
     __patients__ = {}
 
     def __init__(self, db):
-        colnames, data = db.query('select * from patient', None)
+        colnames, data = db.query("""
+          SELECT patientid, name
+          FROM public.patient
+          ORDER BY patientid""", None)
         if colnames is not None:
-            self.__patients__['colnames'] = colnames
+            self.__patients__['colnames'] = ['id', 'Name']
             self.__patients__['data'] = data
 
-    def getPatients(self):
+    """return all records for mass operations"""
+    def getAllPatients(self):
         return self.__patients__

@@ -25,10 +25,13 @@ class Staff():
     __staff__ = {}
 
     def __init__(self, db):
-        colnames, data = db.query('select * from staff', None)
+        colnames, data = db.query("""
+          SELECT staffid, name, email, "number", type
+          FROM public.staff;""", None)
         if colnames is not None:
-            self.__staff__['colnames'] = colnames
+            self.__staff__['colnames'] = ['id', 'Name', 'Email', 'Number', 'Type']
             self.__staff__['data'] = data
 
-    def getStaff(self):
+    """return all records for mass operations"""
+    def getAllStaff(self):
         return self.__staff__
