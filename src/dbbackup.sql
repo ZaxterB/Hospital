@@ -16,6 +16,28 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: hospital; Type: DATABASE; Schema: -; Owner: timc
+--
+
+CREATE DATABASE hospital WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_GB.UTF-8' LC_CTYPE = 'en_GB.UTF-8';
+
+
+ALTER DATABASE hospital OWNER TO timc;
+
+\connect hospital
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -25,12 +47,12 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.bedevent (
-    bedeventid bigint NOT NULL,
+    bedeventid integer NOT NULL,
     eventtime timestamp without time zone NOT NULL,
     type smallint NOT NULL,
-    patientid bigint NOT NULL,
+    patientid integer NOT NULL,
     bedid smallint NOT NULL,
-    monitortype bigint NOT NULL
+    monitortype integer NOT NULL
 );
 
 
@@ -41,7 +63,7 @@ ALTER TABLE public.bedevent OWNER TO timc;
 --
 
 CREATE TABLE public.staffevent (
-    staffeventid bigint NOT NULL,
+    staffeventid integer NOT NULL,
     eventtime timestamp without time zone NOT NULL,
     type smallint NOT NULL,
     staffid integer NOT NULL
@@ -75,7 +97,7 @@ ALTER TABLE public."AllEvents" OWNER TO timc;
 
 CREATE TABLE public.bed (
     bedid integer NOT NULL,
-    number integer NOT NULL
+    bednumber integer NOT NULL
 );
 
 
@@ -87,18 +109,32 @@ ALTER TABLE public.bed OWNER TO timc;
 
 CREATE TABLE public.module (
     moduleid integer NOT NULL,
-    bedid integer NOT NULL
+    bedid integer NOT NULL,
+    name character varying NOT NULL
 );
 
 
 ALTER TABLE public.module OWNER TO timc;
 
 --
+-- Name: modulemonitor; Type: TABLE; Schema: public; Owner: timc
+--
+
+CREATE TABLE public.modulemonitor (
+    modulemonitorid integer NOT NULL,
+    moduleid integer NOT NULL
+);
+
+
+ALTER TABLE public.modulemonitor OWNER TO timc;
+
+--
 -- Name: monitortype; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public.monitortype (
-    monitortypeid bigint NOT NULL,
+    monitortypeid integer NOT NULL,
+    modulemonitorid integer NOT NULL,
     name character varying NOT NULL,
     unit character varying NOT NULL,
     defaultmax numeric(5,2) NOT NULL,
@@ -115,7 +151,7 @@ ALTER TABLE public.monitortype OWNER TO timc;
 --
 
 CREATE TABLE public.patient (
-    patientid bigint NOT NULL,
+    patientid integer NOT NULL,
     name character varying NOT NULL
 );
 
@@ -141,7 +177,7 @@ ALTER TABLE public.staff OWNER TO timc;
 -- Data for Name: bed; Type: TABLE DATA; Schema: public; Owner: timc
 --
 
-COPY public.bed (bedid, number) FROM stdin;
+COPY public.bed (bedid, bednumber) FROM stdin;
 1	1
 2	2
 3	3
@@ -161,7 +197,15 @@ COPY public.bedevent (bedeventid, eventtime, type, patientid, bedid, monitortype
 -- Data for Name: module; Type: TABLE DATA; Schema: public; Owner: timc
 --
 
-COPY public.module (moduleid, bedid) FROM stdin;
+COPY public.module (moduleid, bedid, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: modulemonitor; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.modulemonitor (modulemonitorid, moduleid) FROM stdin;
 \.
 
 
@@ -169,12 +213,12 @@ COPY public.module (moduleid, bedid) FROM stdin;
 -- Data for Name: monitortype; Type: TABLE DATA; Schema: public; Owner: timc
 --
 
-COPY public.monitortype (monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
-1	Pulse rate	Bps	78.00	66.00	100.00	54.00
-3	Systolic pressure	mmHg	120.00	80.00	180.00	60.00
-4	Diastolic pressure	mmHg	80.00	60.00	110.00	50.00
-5	Temperature	degC	37.50	35.50	38.00	35.00
-2	Breathing rate	Bpm	38.00	36.00	40.00	35.00
+COPY public.monitortype (monitortypeid, modulemonitorid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
+1	1	Pulse rate	Bps	78.00	66.00	100.00	54.00
+2	2	Breathing rate	Bpm	38.00	36.00	40.00	35.00
+3	3	Systolic pressure	mmHg	120.00	80.00	180.00	60.00
+4	3	Diastolic pressure	mmHg	80.00	60.00	110.00	50.00
+5	4	Temperature	degC	37.50	35.50	38.00	35.00
 \.
 
 

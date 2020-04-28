@@ -27,7 +27,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="tabBeds">
      <attribute name="title">
@@ -123,57 +123,11 @@
        </property>
       </column>
      </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>25</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Sort:</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="comboBox">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>20</y>
-        <width>301</width>
-        <height>24</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="tabIncidents">
      <attribute name="title">
       <string>Incidents</string>
      </attribute>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>25</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Sort:</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="comboBox_2">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>20</y>
-        <width>301</width>
-        <height>24</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="tblIncidents">
       <property name="geometry">
        <rect>
@@ -227,29 +181,6 @@
      <attribute name="title">
       <string>Staff</string>
      </attribute>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>25</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Sort:</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="comboBox_3">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>20</y>
-        <width>301</width>
-        <height>24</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="tblStaff">
       <property name="geometry">
        <rect>
@@ -308,29 +239,6 @@
      <attribute name="title">
       <string>Bays</string>
      </attribute>
-     <widget class="QLabel" name="label_4">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>25</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Sort:</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="comboBox_4">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>20</y>
-        <width>301</width>
-        <height>24</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="tblBays">
       <property name="geometry">
        <rect>
@@ -442,29 +350,6 @@
      <attribute name="title">
       <string>Modules</string>
      </attribute>
-     <widget class="QComboBox" name="comboBox_5">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>20</y>
-        <width>301</width>
-        <height>24</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_5">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>25</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Sort:</string>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="tblModules">
       <property name="geometry">
        <rect>
