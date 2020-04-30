@@ -23,9 +23,9 @@ class Bed():
 
     def __init__(self, db):
         colnames, data = db.query("""
-          select bedid, number
-          from bed
-          order by bedid""", None)
+          SELECT bedid, bednumber
+          FROM bed
+          ORDER BY bednumber""", None)
         if colnames is not None:
             self.__beds__['colnames'] = ['id', 'Bed Number']
             self.__beds__['data'] = data

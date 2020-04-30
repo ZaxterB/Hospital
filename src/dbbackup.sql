@@ -49,10 +49,10 @@ SET default_table_access_method = heap;
 CREATE TABLE public.bedevent (
     bedeventid integer NOT NULL,
     eventtime timestamp without time zone NOT NULL,
-    type smallint NOT NULL,
+    eventtype smallint NOT NULL,
     patientid integer NOT NULL,
     bedid smallint NOT NULL,
-    monitortype integer NOT NULL
+    monitortypeid integer NOT NULL
 );
 
 
@@ -82,10 +82,10 @@ CREATE VIEW public."AllEvents" AS
     bedevent.bedeventid,
     bedevent.patientid,
     bedevent.bedid AS bed,
-    bedevent.monitortype,
+    bedevent.monitortypeid AS monitortype,
     staffevent.staffeventid,
     staffevent.staffid
-   FROM (public.bedevent
+   FROM (public.bedevent bedevent(bedeventid, eventtime, type, patientid, bedid, monitortypeid)
      JOIN public.staffevent USING (eventtime, type));
 
 
@@ -104,12 +104,24 @@ CREATE TABLE public.bed (
 ALTER TABLE public.bed OWNER TO timc;
 
 --
+-- Name: bedmodule; Type: TABLE; Schema: public; Owner: timc
+--
+
+CREATE TABLE public.bedmodule (
+    bedmoduleid integer NOT NULL,
+    bedid integer NOT NULL,
+    moduleid integer NOT NULL
+);
+
+
+ALTER TABLE public.bedmodule OWNER TO timc;
+
+--
 -- Name: module; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public.module (
     moduleid integer NOT NULL,
-    bedid integer NOT NULL,
     name character varying NOT NULL
 );
 
@@ -117,24 +129,12 @@ CREATE TABLE public.module (
 ALTER TABLE public.module OWNER TO timc;
 
 --
--- Name: modulemonitor; Type: TABLE; Schema: public; Owner: timc
---
-
-CREATE TABLE public.modulemonitor (
-    modulemonitorid integer NOT NULL,
-    moduleid integer NOT NULL
-);
-
-
-ALTER TABLE public.modulemonitor OWNER TO timc;
-
---
 -- Name: monitortype; Type: TABLE; Schema: public; Owner: timc
 --
 
 CREATE TABLE public.monitortype (
     monitortypeid integer NOT NULL,
-    modulemonitorid integer NOT NULL,
+    moduleid integer NOT NULL,
     name character varying NOT NULL,
     unit character varying NOT NULL,
     defaultmax numeric(5,2) NOT NULL,
@@ -189,7 +189,15 @@ COPY public.bed (bedid, bednumber) FROM stdin;
 -- Data for Name: bedevent; Type: TABLE DATA; Schema: public; Owner: timc
 --
 
-COPY public.bedevent (bedeventid, eventtime, type, patientid, bedid, monitortype) FROM stdin;
+COPY public.bedevent (bedeventid, eventtime, eventtype, patientid, bedid, monitortypeid) FROM stdin;
+\.
+
+
+--
+-- Data for Name: bedmodule; Type: TABLE DATA; Schema: public; Owner: timc
+--
+
+COPY public.bedmodule (bedmoduleid, bedid, moduleid) FROM stdin;
 \.
 
 
@@ -197,15 +205,11 @@ COPY public.bedevent (bedeventid, eventtime, type, patientid, bedid, monitortype
 -- Data for Name: module; Type: TABLE DATA; Schema: public; Owner: timc
 --
 
-COPY public.module (moduleid, bedid, name) FROM stdin;
-\.
-
-
---
--- Data for Name: modulemonitor; Type: TABLE DATA; Schema: public; Owner: timc
---
-
-COPY public.modulemonitor (modulemonitorid, moduleid) FROM stdin;
+COPY public.module (moduleid, name) FROM stdin;
+1	Pulse
+2	Breathing
+3	Blood pressure
+4	Temperature
 \.
 
 
@@ -213,7 +217,7 @@ COPY public.modulemonitor (modulemonitorid, moduleid) FROM stdin;
 -- Data for Name: monitortype; Type: TABLE DATA; Schema: public; Owner: timc
 --
 
-COPY public.monitortype (monitortypeid, modulemonitorid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
+COPY public.monitortype (monitortypeid, moduleid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
 1	1	Pulse rate	Bps	78.00	66.00	100.00	54.00
 2	2	Breathing rate	Bpm	38.00	36.00	40.00	35.00
 3	3	Systolic pressure	mmHg	120.00	80.00	180.00	60.00
@@ -299,6 +303,14 @@ ALTER TABLE ONLY public.staff
 
 
 --
+-- Name: bedmodule bedmodule_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+--
+
+ALTER TABLE ONLY public.bedmodule
+    ADD CONSTRAINT bedmodule_pkey PRIMARY KEY (bedmoduleid);
+
+
+--
 -- Name: module module_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
 --
 
@@ -315,11 +327,11 @@ ALTER TABLE ONLY public.bedevent
 
 
 --
--- Name: module bedid; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: monitortype module_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
 --
 
-ALTER TABLE ONLY public.module
-    ADD CONSTRAINT bedid FOREIGN KEY (bedid) REFERENCES public.bed(bedid);
+ALTER TABLE ONLY public.monitortype
+    ADD CONSTRAINT module_fk FOREIGN KEY (monitortypeid) REFERENCES public.module(moduleid) NOT VALID;
 
 
 --
@@ -327,7 +339,7 @@ ALTER TABLE ONLY public.module
 --
 
 ALTER TABLE ONLY public.bedevent
-    ADD CONSTRAINT monitortype_fk FOREIGN KEY (monitortype) REFERENCES public.monitortype(monitortypeid);
+    ADD CONSTRAINT monitortype_fk FOREIGN KEY (monitortypeid) REFERENCES public.monitortype(monitortypeid);
 
 
 --

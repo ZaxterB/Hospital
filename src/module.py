@@ -23,13 +23,15 @@ class Module():
 
     def __init__(self, db):
         colnames, data = db.query("""
-          select 
-          from 
-          order by """, None)
+          SELECT mo.moduleid, mo.name,  string_agg(mt.name::text, ',') as monitorname
+          FROM public.module mo, public.monitortype mt
+          WHERE mo.moduleid = mt.moduleid
+          GROUP BY 1, 2
+          ORDER BY mo.name""", None)
         if colnames is not None:
-            self.__monitortypes__['colnames'] = ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
-            self.__monitortypes__['data'] = data
+            self.__modules__['colnames'] = ['id', 'Name', 'Monitor Name']
+            self.__modules__['data'] = data
 
     """return all records for mass operations"""
-    def getAllMonitorTypes(self):
-        return self.__monitortypes__
+    def getAllModules(self):
+        return self.__modules__

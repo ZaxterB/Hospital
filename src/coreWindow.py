@@ -13,6 +13,7 @@ import constants
 from db import Db
 # app-specific objects
 from bed import Bed
+from module import Module
 from monitortype import MonitorType
 from patient import Patient
 from staff import Staff
@@ -64,6 +65,7 @@ class coreWindow(QMainWindow):
     def loadTables(self, db):
         self.beds = Bed(db).getAllBeds()
         self.monitortypes = MonitorType(db).getAllMonitorTypes()
+        self.modules = Module(db).getAllModules()
         self.patients = Patient(db).getAllPatients()
         self.staff = Staff(db).getAllStaff()
 
