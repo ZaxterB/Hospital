@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 """
 patient.py
@@ -24,7 +24,7 @@ class Patient():
     def __init__(self, db):
         colnames, data = db.query("""
           SELECT patientid, name
-          FROM public.patient
+          FROM patient
           ORDER BY patientid""", None)
         if colnames is not None:
             self.__patients__['colnames'] = ['id', 'Name']

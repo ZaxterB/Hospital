@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 """
 monitortype.py
@@ -23,9 +23,9 @@ class MonitorType():
 
     def __init__(self, db):
         colnames, data = db.query("""
-          select monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
-          from monitortype
-          order by monitortypeid""", None)
+          SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
+          FROM monitortype
+          ORDER BY monitortypeid""", None)
         if colnames is not None:
             self.__monitortypes__['colnames'] = ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
             self.__monitortypes__['data'] = data

@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 import sys
 import os
@@ -28,6 +28,11 @@ main.py
   purpose:      starting/control module
 """
 
+window = None
+
+def closeWindow():
+    """shut down main window (and its timers)"""
+    window.close()
 
 if __name__ == '__main__':
     try:
@@ -44,6 +49,8 @@ if __name__ == '__main__':
         db.query('set search_path to public;')
 
         window = coreWindow(db)
+        # set up trap to close main window (for timers)
+        app.aboutToQuit.connect(closeWindow)
 
         # show the main window
         window.show()

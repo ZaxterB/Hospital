@@ -4,9 +4,11 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.4"
 
+# python modules
 import sys
+import threading
 # app-specific constants
 import constants
 # app-specific database interface class
@@ -49,6 +51,7 @@ class coreWindow(QMainWindow):
     modules = None
     patients = None
     staff = None
+    timer = None
 
     def __init__(self, db, parent=None):
         QMainWindow.__init__(self, parent)
@@ -60,6 +63,8 @@ class coreWindow(QMainWindow):
         self.populateTables()
         # set up user interaction mechanisms
         self.setHandlers()
+        # now begin to react
+        self.setTimer()
 
     """initial load of all database data"""
     def loadTables(self, db):
@@ -84,6 +89,18 @@ class coreWindow(QMainWindow):
             tblWidget.setEnabled(False)
             tblWidget.clicked.connect(self.alert)
 
+    def close(self):
+        self.timer.cancel()
+
     def alert(self, index):
-        """ argments: self=MainWindow, index=QModelIndex of clicked """
+        """ TODO EXPERIMENTAL
+            argmuents: self=MainWindow, index=QModelIndex of clicked """
         print(index.row(), index.column())
+
+    def pulse(self):
+        print('test')
+        self.setTimer()
+
+    def setTimer(self):
+        self.timer = threading.Timer(2.0, self.pulse)
+        self.timer.start()

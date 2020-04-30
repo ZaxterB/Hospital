@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 """
 module.py
@@ -27,7 +27,7 @@ class Module():
           FROM public.module mo, public.monitortype mt
           WHERE mo.moduleid = mt.moduleid
           GROUP BY 1, 2
-          ORDER BY mo.name""", None)
+          ORDER BY mo.moduleid""", None)
         if colnames is not None:
             self.__modules__['colnames'] = ['id', 'Name', 'Monitor Name']
             self.__modules__['data'] = data
