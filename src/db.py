@@ -55,7 +55,7 @@ class Db(object):
         try:
             if len(sql) < 1:
                 raise RuntimeError('Empty query statement given')
-            self.__cursor__.execute(sql, *args)
+            self.__cursor__.execute(sql, args)
             if self.__cursor__.rowcount < 1:
                 return None, None
             else:

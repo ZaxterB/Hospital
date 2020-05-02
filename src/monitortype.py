@@ -23,9 +23,9 @@ class MonitorType():
 
     def __init__(self, db):
         colnames, data = db.query("""
-          SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
-          FROM monitortype
-          ORDER BY monitortypeid""", None)
+            SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
+            FROM monitortype
+            ORDER BY monitortypeid""", None)
         if colnames is not None:
             self.__monitortypes__['colnames'] = ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
             self.__monitortypes__['data'] = data

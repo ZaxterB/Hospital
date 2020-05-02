@@ -21,3 +21,7 @@ DBLOCATION = 'localhost'
 DBNAME = 'hospital'
 
 MAX_BEDS_PER_BAY = 8
+# only one bay for the current functionality
+BAY_NUMBER = 1
+# only one monitoring station for the current functionality
+STATION_NUMBER = 1

@@ -90,6 +90,7 @@ class coreWindow(QMainWindow):
             tblWidget.clicked.connect(self.alert)
 
     def close(self):
+        """shut down timers"""
         self.timer.cancel()
 
     def alert(self, index):

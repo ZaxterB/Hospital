@@ -23,9 +23,9 @@ class Patient():
 
     def __init__(self, db):
         colnames, data = db.query("""
-          SELECT patientid, name
-          FROM patient
-          ORDER BY patientid""", None)
+            SELECT patientid, name
+            FROM patient
+            ORDER BY patientid""", None)
         if colnames is not None:
             self.__patients__['colnames'] = ['id', 'Name']
             self.__patients__['data'] = data

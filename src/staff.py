@@ -26,9 +26,9 @@ class Staff():
 
     def __init__(self, db):
         colnames, data = db.query("""
-          SELECT staffid, name, email, "number", type
-          FROM staff
-          ORDER BY staffid""", None)
+            SELECT staffid, name, email, "number", type
+            FROM staff
+            ORDER BY staffid""", None)
         if colnames is not None:
             self.__staff__['colnames'] = ['id', 'Name', 'Email', 'Number', 'Type']
             self.__staff__['data'] = data
