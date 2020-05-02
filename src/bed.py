@@ -39,10 +39,10 @@ class Bed():
             self.__beds__['data'] = data
             # populate the other class attributes
             for bed in data:
-                data.query = db.query("""
+                colnames, results = db.query("""
                     SELECT moduleid
                     FROM bedmodule
-                    WHERE bedid = %s""", bed[0])
+                    WHERE bedid = %s""", (bed[0], ))
                 self.__bays__.append(constants.BAY_NUMBER)
                 self.__stations__.append(constants.STATION_NUMBER)
                 self.__patients__.append(None)
