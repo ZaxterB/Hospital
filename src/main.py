@@ -7,6 +7,9 @@ __license__ = "Private"
 __version__ = "0.0.7"
 
 import sys
+if sys.version_info[0] < 3 or sys.version_info[1] < 7:
+  raise Exception("Must be run using Python 3.7 or above")
+
 import os
 # app-specific constants
 import constants
