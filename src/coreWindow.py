@@ -14,11 +14,11 @@ import constants
 # app-specific database interface class
 from db import Db
 # app-specific objects
-from bed import Bed
-from module import Module
-from monitortype import MonitorType
-from patient import Patient
-from staff import Staff
+from bed import Beds, Bed
+from module import Modules, Module
+from monitortype import MonitorTypes, MonitorType
+from patient import Patients, Patient
+from staff import Staffs, Staff
 # PyQt libraries
 from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
@@ -68,11 +68,11 @@ class coreWindow(QMainWindow):
 
     """initial load of all database data"""
     def loadTables(self, db):
-        self.beds = Bed(db).getAllBeds()
-        self.monitortypes = MonitorType(db).getAllMonitorTypes()
-        self.modules = Module(db).getAllModules()
-        self.patients = Patient(db).getAllPatients()
-        self.staff = Staff(db).getAllStaff()
+        self.beds = Beds(db).getDisplayBeds()
+        self.monitortypes = MonitorTypes(db).getDisplayMonitorTypes()
+        self.modules = Modules(db).getDisplayModules()
+        self.patients = Patients(db).getDisplayPatients()
+        self.staff = Staffs(db).getDisplayStaff()
 
     """initial load of all database data into display tables"""
     def populateTables(self):

@@ -1,0 +1,13 @@
+---
+- hosts: dbserver
+  become: true
+  tasks:
+  - name: install postgresql
+    apt: name=postgresql state=present update_cache=yes
+
+  - name: start postgresql
+    service: name=postgresql state=started enabled=yes
+
+  - name: install database
+    become_user: postgres
+    command: psql -f ../src/dbbackup.sql postgres

@@ -16,10 +16,12 @@ patient.py
   returns:      TODO
 """
 
+class Patients():
+    """collection and management of Patient data and objects"""
 
-class Patient():
     """private list of patients"""
-    __patients__ = {}
+    __patientsraw__ = {}
+    __patients__ = []
 
     def __init__(self, db):
         colnames, data = db.query("""
@@ -27,9 +29,25 @@ class Patient():
             FROM patient
             ORDER BY patientid""", None)
         if colnames is not None:
-            self.__patients__['colnames'] = ['id', 'Name']
-            self.__patients__['data'] = data
+            # store the raw data
+            self.__patientsraw__['colnames'] = ['id', 'Name']
+            self.__patientsraw__['data'] = data
+            # store all the records individually as objects
+            for record in data:
+                patient = Patient(record[0], record[1])
+                self.__patients__.append(patient)
 
     """return all records for mass operations"""
-    def getAllPatients(self):
-        return self.__patients__
+    def getDisplayPatients(self):
+        return self.__patientsraw__
+
+class Patient():
+    """Patient object"""
+    
+    """private attributes"""
+    __patientid__ = None
+    __name__ = None
+
+    def __init__(self, patientid, name):
+        __patientid__ = patientid
+        __name__ = name

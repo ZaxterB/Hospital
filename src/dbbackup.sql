@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.2 (Ubuntu 12.2-2.pgdg19.10+1)
--- Dumped by pg_dump version 12.2 (Ubuntu 12.2-2.pgdg19.10+1)
+-- Dumped from database version 12.2 (Ubuntu 12.2-4)
+-- Dumped by pg_dump version 12.2 (Ubuntu 12.2-4)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,13 +17,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: hospital; Type: DATABASE; Schema: -; Owner: timc
+-- Name: hospital; Type: DATABASE; Schema: -; Owner: postgres
 --
 
 CREATE DATABASE hospital WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_GB.UTF-8' LC_CTYPE = 'en_GB.UTF-8';
 
 
-ALTER DATABASE hospital OWNER TO timc;
+ALTER DATABASE hospital OWNER TO postgres;
 
 \connect hospital
 
@@ -43,7 +43,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: bedevent; Type: TABLE; Schema: public; Owner: timc
+-- Name: bedevent; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.bedevent (
@@ -56,10 +56,10 @@ CREATE TABLE public.bedevent (
 );
 
 
-ALTER TABLE public.bedevent OWNER TO timc;
+ALTER TABLE public.bedevent OWNER TO postgres;
 
 --
--- Name: staffevent; Type: TABLE; Schema: public; Owner: timc
+-- Name: staffevent; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.staffevent (
@@ -70,10 +70,10 @@ CREATE TABLE public.staffevent (
 );
 
 
-ALTER TABLE public.staffevent OWNER TO timc;
+ALTER TABLE public.staffevent OWNER TO postgres;
 
 --
--- Name: AllEvents; Type: VIEW; Schema: public; Owner: timc
+-- Name: AllEvents; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public."AllEvents" AS
@@ -89,10 +89,10 @@ CREATE VIEW public."AllEvents" AS
      JOIN public.staffevent USING (eventtime, type));
 
 
-ALTER TABLE public."AllEvents" OWNER TO timc;
+ALTER TABLE public."AllEvents" OWNER TO postgres;
 
 --
--- Name: bed; Type: TABLE; Schema: public; Owner: timc
+-- Name: bed; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.bed (
@@ -101,10 +101,10 @@ CREATE TABLE public.bed (
 );
 
 
-ALTER TABLE public.bed OWNER TO timc;
+ALTER TABLE public.bed OWNER TO postgres;
 
 --
--- Name: bedmodule; Type: TABLE; Schema: public; Owner: timc
+-- Name: bedmodule; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.bedmodule (
@@ -114,10 +114,10 @@ CREATE TABLE public.bedmodule (
 );
 
 
-ALTER TABLE public.bedmodule OWNER TO timc;
+ALTER TABLE public.bedmodule OWNER TO postgres;
 
 --
--- Name: module; Type: TABLE; Schema: public; Owner: timc
+-- Name: module; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.module (
@@ -126,10 +126,10 @@ CREATE TABLE public.module (
 );
 
 
-ALTER TABLE public.module OWNER TO timc;
+ALTER TABLE public.module OWNER TO postgres;
 
 --
--- Name: monitortype; Type: TABLE; Schema: public; Owner: timc
+-- Name: monitortype; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.monitortype (
@@ -144,10 +144,10 @@ CREATE TABLE public.monitortype (
 );
 
 
-ALTER TABLE public.monitortype OWNER TO timc;
+ALTER TABLE public.monitortype OWNER TO postgres;
 
 --
--- Name: patient; Type: TABLE; Schema: public; Owner: timc
+-- Name: patient; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.patient (
@@ -156,25 +156,32 @@ CREATE TABLE public.patient (
 );
 
 
-ALTER TABLE public.patient OWNER TO timc;
+ALTER TABLE public.patient OWNER TO postgres;
 
 --
--- Name: staff; Type: TABLE; Schema: public; Owner: timc
+-- Name: staff; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.staff (
     staffid integer NOT NULL,
     name character varying NOT NULL,
     email character varying,
-    number character varying,
-    type smallint NOT NULL
+    telnumber character varying,
+    stafftype smallint NOT NULL
 );
 
 
-ALTER TABLE public.staff OWNER TO timc;
+ALTER TABLE public.staff OWNER TO postgres;
 
 --
--- Data for Name: bed; Type: TABLE DATA; Schema: public; Owner: timc
+-- Name: COLUMN staff.stafftype; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.staff.stafftype IS '1=nurse, 2=consultant';
+
+
+--
+-- Data for Name: bed; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bed (bedid, bednumber) FROM stdin;
@@ -186,7 +193,7 @@ COPY public.bed (bedid, bednumber) FROM stdin;
 
 
 --
--- Data for Name: bedevent; Type: TABLE DATA; Schema: public; Owner: timc
+-- Data for Name: bedevent; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bedevent (bedeventid, eventtime, eventtype, patientid, bedid, monitortypeid) FROM stdin;
@@ -194,15 +201,23 @@ COPY public.bedevent (bedeventid, eventtime, eventtype, patientid, bedid, monito
 
 
 --
--- Data for Name: bedmodule; Type: TABLE DATA; Schema: public; Owner: timc
+-- Data for Name: bedmodule; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bedmodule (bedmoduleid, bedid, moduleid) FROM stdin;
+1	1	1
+2	1	2
+3	2	2
+4	2	3
+5	3	1
+6	3	2
+7	3	3
+8	3	4
 \.
 
 
 --
--- Data for Name: module; Type: TABLE DATA; Schema: public; Owner: timc
+-- Data for Name: module; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.module (moduleid, name) FROM stdin;
@@ -214,7 +229,7 @@ COPY public.module (moduleid, name) FROM stdin;
 
 
 --
--- Data for Name: monitortype; Type: TABLE DATA; Schema: public; Owner: timc
+-- Data for Name: monitortype; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.monitortype (monitortypeid, moduleid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
@@ -227,7 +242,7 @@ COPY public.monitortype (monitortypeid, moduleid, name, unit, defaultmax, defaul
 
 
 --
--- Data for Name: patient; Type: TABLE DATA; Schema: public; Owner: timc
+-- Data for Name: patient; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.patient (patientid, name) FROM stdin;
@@ -235,10 +250,10 @@ COPY public.patient (patientid, name) FROM stdin;
 
 
 --
--- Data for Name: staff; Type: TABLE DATA; Schema: public; Owner: timc
+-- Data for Name: staff; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.staff (staffid, name, email, number, type) FROM stdin;
+COPY public.staff (staffid, name, email, telnumber, stafftype) FROM stdin;
 1	Edward Brown	ed.brown@nhs.net	+44 4040 234984	1
 2	Evelyn Entwhistle	evelyn.entwhistle@nhs.net	+44 9823 943731	2
 3	Bob Ball	bob.ball@nhs.net	+44 3765 736250	1
@@ -247,7 +262,7 @@ COPY public.staff (staffid, name, email, number, type) FROM stdin;
 
 
 --
--- Data for Name: staffevent; Type: TABLE DATA; Schema: public; Owner: timc
+-- Data for Name: staffevent; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.staffevent (staffeventid, eventtime, type, staffid) FROM stdin;
@@ -255,7 +270,7 @@ COPY public.staffevent (staffeventid, eventtime, type, staffid) FROM stdin;
 
 
 --
--- Name: bedevent BedEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent BedEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bedevent
@@ -263,7 +278,7 @@ ALTER TABLE ONLY public.bedevent
 
 
 --
--- Name: bed Bed_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: bed Bed_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bed
@@ -271,7 +286,7 @@ ALTER TABLE ONLY public.bed
 
 
 --
--- Name: monitortype Monitortype_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: monitortype Monitortype_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.monitortype
@@ -279,7 +294,7 @@ ALTER TABLE ONLY public.monitortype
 
 
 --
--- Name: patient Patient_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: patient Patient_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient
@@ -287,7 +302,7 @@ ALTER TABLE ONLY public.patient
 
 
 --
--- Name: staffevent StaffEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: staffevent StaffEvent_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.staffevent
@@ -295,7 +310,7 @@ ALTER TABLE ONLY public.staffevent
 
 
 --
--- Name: staff Staff_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: staff Staff_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.staff
@@ -303,7 +318,7 @@ ALTER TABLE ONLY public.staff
 
 
 --
--- Name: bedmodule bedmodule_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedmodule bedmodule_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bedmodule
@@ -311,7 +326,7 @@ ALTER TABLE ONLY public.bedmodule
 
 
 --
--- Name: module module_pkey; Type: CONSTRAINT; Schema: public; Owner: timc
+-- Name: module module_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.module
@@ -319,7 +334,7 @@ ALTER TABLE ONLY public.module
 
 
 --
--- Name: bedevent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bedevent
@@ -327,7 +342,7 @@ ALTER TABLE ONLY public.bedevent
 
 
 --
--- Name: monitortype module_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: monitortype module_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.monitortype
@@ -335,7 +350,7 @@ ALTER TABLE ONLY public.monitortype
 
 
 --
--- Name: bedevent monitortype_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent monitortype_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bedevent
@@ -343,7 +358,7 @@ ALTER TABLE ONLY public.bedevent
 
 
 --
--- Name: bedevent patient_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: bedevent patient_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bedevent
@@ -351,7 +366,7 @@ ALTER TABLE ONLY public.bedevent
 
 
 --
--- Name: staffevent staffevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: timc
+-- Name: staffevent staffevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.staffevent

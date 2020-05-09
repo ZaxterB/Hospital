@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 """
 module.py
@@ -17,9 +17,12 @@ module.py
 """
 
 
-class Module():
+class Modules():
+    """collection and management of Module data and objects"""
+
     """private list of monitor types"""
-    __modules__ = {}
+    __modulesraw__ = {}
+    __modules__ = []
 
 
     def __init__(self, db):
@@ -30,12 +33,27 @@ class Module():
             GROUP BY 1, 2
             ORDER BY mo.moduleid""", None)
         if colnames is not None:
-            self.__modules__['colnames'] = ['id', 'Name', 'Monitor Name']
-            self.__modules__['data'] = data
+            # store the raw data
+            self.__modulesraw__['colnames'] = ['id', 'Name', 'Monitor Name']
+            self.__modulesraw__['data'] = data
+            # store all the records individually as objects
+            for record in data:
+                module = Module(record[0], record[1])
+                self.__modules__.append(module)
 
-    """return all records for mass operations"""
-    def getAllModules(self):
-        return self.__modules__
+    def getDisplayModules(self):
+        return self.__modulesraw__
+
+class Module():
+    """module object"""
+
+    """private attributes"""
+    __moduleid__ = None
+    __modulename__ = None
+
+    def __init__(self, moduleid, modulename):
+        self.__moduleid__ = moduleid
+        self.__modulename__ = modulename
 
     """get the current monitor values for a given module"""
     def getCurrentValues(self):

@@ -19,20 +19,44 @@ bed.py
   returns:      TODO
 """
 
+class Staffs():
+    """collection and management of Staff data and objects (sorry about the nasty plural)"""
 
-class Staff():
     """private list of staff"""
-    __staff__ = {}
+    __staffraw__ = {}
+    __staff__ = []
 
     def __init__(self, db):
         colnames, data = db.query("""
-            SELECT staffid, name, email, "number", type
+            SELECT staffid, name, email, telnumber, case when stafftype=1 then 'Nurse' else 'Consultant' end as stafftype
             FROM staff
             ORDER BY staffid""", None)
         if colnames is not None:
-            self.__staff__['colnames'] = ['id', 'Name', 'Email', 'Number', 'Type']
-            self.__staff__['data'] = data
+            # store the raw data
+            self.__staffraw__['colnames'] = ['id', 'Name', 'Email', 'Tel Number', 'Type']
+            self.__staffraw__['data'] = data
+            # store all the records individually as objects
+            for record in data:
+                staff = Staff(record[0], record[1], record[2], record[3], record[4])
+                self.__staff__.append(staff)
 
     """return all records for mass operations"""
-    def getAllStaff(self):
-        return self.__staff__
+    def getDisplayStaff(self):
+        return self.__staffraw__
+
+class Staff():
+    """Staff object (singular!)"""
+
+    """private attributes"""
+    __staffid__ = None
+    __name__ = None
+    __email__ = None
+    __telnumber__ = None
+    __stafftype__ = None
+
+    def __init__(self, staffid, name, email, telnumber, stafftype):
+        __staffid__ = staffid
+        __name__ = name
+        __email__ = email
+        __telnumber__ = telnumber
+        __stafftype__ = stafftype
