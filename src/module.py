@@ -27,9 +27,9 @@ class Modules():
 
     def __init__(self, db):
         colnames, data = db.query("""
-            SELECT mo.moduleid, mo.name,  string_agg(mt.name::text, ',') as monitorname
+            SELECT mo.moduleid, mo.name, string_agg(mt.name::text, ',') as monitorname
             FROM public.module mo, public.monitortype mt
-            WHERE mo.moduleid = mt.moduleid
+            WHERE mo.moduleid = mt.__moduleid__
             GROUP BY 1, 2
             ORDER BY mo.moduleid""", None)
         if colnames is not None:
@@ -43,6 +43,16 @@ class Modules():
 
     def getDisplayModules(self):
         return self.__modulesraw__
+
+    def getModulesForBed(self, bedid):
+        colnames, data = db.query("""
+            SELECT bm.bedmoduleid, mo.moduleid, mo.name
+            FROM public.module mo, public.bedmodule bm
+            WHERE mo.moduleid = bm.moduleid AND
+                bm.bedid = %s""", (bedid, ))
+        if colnames is not None:
+            
+
 
 class Module():
     """module object"""

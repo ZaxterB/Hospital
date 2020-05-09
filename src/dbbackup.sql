@@ -129,12 +129,26 @@ CREATE TABLE public.module (
 ALTER TABLE public.module OWNER TO postgres;
 
 --
+-- Name: modulemonitor; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.modulemonitor (
+    modulemonitorid integer NOT NULL,
+    monitortypeid integer NOT NULL,
+    moduleid integer NOT NULL,
+    minval numeric NOT NULL,
+    maxval numeric NOT NULL
+);
+
+
+ALTER TABLE public.modulemonitor OWNER TO postgres;
+
+--
 -- Name: monitortype; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.monitortype (
     monitortypeid integer NOT NULL,
-    moduleid integer NOT NULL,
     name character varying NOT NULL,
     unit character varying NOT NULL,
     defaultmax numeric(5,2) NOT NULL,
@@ -229,15 +243,28 @@ COPY public.module (moduleid, name) FROM stdin;
 
 
 --
+-- Data for Name: modulemonitor; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.modulemonitor (modulemonitorid, monitortypeid, moduleid, minval, maxval) FROM stdin;
+1	1	1	66	78
+2	2	2	36	38
+3	3	3	80	120
+4	4	3	60	80
+5	5	4	35.5	37.5
+\.
+
+
+--
 -- Data for Name: monitortype; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.monitortype (monitortypeid, moduleid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
-1	1	Pulse rate	Bps	78.00	66.00	100.00	54.00
-2	2	Breathing rate	Bpm	38.00	36.00	40.00	35.00
-3	3	Systolic pressure	mmHg	120.00	80.00	180.00	60.00
-4	3	Diastolic pressure	mmHg	80.00	60.00	110.00	50.00
-5	4	Temperature	degC	37.50	35.50	38.00	35.00
+COPY public.monitortype (monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin) FROM stdin;
+1	Pulse rate	Bps	78.00	66.00	100.00	54.00
+2	Breathing rate	Bpm	38.00	36.00	40.00	35.00
+3	Systolic pressure	mmHg	120.00	80.00	180.00	60.00
+4	Diastolic pressure	mmHg	80.00	60.00	110.00	50.00
+5	Temperature	degC	37.50	35.50	38.00	35.00
 \.
 
 
@@ -334,6 +361,14 @@ ALTER TABLE ONLY public.module
 
 
 --
+-- Name: modulemonitor modulemonitor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.modulemonitor
+    ADD CONSTRAINT modulemonitor_pkey PRIMARY KEY (modulemonitorid);
+
+
+--
 -- Name: bedevent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -355,6 +390,14 @@ ALTER TABLE ONLY public.monitortype
 
 ALTER TABLE ONLY public.bedevent
     ADD CONSTRAINT monitortype_fk FOREIGN KEY (monitortypeid) REFERENCES public.monitortype(monitortypeid);
+
+
+--
+-- Name: modulemonitor monitortype_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.modulemonitor
+    ADD CONSTRAINT monitortype_fk FOREIGN KEY (modulemonitorid) REFERENCES public.monitortype(monitortypeid) NOT VALID;
 
 
 --

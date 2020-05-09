@@ -8,6 +8,7 @@ __version__ = "0.0.1"
 
 # app-specific constants
 import constants
+from module import Modules, Module
 
 """
 bed.py
@@ -60,6 +61,7 @@ class Bed():
         self.__bednumber__ = bednumber
         self.__bayid__ = bayid
         self.__stationid__ = stationid
+        self.__modules__ = Modules.getModulesForBed(bedid)
 
     """add a module to the bed"""
     def addModule(self, module):
