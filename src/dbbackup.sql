@@ -221,7 +221,7 @@ COPY public.bedevent (bedeventid, eventtime, eventtype, patientid, bedid, monito
 COPY public.bedmodule (bedmoduleid, bedid, moduleid) FROM stdin;
 1	1	1
 2	1	2
-3	2	2
+3	2	5
 4	2	3
 5	3	1
 6	3	2
@@ -239,6 +239,8 @@ COPY public.module (moduleid, name) FROM stdin;
 2	Breathing
 3	Blood pressure
 4	Temperature
+5	Breathing
+
 \.
 
 
@@ -252,6 +254,7 @@ COPY public.modulemonitor (modulemonitorid, monitortypeid, moduleid, minval, max
 3	3	3	80	120
 4	4	3	60	80
 5	5	4	35.5	37.5
+6	2	5	37	39
 \.
 
 
