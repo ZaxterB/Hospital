@@ -19,30 +19,11 @@ monitortype.py
 class MonitorTypes():
     """collection and management of MonitorType data and objects"""
 
-    """private list of monitor types"""
-    __monitortypesraw__ = {}
-    __monitortypes__ = []
-
     def __init__(self, db):
         self.db = db
-        colnames, data = db.query("""
-            SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
-            FROM monitortype
-            ORDER BY monitortypeid""", None)
-        if colnames is not None:
-            # store the raw data
-            self.__monitortypesraw__['colnames'] = ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
-            self.__monitortypesraw__['data'] = data
-            # store all the records individually as objects
-            for record in data:
-                monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6]) # removed , record[7]
-                self.__monitortypes__.append(monitortype)
-
-    """return all records for mass operations"""
-    def getMonitorTypes(self):
-        return self.__monitortypes__
 
     def getMonitorTypesForModule(self, monitortypeid):
+        monitortypes = []
         colnames, data = self.db.query("""
             SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
             FROM monitortype
@@ -52,8 +33,8 @@ class MonitorTypes():
             # store all the records individually as objects
             for record in data:
                 monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6])
-                self.__monitortypes__.append(monitortype)
-        return self.__monitortypes__
+                monitortypes.append(monitortype)
+        return monitortypes
 
 class MonitorType():
     """MonitorType object"""

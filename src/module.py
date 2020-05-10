@@ -21,32 +21,11 @@ module.py
 class Modules():
     """collection and management of Module data and objects"""
 
-    """private list of monitor types"""
-    __modulesraw__ = {}
-    __modules__ = []
-
-
     def __init__(self, db):
         self.db = db
-        colnames, data = self.db.query("""
-            SELECT mo.moduleid, mo.name, string_agg(mt.name::text, ',') as monitorname
-            FROM public.module mo,public.modulemonitor mm, public.monitortype mt
-            WHERE mo.moduleid = mm.moduleid AND mm.monitortypeid = mt.monitortypeid
-            GROUP BY 1, 2
-            ORDER BY mo.moduleid""", None) #kinda legacy function here TODO: simplify
-        if colnames is not None:
-            # store the raw data
-            self.__modulesraw__['colnames'] = ['id', 'Name', 'Monitor Name']
-            self.__modulesraw__['data'] = data
-            # store all the records individually as objects
-            for record in data:
-                module = Module(record[0], record[1])
-                self.__modules__.append(module)
-
-    def getModules(self):
-        return self.__modules__
 
     def getModulesForBed(self, bedid):
+        modules = []
         colnames, data = self.db.query("""
             SELECT bm.bedmoduleid, mo.moduleid, mo.name
             FROM public.module mo, public.bedmodule bm
@@ -56,7 +35,8 @@ class Modules():
             for record in data:
                 MonitorList = ModuleMonitors(self.db).getModuleMonitorForModule(record[1])
                 module = Module(record[1], record[2], MonitorList)
-                # self.__modules__.append(module)
+                modules.append(module)
+        return modules
 
 class Module():
     """module object"""
@@ -64,11 +44,12 @@ class Module():
     """private attributes"""
     __moduleid__ = None
     __modulename__ = None
-    __monitors__ = []
+    __modulemonitors__ = []
 
     def __init__(self, moduleid, modulename, monitors):
         self.__moduleid__ = moduleid
         self.__modulename__ = modulename
+        self.__modulemonitors__ = monitors
 
     def displayTitles(self):
         """return a list of column names for display"""

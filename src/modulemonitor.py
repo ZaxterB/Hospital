@@ -21,29 +21,14 @@ class ModuleMonitors():
     """collection and management of MonitorType data and objects"""
 
     """private list of monitor types"""
-    __modulemonitorsraw__ = {}
-    __modulemonitors__ = []
 
     def __init__(self, db):
         self.db = db
-        # colnames, data = db.query("""
-        #     SELECT modulemonitorid, monitortypeid, moduleid, minval, maxval
-        #     FROM modulemonitor
-        #     ORDER BY monitortypeid""", None)
-        # if colnames is not None:
-        #     # store the raw data
-        #     self.__monitortypesraw__['colnames'] = ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
-        #     self.__monitortypesraw__['data'] = data
-        #     # store all the records individually as objects
-        #     for record in data:
-        #         monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6]) # removed , record[7]
-        #         self.__monitortypes__.append(monitortype)
 
     """return all records for mass operations"""
-    def getDisplayMonitorTypes(self):
-        return self.__modulemonitorsraw__
 
     def getModuleMonitorForModule(self, moduleid):
+        modulemonitors = []
         colnames, data = self.db.query("""
             SELECT modulemonitorid, monitortypeid,  minval, maxval
             FROM modulemonitor
@@ -53,8 +38,8 @@ class ModuleMonitors():
             for record in data:
                 monitortype = MonitorTypes(self.db).getMonitorTypesForModule(record[1])
                 modulemonitor = ModuleMonitor(record[0], monitortype, record[2], record[3])
-                self.__modulemonitors__.append(modulemonitor)
-        return self.__modulemonitors__
+                modulemonitors.append(modulemonitor)
+        return modulemonitors
 
 class ModuleMonitor():
     """MonitorType object"""
