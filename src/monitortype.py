@@ -38,15 +38,14 @@ class MonitorTypes():
                 self.__monitortypes__.append(monitortype)
 
     """return all records for mass operations"""
-    def getDisplayMonitorTypes(self):
-        return self.__monitortypesraw__
+    def getMonitorTypes(self):
+        return self.__monitortypes__
 
 class MonitorType():
     """MonitorType object"""
 
     """private attributes"""
     __monitortypeid__ = None
-    #__moduleid__ = None
     __name__ = None
     __unit__ = None
     __defaultmax__ = None
@@ -54,12 +53,19 @@ class MonitorType():
     __dangerMax = None
     __dangerMin = None
 
-    def __init__(self, monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin): #removed moduleid,
-        __monitortypeid__ = monitortypeid
-        # __moduleid__ = moduleid
-        __name__ = name
-        __unit__ = unit
-        __defaultmax__ = defaultmax
-        __defaultmin__ = defaultmin
-        __dangerMax = dangermax
-        __dangerMin = dangermin
+    def __init__(self, monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin):
+        self.__monitortypeid__ = monitortypeid
+        self.__name__ = name
+        self.__unit__ = unit
+        self.__defaultmax__ = defaultmax
+        self.__defaultmin__ = defaultmin
+        self.__dangerMax = dangermax
+        self.__dangerMin = dangermin
+
+    def displayTitles(self):
+        """return a list of column names for display"""
+        return ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
+
+    def display(self):
+        """return a displayable list of columns"""
+        return self.__monitortypeid__, self.__name__, self.__unit__, self.__defaultmax__, self.__defaultmin__, self.__dangerMax, self.__dangerMin

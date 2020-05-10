@@ -40,12 +40,11 @@ class Modules():
             self.__modulesraw__['data'] = data
             # store all the records individually as objects
             for record in data:
-                print(record)
                 module = Module(record[0], record[1])
                 self.__modules__.append(module)
 
-    def getDisplayModules(self):
-        return self.__modulesraw__
+    def getModules(self):
+        return self.__modules__
 
     def getModulesForBed(self, bedid):
         colnames, data = self.db.query("""
@@ -67,12 +66,20 @@ class Module():
     __modulename__ = None
     __monitors__ = []
 
-    def __init__(self, moduleid, modulename, monitors):
+    def __init__(self, moduleid, modulename):
         self.__moduleid__ = moduleid
         self.__modulename__ = modulename
-        self.__monitors__ = monitors
 
-    """get the current monitor values for a given module"""
+    def displayTitles(self):
+        """return a list of column names for display"""
+        return ['id', 'Name', 'Monitor Name']
+
+    def display(self):
+        """return a displayable list of columns"""
+        """TODO finish call and return of monitors"""
+        return self.__moduleid__, self.__modulename__, ""
+
     def getCurrentValues(self):
-      """TODO"""
-      pass
+        """get the current monitor values for a given module"""
+        """TODO"""
+        pass

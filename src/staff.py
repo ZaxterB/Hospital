@@ -40,9 +40,9 @@ class Staffs():
                 staff = Staff(record[0], record[1], record[2], record[3], record[4])
                 self.__staff__.append(staff)
 
-    """return all records for mass operations"""
-    def getDisplayStaff(self):
-        return self.__staffraw__
+    def getStaff(self):
+        """return all records for mass operations"""
+        return self.__staff__
 
 class Staff():
     """Staff object (singular!)"""
@@ -55,8 +55,16 @@ class Staff():
     __stafftype__ = None
 
     def __init__(self, staffid, name, email, telnumber, stafftype):
-        __staffid__ = staffid
-        __name__ = name
-        __email__ = email
-        __telnumber__ = telnumber
-        __stafftype__ = stafftype
+        self.__staffid__ = staffid
+        self.__name__ = name
+        self.__email__ = email
+        self.__telnumber__ = telnumber
+        self.__stafftype__ = stafftype
+
+    def displayTitles(self):
+        """return a list of column names for display"""
+        return ['id', 'Name', 'Email', 'Tel Number', 'Type']
+
+    def display(self):
+        """return a displayable list of columns"""
+        return self.__staffid__, self.__name__, self.__email__, self.__telnumber__, self.__stafftype__

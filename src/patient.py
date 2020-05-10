@@ -37,9 +37,9 @@ class Patients():
                 patient = Patient(record[0], record[1])
                 self.__patients__.append(patient)
 
-    """return all records for mass operations"""
-    def getDisplayPatients(self):
-        return self.__patientsraw__
+    def getPatients(self):
+        """return all records for mass operations"""
+        return self.__patients__
 
 class Patient():
     """Patient object"""

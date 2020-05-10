@@ -33,18 +33,6 @@ coreWindow.py
   returns:      (TODO see methods)
 """
 
-"""TODO"""
-class QtTablePopulate():
-    def __init__(self, widget, data):
-        if data is not None and len(data):
-            widget.setHorizontalHeaderLabels(data['colnames'])
-            for rowNum, row in enumerate(data['data']):
-                widget.setRowCount(widget.rowCount() + 1)
-                for colNum, element in enumerate(row):
-                    item = QTableWidgetItem(str(element))
-                    widget.setItem(rowNum, colNum, item)
-            widget.resizeColumnsToContents()
-
 class coreWindow(QMainWindow):
     beds = None
     monitorTypes = None
@@ -66,24 +54,39 @@ class coreWindow(QMainWindow):
         # now begin to react
         self.setTimer()
 
-    """initial load of all database data"""
     def loadTables(self, db):
-        self.beds = Beds(db).getDisplayBeds()
-        self.monitortypes = MonitorTypes(db).getDisplayMonitorTypes()
-        self.modules = Modules(db).getDisplayModules()
-        self.patients = Patients(db).getDisplayPatients()
-        self.staff = Staffs(db).getDisplayStaff()
+        """initial load of all database data"""
+        self.beds = Beds(db).getBeds()
+        self.monitortypes = MonitorTypes(db).getMonitorTypes()
+        self.modules = Modules(db).getModules()
+        self.patients = Patients(db).getPatients()
+        self.staff = Staffs(db).getStaff()
 
-    """initial load of all database data into display tables"""
     def populateTables(self):
-        QtTablePopulate(self.findChild(QTableWidget, "tblBed"), self.beds)
-        QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self.monitortypes)
-        QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self.modules)
-        QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self.patients)
-        QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self.staff)
+        """initial load of all database data into display tables"""
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblBed"), self.beds)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self.monitortypes)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self.modules)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self.patients)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self.staff)
 
-    """set up the window event handler functions"""
+    def QtTablePopulate(self, widget, data):
+        if data is not None and len(data):
+            # display column titles
+            widget.setHorizontalHeaderLabels(data[0].displayTitles())
+
+            for rowNum, row in enumerate(data):
+                # add a row to the display widget
+                widget.setRowCount(widget.rowCount() + 1)
+
+                # now iterate over the columns for the object
+                for colNum, element in enumerate(row.display()):
+                    item = QTableWidgetItem(str(element))
+                    widget.setItem(rowNum, colNum, item)
+            widget.resizeColumnsToContents()
+
     def setHandlers(self):
+        """set up the window event handler functions"""
         tblWidget = self.findChild(QTableWidget, 'tblShifts')
         if tblWidget is not None:
             tblWidget.setEnabled(False)

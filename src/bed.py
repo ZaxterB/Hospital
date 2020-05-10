@@ -43,8 +43,8 @@ class Beds():
                 self.__beds__.append(bed)
 
     """return all records for display"""
-    def getDisplayBeds(self):
-        return self.__bedsraw__
+    def getBeds(self):
+        return self.__beds__
 
 class Bed():
     """Bed object"""
@@ -61,13 +61,20 @@ class Bed():
         self.__bednumber__ = bednumber
         self.__bayid__ = bayid
         self.__stationid__ = stationid
-        self.__modules__ = Modules.getModulesForBed(bedid)
 
-    """add a module to the bed"""
     def addModule(self, module):
+        """add a module to the bed"""
         self.__modules__.add(module)
 
-    """query all the beds for their monitor values"""
+    def displayTitles(self):
+        """return a list of column names for display"""
+        return ['id', 'Bed Number']
+
+    def display(self):
+        """return a displayable list of columns"""
+        return self.__bedid__, self.__bednumber__
+
     def getMonitorValues(self):
+        """query all the beds for their monitor values"""
         """TODO"""
         pass
