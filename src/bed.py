@@ -39,7 +39,8 @@ class Beds():
             self.__bedsraw__['data'] = data
             # store all the records individually as objects
             for record in data:
-                bed = Bed(record[0], record[1], constants.BAY_NUMBER, constants.STATION_NUMBER)
+                ModuleList = Modules(db).getModulesForBed(record[0])
+                bed = Bed(record[0], record[1], constants.BAY_NUMBER, constants.STATION_NUMBER, ModuleList)
                 self.__beds__.append(bed)
 
     """return all records for display"""
@@ -56,11 +57,12 @@ class Bed():
     __stationid__= None
     __modules__ = []
 
-    def __init__(self, bedid, bednumber, bayid, stationid):
+    def __init__(self, bedid, bednumber, bayid, stationid, modules):
         self.__bedid__ = bedid
         self.__bednumber__ = bednumber
         self.__bayid__ = bayid
         self.__stationid__ = stationid
+        self.__modules__ = modules
 
     def addModule(self, module):
         """add a module to the bed"""

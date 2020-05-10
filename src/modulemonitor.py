@@ -54,6 +54,7 @@ class ModuleMonitors():
                 monitortype = MonitorTypes(self.db).getMonitorTypesForModule(record[1])
                 modulemonitor = ModuleMonitor(record[0], monitortype, record[2], record[3])
                 self.__modulemonitors__.append(modulemonitor)
+        return self.__modulemonitors__
 
 class ModuleMonitor():
     """MonitorType object"""

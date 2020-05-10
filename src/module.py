@@ -56,7 +56,7 @@ class Modules():
             for record in data:
                 MonitorList = ModuleMonitors(self.db).getModuleMonitorForModule(record[1])
                 module = Module(record[1], record[2], MonitorList)
-                self.__modules__.append(module)
+                # self.__modules__.append(module)
 
 class Module():
     """module object"""
@@ -66,7 +66,7 @@ class Module():
     __modulename__ = None
     __monitors__ = []
 
-    def __init__(self, moduleid, modulename):
+    def __init__(self, moduleid, modulename, monitors):
         self.__moduleid__ = moduleid
         self.__modulename__ = modulename
 

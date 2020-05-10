@@ -240,7 +240,6 @@ COPY public.module (moduleid, name) FROM stdin;
 3	Blood pressure
 4	Temperature
 5	Breathing
-
 \.
 
 
