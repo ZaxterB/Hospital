@@ -4,11 +4,10 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 # app-specific constants
 import constants
-from module import Modules, Module
 
 """
 bed.py

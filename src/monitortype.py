@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 """
 monitortype.py
@@ -34,12 +34,28 @@ class MonitorTypes():
             self.__monitortypesraw__['data'] = data
             # store all the records individually as objects
             for record in data:
-                monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6]) # removed , record[7]
+                monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6])
                 self.__monitortypes__.append(monitortype)
 
-    """return all records for mass operations"""
     def getMonitorTypes(self):
+        """return all records for mass operations"""
         return self.__monitortypes__
+
+    def getMonitorTypes(self, moduleid):
+        """return all records for one module only"""
+        colnames, data = db.query("""
+            SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
+            FROM monitortype mt, modulemonitor mm
+            WHERE mt.moduleid = mm.moduleid AND
+                mt.moduleid = %s
+            ORDER BY monitortypeid""", (moduleid, ))
+        tempMonitorTypes = []
+        if colnames is not None:
+            # store all the records individually as objects
+            for record in data:
+                monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6])
+                tempMonitorTypes.append(monitortype)
+        return tempMonitorTypes
 
 class MonitorType():
     """MonitorType object"""

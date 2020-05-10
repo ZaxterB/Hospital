@@ -4,12 +4,8 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
-# app-specific objects
-from module import Modules
-# app-specific constants
-import constants
 
 """
 bed.py

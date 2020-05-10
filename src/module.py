@@ -4,9 +4,8 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
-from modulemonitor import ModuleMonitor, ModuleMonitors
 """
 module.py
 
@@ -16,7 +15,6 @@ module.py
   arguments:
   returns:
 """
-
 
 class Modules():
     """collection and management of Module data and objects"""
@@ -69,6 +67,7 @@ class Module():
     def __init__(self, moduleid, modulename):
         self.__moduleid__ = moduleid
         self.__modulename__ = modulename
+        self.__monitors__ = MonitorTypes(self.db).getMonitorTypes(self.__moduleid__)
 
     def displayTitles(self):
         """return a list of column names for display"""
