@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 import sys
 if sys.version_info[0] < 3 or sys.version_info[1] < 7:
@@ -44,6 +44,13 @@ if __name__ == '__main__':
         if appDir != os.getcwd():
             os.chdir(appDir)
 
+        # check arguments
+        dataFileName = None
+        if len(sys.argv) == 2:
+            dataFileName = sys.argv[1]
+        elif len(sys.argv) != 1:
+            raise RuntimeError('Startup arguments incorrect. Please optionally provide a test data file name')
+
         # start a Qt windowing application
         app = QApplication([])
 
@@ -51,7 +58,7 @@ if __name__ == '__main__':
         db = Db(constants.DBLOCATION, constants.DBNAME)
         db.query('set search_path to public;')
 
-        window = coreWindow(db)
+        window = coreWindow(db, dataFileName)
         # set up trap to close main window (for timers)
         app.aboutToQuit.connect(closeWindow)
 

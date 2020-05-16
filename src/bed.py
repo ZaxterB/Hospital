@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 # app-specific constants
 import constants
@@ -76,7 +76,7 @@ class Bed():
 
     def displayTitles(self):
         """return a list of column names for display"""
-        return ['id', 'Bed Number']
+        return ['id', 'Bed Number', "Monitors"]
 
     def display(self):
         """return a displayable list of columns"""

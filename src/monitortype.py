@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 """
 monitortype.py
@@ -86,7 +86,7 @@ class MonitorType():
         """return a displayable list of columns"""
         return self._monitortypeid, self._name, self._unit, self._defaultmax, self._defaultmin, self._dangerMax, self._dangerMin
 
-    def get_name(self):
+    def getName(self):
         return self._name
 
-    name = property(get_name)
+    name = property(getName)

@@ -4,7 +4,7 @@
 __author__ = "Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 from monitortype import MonitorTypes, MonitorType
 
@@ -55,6 +55,12 @@ class ModuleMonitor():
     def getMonitorTypeName(self):
         """return names of monitortypes"""
         return self._monitortype.name
+
+    def getStaticValues(self):
+        """return a displayable string of current values"""
+        return self._monitortype.name
+
+    staticValues = property(getStaticValues)
 
     def getCurrentValues(self):
         """return a displayable string of current values"""

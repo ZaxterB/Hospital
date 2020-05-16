@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 # app-specific constants
 from monitortype import MonitorTypes
@@ -90,10 +90,21 @@ class Module():
 
     def display(self):
         """return a displayable list of columns"""
+        return self._moduleid, self._modulename, self.staticDisplay()
+
+    def displayLive(self):
+        """return a displayable list of columns"""
         return self._moduleid, self._modulename, self.shortDisplay()
 
+    def staticDisplay(self):
+        """return just a string representing this object - name only"""
+        modulemonitorlist = []
+        for modulemonitor in self._monitortypes:
+            modulemonitorlist.append(modulemonitor.staticValues)
+        return '\n'.join(modulemonitorlist)
+
     def shortDisplay(self):
-        """return just a string representing this object"""
+        """return just a string representing this object - active values"""
         modulemonitorlist = []
         for modulemonitor in self._monitortypes:
             modulemonitorlist.append(modulemonitor.currentValues)

@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 from staff import Staffs
 
@@ -68,4 +68,4 @@ class Shift():
 
     def display(self):
         """return a displayable list of columns"""
-        return self._shiftid, self._staff.get_name(), self._start, self._currentend, self._currentend - self._start
+        return self._shiftid, self._staff.getName(), self._start, self._currentend, self._currentend - self._start

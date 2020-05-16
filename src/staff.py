@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 """
 staff.py
@@ -75,6 +75,6 @@ class Staff():
         """return a displayable list of columns"""
         return self._staffid, self._name, self._email, self._telnumber, self._stafftype
 
-    def get_name(self):
+    def getName(self):
         """return name"""
         return self._name

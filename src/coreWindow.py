@@ -4,11 +4,12 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 # python modules
 import sys
 import threading
+import csv
 # app-specific constants
 import constants
 # app-specific database interface class
@@ -41,7 +42,7 @@ class coreWindow(QMainWindow):
     shifts = None
     timer = None
 
-    def __init__(self, db, parent=None):
+    def __init__(self, db, dataFileName, parent=None):
         QMainWindow.__init__(self, parent)
         uic.loadUi('files/mainwindow.ui', self)
         self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
