@@ -12,26 +12,30 @@ patient.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      patient class
-  arguments:
-  returns:      TODO
 """
 
 class Patients():
-    """collection and management of Patient data and objects"""
+    """singleton collection and management of Patient data and objects"""
+    __instance__ = None
 
     """private list of patients"""
-    __patientsraw__ = {}
     __patients__ = []
+    __db__ = None
+
+    def __new__(self, *args, **kwargs):
+        """singleton override"""
+        if not self.__instance__:
+            self.__instance__ = object.__new__(self)
+        return self.__instance__
 
     def __init__(self, db):
+        if len(self.__patients__) != 0:
+            return
         colnames, data = db.query("""
             SELECT patientid, name
             FROM patient
             ORDER BY patientid""", None)
         if colnames is not None:
-            # store the raw data
-            self.__patientsraw__['colnames'] = ['id', 'Name']
-            self.__patientsraw__['data'] = data
             # store all the records individually as objects
             for record in data:
                 patient = Patient(record[0], record[1])
@@ -45,9 +49,9 @@ class Patient():
     """Patient object"""
     
     """private attributes"""
-    __patientid__ = None
-    __name__ = None
+    _patientid = None
+    _name = None
 
     def __init__(self, patientid, name):
-        __patientid__ = patientid
-        __name__ = name
+        _patientid = patientid
+        _name = name

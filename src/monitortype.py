@@ -12,28 +12,34 @@ monitortype.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      monitortype class
-  arguments:
-  returns:      TODO
+                this subsumes the modulemonitor class functionality since they are so closely related
+                in the database
 """
 
-class MonitorTypes():
-    """collection and management of MonitorType data and objects"""
-
-    """private list of monitor types"""
-    __monitortypesraw__ = {}
+class MonitorTypes(object):
+    """singleton collection and management of MonitorType data and objects"""
+    __instance__ = None
+    """private list of monitor types and database connection"""
     __monitortypes__ = []
+    __db__ = None
+
+    def __new__(self, *args, **kwargs):
+        """singleton override"""
+        if not self.__instance__:
+            self.__instance__ = object.__new__(self)
+        return self.__instance__
 
     def __init__(self, db):
-        colnames, data = db.query("""
+        if len(self.__monitortypes__) != 0:
+            return
+        self.__db__ = db
+        colnames, data = self.__db__.query("""
             SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
             FROM monitortype
-            ORDER BY monitortypeid""", None) #removed moduleid,
+            ORDER BY monitortypeid""", None)
         if colnames is not None:
-            # store the raw data
-            self.__monitortypesraw__['colnames'] = ['id', 'Name', 'Unit', 'Default Max', 'Default Min', 'Danger Max', 'Danger Min']
-            self.__monitortypesraw__['data'] = data
             # store all the records individually as objects
-            for record in data:
+            for counter, record in enumerate(data):
                 monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6])
                 self.__monitortypes__.append(monitortype)
 
@@ -41,42 +47,38 @@ class MonitorTypes():
         """return all records for mass operations"""
         return self.__monitortypes__
 
-    def getMonitorTypes(self, moduleid):
-        """return all records for one module only"""
-        colnames, data = db.query("""
-            SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
-            FROM monitortype mt, modulemonitor mm
-            WHERE mt.moduleid = mm.moduleid AND
-                mt.moduleid = %s
-            ORDER BY monitortypeid""", (moduleid, ))
-        tempMonitorTypes = []
+    def getMonitorTypeForModule(self, monitortypeid):
+        """return the record"""
+        colnames, data = self.__db__.query("""
+            SELECT mt.monitortypeid, mt.name, mt.unit, mt.defaultmax, mt.defaultmin, mt.dangermax, mt.dangermin
+            FROM monitortype mt
+            WHERE mt.monitortypeid = %s""", (monitortypeid, ))
         if colnames is not None:
             # store all the records individually as objects
             for record in data:
                 monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6])
-                tempMonitorTypes.append(monitortype)
-        return tempMonitorTypes
+        return monitortype
 
 class MonitorType():
     """MonitorType object"""
 
     """private attributes"""
-    __monitortypeid__ = None
-    __name__ = None
-    __unit__ = None
-    __defaultmax__ = None
-    __defaultmin__ = None
-    __dangerMax = None
-    __dangerMin = None
+    _monitortypeid = None
+    _name = None
+    _unit = None
+    _defaultmax = None
+    _defaultmin = None
+    _dangerMax = None
+    _dangerMin = None
 
     def __init__(self, monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin):
-        self.__monitortypeid__ = monitortypeid
-        self.__name__ = name
-        self.__unit__ = unit
-        self.__defaultmax__ = defaultmax
-        self.__defaultmin__ = defaultmin
-        self.__dangerMax = dangermax
-        self.__dangerMin = dangermin
+        self._monitortypeid = monitortypeid
+        self._name = name
+        self._unit = unit
+        self._defaultmax = defaultmax
+        self._defaultmin = defaultmin
+        self._dangerMax = dangermax
+        self._dangerMin = dangermin
 
     def displayTitles(self):
         """return a list of column names for display"""
@@ -84,4 +86,9 @@ class MonitorType():
 
     def display(self):
         """return a displayable list of columns"""
-        return self.__monitortypeid__, self.__name__, self.__unit__, self.__defaultmax__, self.__defaultmin__, self.__dangerMax, self.__dangerMin
+        return self._monitortypeid, self._name, self._unit, self._defaultmax, self._defaultmin, self._dangerMax, self._dangerMin
+
+    def get_name(self):
+        return self._name
+
+    name = property(get_name)

@@ -29,8 +29,6 @@ coreWindow.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      main window control module
-  arguments:    TODO instantion: none
-  returns:      (TODO see methods)
 """
 
 class coreWindow(QMainWindow):
@@ -71,6 +69,7 @@ class coreWindow(QMainWindow):
         self.QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self.staff)
 
     def QtTablePopulate(self, widget, data):
+        """given a Qt window widget object and an object TODO"""
         if data is not None and len(data):
             # display column titles
             widget.setHorizontalHeaderLabels(data[0].displayTitles())
@@ -102,7 +101,6 @@ class coreWindow(QMainWindow):
         print(index.row(), index.column())
 
     def pulse(self):
-        print('test')
         self.setTimer()
 
     def setTimer(self):
