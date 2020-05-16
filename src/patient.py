@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.1"
 
 """
 patient.py
@@ -12,47 +12,42 @@ patient.py
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      patient class
+  arguments:
+  returns:      TODO
 """
 
 class Patients():
-    """singleton collection and management of Patient data and objects"""
-    _instance = None
+    """collection and management of Patient data and objects"""
 
     """private list of patients"""
-    _patients = []
-    _db = None
-
-    def __new__(self, *args, **kwargs):
-        """singleton override"""
-        if not self._instance:
-            self._instance = object.__new__(self)
-        return self._instance
+    __patientsraw__ = {}
+    __patients__ = []
 
     def __init__(self, db):
-        self._db = db
-        if len(self._patients) != 0:
-            return
         colnames, data = db.query("""
             SELECT patientid, name
             FROM patient
             ORDER BY patientid""", None)
         if colnames is not None:
+            # store the raw data
+            self.__patientsraw__['colnames'] = ['id', 'Name']
+            self.__patientsraw__['data'] = data
             # store all the records individually as objects
             for record in data:
                 patient = Patient(record[0], record[1])
-                self._patients.append(patient)
+                self.__patients__.append(patient)
 
     def getPatients(self):
         """return all records for mass operations"""
-        return self._patients
+        return self.__patients__
 
 class Patient():
     """Patient object"""
     
     """private attributes"""
-    _patientid = None
-    _name = None
+    __patientid__ = None
+    __name__ = None
 
     def __init__(self, patientid, name):
-        _patientid = patientid
-        _name = name
+        __patientid__ = patientid
+        __name__ = name
