@@ -19,9 +19,11 @@ class Staffs():
     """collection and management of Staff data and objects (sorry about the nasty plural)"""
 
     """private list of staff"""
-    __staff__ = []
+    _staff = []
+    _db = none
 
     def __init__(self, db):
+        self._db = db
         colnames, data = db.query("""
             SELECT staffid, name, email, telnumber, case when stafftype=1 then 'Nurse' else 'Consultant' end as stafftype
             FROM staff
@@ -30,11 +32,11 @@ class Staffs():
             # store all the records individually as objects
             for record in data:
                 staff = Staff(record[0], record[1], record[2], record[3], record[4])
-                self.__staff__.append(staff)
+                self._staff.append(staff)
 
     def getStaff(self):
         """return all records for mass operations"""
-        return self.__staff__
+        return self._staff
 
 class Staff():
     """Staff object (singular!)"""

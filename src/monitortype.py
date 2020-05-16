@@ -18,22 +18,22 @@ monitortype.py
 
 class MonitorTypes(object):
     """singleton collection and management of MonitorType data and objects"""
-    __instance__ = None
+    _instance = None
     """private list of monitor types and database connection"""
-    __monitortypes__ = []
-    __db__ = None
+    _monitortypes = []
+    _db = None
 
     def __new__(self, *args, **kwargs):
         """singleton override"""
-        if not self.__instance__:
-            self.__instance__ = object.__new__(self)
-        return self.__instance__
+        if not self._instance:
+            self._instance = object.__new__(self)
+        return self._instance
 
     def __init__(self, db):
-        if len(self.__monitortypes__) != 0:
+        if len(self._monitortypes) != 0:
             return
-        self.__db__ = db
-        colnames, data = self.__db__.query("""
+        self._db = db
+        colnames, data = self._db.query("""
             SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
             FROM monitortype
             ORDER BY monitortypeid""", None)
@@ -41,15 +41,15 @@ class MonitorTypes(object):
             # store all the records individually as objects
             for counter, record in enumerate(data):
                 monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6])
-                self.__monitortypes__.append(monitortype)
+                self._monitortypes.append(monitortype)
 
     def getMonitorTypes(self):
         """return all records for mass operations"""
-        return self.__monitortypes__
+        return self._monitortypes
 
     def getMonitorTypeForModule(self, monitortypeid):
         """return the record"""
-        colnames, data = self.__db__.query("""
+        colnames, data = self._db.query("""
             SELECT mt.monitortypeid, mt.name, mt.unit, mt.defaultmax, mt.defaultmin, mt.dangermax, mt.dangermin
             FROM monitortype mt
             WHERE mt.monitortypeid = %s""", (monitortypeid, ))

@@ -16,20 +16,21 @@ patient.py
 
 class Patients():
     """singleton collection and management of Patient data and objects"""
-    __instance__ = None
+    _instance = None
 
     """private list of patients"""
-    __patients__ = []
-    __db__ = None
+    _patients = []
+    _db = None
 
     def __new__(self, *args, **kwargs):
         """singleton override"""
-        if not self.__instance__:
-            self.__instance__ = object.__new__(self)
-        return self.__instance__
+        if not self._instance:
+            self._instance = object.__new__(self)
+        return self._instance
 
     def __init__(self, db):
-        if len(self.__patients__) != 0:
+        self._db = db
+        if len(self._patients) != 0:
             return
         colnames, data = db.query("""
             SELECT patientid, name
@@ -39,11 +40,11 @@ class Patients():
             # store all the records individually as objects
             for record in data:
                 patient = Patient(record[0], record[1])
-                self.__patients__.append(patient)
+                self._patients.append(patient)
 
     def getPatients(self):
         """return all records for mass operations"""
-        return self.__patients__
+        return self._patients
 
 class Patient():
     """Patient object"""
