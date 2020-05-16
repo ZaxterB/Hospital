@@ -35,20 +35,19 @@ class Beds():
 
     def __init__(self, db):
         self._db = db
-        colnames, data = db.query("""
+
+    """return all records for display"""
+    def getBeds(self):
+        colnames, data = self._db.query("""
             SELECT bedid, bednumber
             FROM bed
             ORDER BY bednumber""", None)
         if colnames is not None:
             # store all the records individually as objects
             for record in data:
-                print("bednumber", record[1])
-                moduleList = Modules(db).getModulesForBed(record[0])
+                moduleList = Modules(self._db).getModulesForBed(record[0])
                 bed = Bed(record[0], record[1], constants.BAY_NUMBER, constants.STATION_NUMBER, moduleList)
                 self._beds.append(bed)
-
-    """return all records for display"""
-    def getBeds(self):
         return self._beds
 
 class Bed():
@@ -70,6 +69,9 @@ class Bed():
 
     def addModule(self, module):
         """add a module to the bed"""
+        # prevent more than the maximum deisng number of modules being added 
+        if len(self._modules) > MAX_MODULES_PER_BED - 1:
+            raise ValueError('cannot have more than {0} modules per bed'.format(MAX_MODULES_PER_BED))
         self._modules.add(module)
 
     def displayTitles(self):

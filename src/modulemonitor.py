@@ -7,8 +7,9 @@ __license__ = "Private"
 __version__ = "0.0.2"
 
 from monitortype import MonitorTypes, MonitorType
+
 """
-monitortype.py
+modulemonitor.py
 
   created by:   Zach Beed
   date:         11mar2020
@@ -30,7 +31,6 @@ class ModuleMonitors():
         if colnames is not None:
             # store all the records individually as objects
             for record in data:
-                print("modulemonitor", )
                 monitortype = MonitorTypes(self.db).getMonitorTypeForModule(record[1])
                 modulemonitor = ModuleMonitor(record[0], monitortype, record[2], record[3])
                 modulemonitors.append(modulemonitor)

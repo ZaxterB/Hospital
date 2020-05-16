@@ -30,9 +30,10 @@ class MonitorTypes(object):
         return self._instance
 
     def __init__(self, db):
-        if len(self._monitortypes) != 0:
-            return
         self._db = db
+
+    def getMonitorTypes(self):
+        """return all records for mass operations"""
         colnames, data = self._db.query("""
             SELECT monitortypeid, name, unit, defaultmax, defaultmin, dangermax, dangermin
             FROM monitortype
@@ -42,9 +43,6 @@ class MonitorTypes(object):
             for counter, record in enumerate(data):
                 monitortype = MonitorType(record[0], record[1], record[2], record[3], record[4], record[5], record[6])
                 self._monitortypes.append(monitortype)
-
-    def getMonitorTypes(self):
-        """return all records for mass operations"""
         return self._monitortypes
 
     def getMonitorTypeForModule(self, monitortypeid):

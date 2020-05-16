@@ -6,9 +6,8 @@ __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
 __version__ = "0.0.2"
 
-
 """
-bed.py
+staff.py
 
   created by:   Tim Clarke
   date:         16mar2020
@@ -16,15 +15,25 @@ bed.py
 """
 
 class Staffs():
-    """collection and management of Staff data and objects (sorry about the nasty plural)"""
+    """singleton collection and management of Staff data and objects (sorry about the nasty plural)"""
+    _instance = None
 
     """private list of staff"""
     _staff = []
-    _db = none
+    _db = None
+
+    def __new__(self, *args, **kwargs):
+        """singleton override"""
+        if not self._instance:
+            self._instance = object.__new__(self)
+        return self._instance
 
     def __init__(self, db):
         self._db = db
-        colnames, data = db.query("""
+
+    def getStaff(self):
+        """return all records for mass operations"""
+        colnames, data = self._db.query("""
             SELECT staffid, name, email, telnumber, case when stafftype=1 then 'Nurse' else 'Consultant' end as stafftype
             FROM staff
             ORDER BY staffid""", None)
@@ -33,10 +42,13 @@ class Staffs():
             for record in data:
                 staff = Staff(record[0], record[1], record[2], record[3], record[4])
                 self._staff.append(staff)
-
-    def getStaff(self):
-        """return all records for mass operations"""
         return self._staff
+
+    def getStaffbyID(self, staffid):
+        for staff in self._staff:
+            if staff._staffid == staffid:
+                return staff
+        return None
 
 class Staff():
     """Staff object (singular!)"""
@@ -62,3 +74,7 @@ class Staff():
     def display(self):
         """return a displayable list of columns"""
         return self._staffid, self._name, self._email, self._telnumber, self._stafftype
+
+    def get_name(self):
+        """return name"""
+        return self._name

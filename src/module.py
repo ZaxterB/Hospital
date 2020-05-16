@@ -66,7 +66,6 @@ class Modules():
         modules = []
         if colnames is not None:
             for counter, record in enumerate(data):
-                print("moduleid name", record[0], record[1])
                 # create a module object from moduleid, modulename, monitors[]
                 module = Module(record[0], record[1], ModuleMonitors(self.db).getModuleMonitorForModule(record[0]))
                 modules.append(module)

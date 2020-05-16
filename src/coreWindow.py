@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 # python modules
 import sys
@@ -19,6 +19,7 @@ from module import Modules, Module
 from monitortype import MonitorTypes, MonitorType
 from patient import Patients, Patient
 from staff import Staffs, Staff
+from shift import Shifts, Shift
 # PyQt libraries
 from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
@@ -37,6 +38,7 @@ class coreWindow(QMainWindow):
     modules = None
     patients = None
     staff = None
+    shifts = None
     timer = None
 
     def __init__(self, db, parent=None):
@@ -59,14 +61,16 @@ class coreWindow(QMainWindow):
         self.modules = Modules(db).getModules()
         self.patients = Patients(db).getPatients()
         self.staff = Staffs(db).getStaff()
+        self.shifts = Shifts(db).getShifts()
 
     def populateTables(self):
         """initial load of all database data into display tables"""
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblBed"), self.beds)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self.beds)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self.monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self.modules)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self.patients)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self.staff)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblShifts"), self.shifts)
 
     def QtTablePopulate(self, widget, data):
         """given a Qt window widget object and an object TODO"""
