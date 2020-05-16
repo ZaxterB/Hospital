@@ -83,7 +83,7 @@ class Bed():
         modules = []
         for module in self._modules:
             modules.append(module.shortDisplay())
-        return self._bedid, self._bednumber, ','.join(modules)
+        return self._bedid, self._bednumber, '\n'.join(modules)
 
     def getMonitorValues(self):
         """query all the beds for their monitor values"""

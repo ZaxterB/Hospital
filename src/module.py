@@ -75,12 +75,12 @@ class Module():
     """module object"""
 
     """private attributes"""
-    moduleid = None
+    _moduleid = None
     _modulename = None
     _monitortypes = []
 
     def __init__(self, moduleid, modulename, monitortypes):
-        self.moduleid = moduleid
+        self._moduleid = moduleid
         self._modulename = modulename
         self._monitortypes = monitortypes
 
@@ -90,14 +90,14 @@ class Module():
 
     def display(self):
         """return a displayable list of columns"""
-        return self.moduleid, self._modulename, self.shortDisplay()
+        return self._moduleid, self._modulename, self.shortDisplay()
 
     def shortDisplay(self):
         """return just a string representing this object"""
         modulemonitorlist = []
         for modulemonitor in self._monitortypes:
-            modulemonitorlist.append(modulemonitor.getMonitorTypeName())
-        return ','.join(modulemonitorlist)
+            modulemonitorlist.append(modulemonitor.currentValues)
+        return '\n'.join(modulemonitorlist)
 
     def getCurrentValues(self):
         """get the current monitor values for a given module"""

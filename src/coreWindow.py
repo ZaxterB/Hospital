@@ -87,6 +87,7 @@ class coreWindow(QMainWindow):
                     item = QTableWidgetItem(str(element))
                     widget.setItem(rowNum, colNum, item)
             widget.resizeColumnsToContents()
+            widget.resizeRowsToContents()
 
     def setHandlers(self):
         """set up the window event handler functions"""

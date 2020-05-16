@@ -44,6 +44,7 @@ class ModuleMonitor():
     _monitortype = None
     _minval = None
     _maxval = None
+    _current = None
 
     def __init__(self, modulemonitorid, monitortype, minval, maxval):
         self._modulemonitorid = modulemonitorid
@@ -53,4 +54,13 @@ class ModuleMonitor():
 
     def getMonitorTypeName(self):
         """return names of monitortypes"""
-        return self._monitortype.get_name()
+        return self._monitortype.name
+
+    def getCurrentValues(self):
+        """return a displayable string of current values"""
+        return self._monitortype.name + ': ' + str(self._current) + ' (' + str(self._maxval) + '/' + str(self._minval) + ')'
+
+    currentValues = property(getCurrentValues)
+
+    def setCurrentValue(self, value):
+        _current = value
