@@ -4,10 +4,8 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
-# app-specific database interface class
-from db import Db
 
 """
 bed.py
@@ -15,51 +13,47 @@ bed.py
   created by:   Tim Clarke
   date:         16mar2020
   purpose:      staff class
-  arguments:
-  returns:      TODO
 """
 
 class Staffs():
     """collection and management of Staff data and objects (sorry about the nasty plural)"""
 
     """private list of staff"""
-    __staffraw__ = {}
-    __staff__ = []
+    _staff = []
+    _db = none
 
     def __init__(self, db):
+        self._db = db
         colnames, data = db.query("""
             SELECT staffid, name, email, telnumber, case when stafftype=1 then 'Nurse' else 'Consultant' end as stafftype
             FROM staff
             ORDER BY staffid""", None)
         if colnames is not None:
-            # store the raw data
-            self.__staffraw__['colnames'] = ['id', 'Name', 'Email', 'Tel Number', 'Type']
-            self.__staffraw__['data'] = data
             # store all the records individually as objects
             for record in data:
                 staff = Staff(record[0], record[1], record[2], record[3], record[4])
-                self.__staff__.append(staff)
+                self._staff.append(staff)
 
     def getStaff(self):
         """return all records for mass operations"""
-        return self.__staff__
+        return self._staff
 
 class Staff():
     """Staff object (singular!)"""
 
     """private attributes"""
-    __staffid__ = None
-    __name__ = None
-    __email__ = None
-    __telnumber__ = None
-    __stafftype__ = None
+    _staffid = None
+    _name = None
+    _email = None
+    _telnumber = None
+    _stafftype = None
 
     def __init__(self, staffid, name, email, telnumber, stafftype):
-        self.__staffid__ = staffid
-        self.__name__ = name
-        self.__email__ = email
-        self.__telnumber__ = telnumber
-        self.__stafftype__ = stafftype
+        self._staffid = staffid
+        self._name = name
+        self._email = email
+        self._telnumber = telnumber
+        self._stafftype = stafftype
 
     def displayTitles(self):
         """return a list of column names for display"""
@@ -67,4 +61,4 @@ class Staff():
 
     def display(self):
         """return a displayable list of columns"""
-        return self.__staffid__, self.__name__, self.__email__, self.__telnumber__, self.__stafftype__
+        return self._staffid, self._name, self._email, self._telnumber, self._stafftype
