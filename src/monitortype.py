@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 """
 monitortype.py
@@ -90,3 +90,8 @@ class MonitorType():
         return self._name
 
     name = property(getName)
+
+    def getid(self):
+        return self._monitortypeid
+
+    id = property(getid)

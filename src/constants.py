@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 """
 constants.py
@@ -28,3 +28,5 @@ MAX_MODULES_PER_BED = 4
 BAY_NUMBER = 1
 # only one monitoring station for the current functionality
 STATION_NUMBER = 1
+# pulse time (seconds)
+PULSE_TIME = 1.0

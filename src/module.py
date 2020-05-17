@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 # app-specific constants
 from monitortype import MonitorTypes
@@ -114,3 +114,18 @@ class Module():
         """get the current monitor values for a given module"""
         """TODO"""
         pass
+
+    def getMonitortypeids(self):
+        """return a list of all the monitortypes in this module"""
+        monitortypeids = []
+        for monitortype in self._monitortypes:
+            monitortypeids.append(monitortype.monitortypeid)
+        return monitortypeids
+
+    monitortypeids = property(getMonitortypeids)
+
+    def setMonitorTypeValue(self, monitortypeid, newvalue):
+        """search this module for the monitortype, if found set the value"""
+        for modulemonitor in self._monitortypes:
+            if modulemonitor.monitortypeid == monitortypeid:
+                modulemonitor.setCurrentValue(newvalue)

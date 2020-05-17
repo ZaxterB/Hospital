@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 # app-specific constants
 import constants
@@ -36,8 +36,8 @@ class Beds():
     def __init__(self, db):
         self._db = db
 
-    """return all records for display"""
     def getBeds(self):
+        """return all records for display"""
         colnames, data = self._db.query("""
             SELECT bedid, bednumber
             FROM bed
@@ -49,6 +49,12 @@ class Beds():
                 bed = Bed(record[0], record[1], constants.BAY_NUMBER, constants.STATION_NUMBER, moduleList)
                 self._beds.append(bed)
         return self._beds
+
+    def getBed(self, bedid):
+        """get specific bed by id"""
+        for bed in self._beds:
+            if bed.bedid == bedid:
+                return bed
 
 class Bed():
     """Bed object"""
@@ -89,3 +95,15 @@ class Bed():
         """query all the beds for their monitor values"""
         """TODO"""
         pass
+
+    def getBedid(self):
+        """return bedid"""
+        return self._bedid
+
+    bedid = property(getBedid)
+
+    def setMonitorTypeValue(self, monitortypeid, newvalue):
+        """set the monitortypeid for this bed to newvalue"""
+        for module in self._modules:
+            if monitortypeid in module.monitortypeids:
+                module.setMonitorTypeValue(monitortypeid, newvalue)

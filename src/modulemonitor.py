@@ -4,7 +4,7 @@
 __author__ = "Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 from monitortype import MonitorTypes, MonitorType
 
@@ -69,4 +69,12 @@ class ModuleMonitor():
     currentValues = property(getCurrentValues)
 
     def setCurrentValue(self, value):
-        _current = value
+        self._current = value
+        if self._current <= self._minval or self._current >= self._maxval:
+            """TODO raise alarm"""
+            pass
+
+    def getmonitortypeid(self):
+        return self._monitortype.id
+
+    monitortypeid = property(getmonitortypeid)

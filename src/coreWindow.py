@@ -4,12 +4,11 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 # python modules
 import sys
 import threading
-import csv
 # app-specific constants
 import constants
 # app-specific database interface class
@@ -21,6 +20,7 @@ from monitortype import MonitorTypes, MonitorType
 from patient import Patients, Patient
 from staff import Staffs, Staff
 from shift import Shifts, Shift
+from testfile import TestFile
 # PyQt libraries
 from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
@@ -34,17 +34,21 @@ coreWindow.py
 """
 
 class coreWindow(QMainWindow):
-    beds = None
-    monitorTypes = None
-    modules = None
-    patients = None
-    staff = None
-    shifts = None
-    timer = None
+    """private variables"""
+    _db = None # database object
+    _beds = None
+    _monitorTypes = None
+    _modules = None
+    _patients = None
+    _staff = None
+    _shifts = None
+    _testfile = None
+    _timer = None
 
-    def __init__(self, db, dataFileName, parent=None):
+    def __init__(self, db, testFileName, parent=None):
+        self._db = db
         QMainWindow.__init__(self, parent)
-        uic.loadUi('files/mainwindow.ui', self)
+        uic.loadUi('src/files/mainwindow.ui', self)
         self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
         # initially load all classes from database
         self.loadTables(db)
@@ -52,29 +56,33 @@ class coreWindow(QMainWindow):
         self.populateTables()
         # set up user interaction mechanisms
         self.setHandlers()
+        # open test file if supplied
+
+        if testFileName is not None:
+            self._testfile = TestFile(testFileName)
         # now begin to react
         self.setTimer()
 
     def loadTables(self, db):
         """initial load of all database data"""
-        self.beds = Beds(db).getBeds()
-        self.monitortypes = MonitorTypes(db).getMonitorTypes()
-        self.modules = Modules(db).getModules()
-        self.patients = Patients(db).getPatients()
-        self.staff = Staffs(db).getStaff()
-        self.shifts = Shifts(db).getShifts()
+        self._beds = Beds(db).getBeds()
+        self._monitortypes = MonitorTypes(db).getMonitorTypes()
+        self._modules = Modules(db).getModules()
+        self._patients = Patients(db).getPatients()
+        self._staff = Staffs(db).getStaff()
+        self._shifts = Shifts(db).getShifts()
 
     def populateTables(self):
         """initial load of all database data into display tables"""
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self.beds)
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self.monitortypes)
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self.modules)
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self.patients)
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self.staff)
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblShifts"), self.shifts)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self._staff)
+        self.QtTablePopulate(self.findChild(QTableWidget, "tblShifts"), self._shifts)
 
     def QtTablePopulate(self, widget, data):
-        """given a Qt window widget object and an object TODO"""
+        """given a Qt window widget object and a one of our data objects, display the latter in the former"""
         if data is not None and len(data):
             # display column titles
             widget.setHorizontalHeaderLabels(data[0].displayTitles())
@@ -107,8 +115,29 @@ class coreWindow(QMainWindow):
         print(index.row(), index.column())
 
     def pulse(self):
+        # set the timer off again since 
         self.setTimer()
+        # TODO
+        if self._testfile:
+            try:
+                data = next(self._testfile)
+                # validate 
+                if len(data) != 3:
+                    print('Error in pulse(): Row {} in test data file does not contain exactly three values'.format(data))
+                # inject the value
+                bed = Beds(self._db).getBed(int(data[0]))
+                if not bed:
+                    print('Error in pulse(): Column 1 in row {} in test data file does not contain a valid bedid'.format(data))
+                bed.setMonitorTypeValue(int(data[1]), int(data[2]))
+            except StopIteration:
+                # test data file finished, ignore gracefully
+                pass
+            except:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                raise RuntimeError("Error in main(): {0} at line {1}".
+                                   format(str(exc_value), str(exc_traceback.tb_lineno)))
 
     def setTimer(self):
-        self.timer = threading.Timer(2.0, self.pulse)
+        """ start a timer to run the pulse function """
+        self.timer = threading.Timer(constants.PULSE_TIME, self.pulse)
         self.timer.start()
