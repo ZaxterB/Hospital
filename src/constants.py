@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.1"
+__version__ = "0.0.3"
 
 """
 constants.py
@@ -20,8 +20,13 @@ constants.py
 DBLOCATION = 'localhost'
 DBNAME = 'hospital'
 
+# current design maximum of beds in a bay
 MAX_BEDS_PER_BAY = 8
+# current design maximum of modules per bed
+MAX_MODULES_PER_BED = 4
 # only one bay for the current functionality
 BAY_NUMBER = 1
 # only one monitoring station for the current functionality
 STATION_NUMBER = 1
+# pulse time (seconds)
+PULSE_TIME = 1.0
