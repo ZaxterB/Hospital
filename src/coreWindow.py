@@ -49,7 +49,7 @@ class coreWindow(QMainWindow):
         self._db = db
         QMainWindow.__init__(self, parent)
         uic.loadUi('files/mainwindow.ui', self)
-        self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
+        self.setWindowIcon(QtGui.QIcon('src/files/hospital.png'))
         # initially load all classes from database
         self.loadTables(db)
         # show them to the user
