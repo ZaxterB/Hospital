@@ -48,8 +48,8 @@ class coreWindow(QMainWindow):
     def __init__(self, db, testFileName, parent=None):
         self._db = db
         QMainWindow.__init__(self, parent)
-        uic.loadUi('src/files/mainwindow.ui', self)
-        self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
+        uic.loadUi('files/mainwindow.ui', self)
+        self.setWindowIcon(QtGui.QIcon('src/files/hospital.png'))
         # initially load all classes from database
         self.loadTables(db)
         # show them to the user
@@ -74,7 +74,7 @@ class coreWindow(QMainWindow):
 
     def populateTables(self):
         """initial load of all database data into display tables"""
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
+        # self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
@@ -115,13 +115,13 @@ class coreWindow(QMainWindow):
         print(index.row(), index.column())
 
     def pulse(self):
-        # set the timer off again since 
+        # set the timer off again since
         self.setTimer()
         # TODO
         if self._testfile:
             try:
                 data = next(self._testfile)
-                # validate 
+                # validate
                 if len(data) != 3:
                     print('Error in pulse(): Row {} in test data file does not contain exactly three values'.format(data))
                 # inject the value
