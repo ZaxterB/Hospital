@@ -412,11 +412,27 @@ ALTER TABLE ONLY public.bedevent
 
 
 --
--- Name: monitortype module_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: bedmodule bedid_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.monitortype
-    ADD CONSTRAINT module_fk FOREIGN KEY (monitortypeid) REFERENCES public.module(moduleid) NOT VALID;
+ALTER TABLE ONLY public.bedmodule
+    ADD CONSTRAINT bedid_fk FOREIGN KEY (bedid) REFERENCES public.bed(bedid) NOT VALID;
+
+
+--
+-- Name: bedmodule moduleid_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bedmodule
+    ADD CONSTRAINT moduleid_fk FOREIGN KEY (moduleid) REFERENCES public.module(moduleid) NOT VALID;
+
+
+--
+-- Name: modulemonitor moduleid_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.modulemonitor
+    ADD CONSTRAINT moduleid_fk FOREIGN KEY (moduleid) REFERENCES public.module(moduleid) NOT VALID;
 
 
 --
