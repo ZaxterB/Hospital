@@ -50,16 +50,20 @@ class coreWindow(QMainWindow):
         QMainWindow.__init__(self, parent)
         uic.loadUi('src/files/mainwindow.ui', self)
         self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
+
         # initially load all classes from database
         self.loadTables(db)
+
         # show them to the user
         self.populateTables()
+
         # set up user interaction mechanisms
         self.setHandlers()
-        # open test file if supplied
 
+        # open test file if supplied
         if testFileName is not None:
             self._testfile = TestFile(testFileName)
+
         # now begin to react
         self.setTimer()
 
@@ -107,15 +111,21 @@ class coreWindow(QMainWindow):
 
     def close(self):
         """shut down timers"""
-        self.timer.cancel()
+        self._timer.cancel()
 
     def alert(self, index):
         """ TODO EXPERIMENTAL
             argmuents: self=MainWindow, index=QModelIndex of clicked """
         print(index.row(), index.column())
 
+    def setTimer(self):
+        """ start a timer to run the pulse function """
+        self._timer = threading.Timer(constants.PULSE_TIME, self.pulse)
+        self._timer.start()
+
     def pulse(self):
-        # set the timer off again since 
+        """repeated process timer handler"""
+        # set the timer off again
         self.setTimer()
         # TODO
         if self._testfile:
@@ -136,8 +146,3 @@ class coreWindow(QMainWindow):
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 raise RuntimeError("Error in main(): {0} at line {1}".
                                    format(str(exc_value), str(exc_traceback.tb_lineno)))
-
-    def setTimer(self):
-        """ start a timer to run the pulse function """
-        self.timer = threading.Timer(constants.PULSE_TIME, self.pulse)
-        self.timer.start()

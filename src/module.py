@@ -40,7 +40,7 @@ class Modules():
         self.db = db
 
     def getModules(self):
-        """TODO"""
+        """return all records for mass operations"""
         if len(self._modules) == 0:
             colnames, data = self.db.query("""
                 SELECT mo.moduleid, mo.name, string_agg(mt.name::text, ',') as monitorname
