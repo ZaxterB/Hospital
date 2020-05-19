@@ -4,71 +4,85 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.6"
 
-from modulemonitor import ModuleMonitor, ModuleMonitors
+# app-specific constants
+from monitortype import MonitorTypes
+from modulemonitor import ModuleMonitors, ModuleMonitor
+
 """
 module.py
 
   created by:   Tim Clarke
   date:         11mar2020
   purpose:      module class
-  arguments:
-  returns:
+                this subsumes the bedmodule class functionality since they are so closely related
+                in the database
 """
 
-
 class Modules():
-    """collection and management of Module data and objects"""
+    """singleton collection and management of Module data and objects"""
+    __instance__ = None
 
-    """private list of monitor types"""
-    __modulesraw__ = {}
-    __modules__ = []
+    """private list of modules"""
+    _modules = []
+    _db = None
 
+    def __new__(self, *args, **kwargs):
+        """singleton override"""
+        if not self.__instance__:
+            self.__instance__ = object.__new__(self)
+        return self.__instance__
 
     def __init__(self, db):
+        if len(self._modules) != 0:
+            return
         self.db = db
-        colnames, data = self.db.query("""
-            SELECT mo.moduleid, mo.name, string_agg(mt.name::text, ',') as monitorname
-            FROM public.module mo,public.modulemonitor mm, public.monitortype mt
-            WHERE mo.moduleid = mm.moduleid AND mm.monitortypeid = mt.monitortypeid
-            GROUP BY 1, 2
-            ORDER BY mo.moduleid""", None) #kinda legacy function here TODO: simplify
-        if colnames is not None:
-            # store the raw data
-            self.__modulesraw__['colnames'] = ['id', 'Name', 'Monitor Name']
-            self.__modulesraw__['data'] = data
-            # store all the records individually as objects
-            for record in data:
-                module = Module(record[0], record[1])
-                self.__modules__.append(module)
 
     def getModules(self):
-        return self.__modules__
+        """TODO"""
+        if len(self._modules) == 0:
+            colnames, data = self.db.query("""
+                SELECT mo.moduleid, mo.name, string_agg(mt.name::text, ',') as monitorname
+                FROM public.module mo,public.modulemonitor mm, public.monitortype mt
+                WHERE mo.moduleid = mm.moduleid AND mm.monitortypeid = mt.monitortypeid
+                GROUP BY 1, 2
+                ORDER BY mo.moduleid""", None) #kinda legacy function here TODO: simplify
+            if colnames is not None:
+                # store all the records individually as objects
+                for record in data:
+                    # create a module object from moduleid, modulename, monitors[]
+                    module = Module(record[0], record[1], ModuleMonitors(self.db).getModuleMonitorForModule(record[0]))
+                    self._modules.append(module)
+        return self._modules
 
     def getModulesForBed(self, bedid):
+        """get all modules installd on a bed"""
         colnames, data = self.db.query("""
-            SELECT bm.bedmoduleid, mo.moduleid, mo.name
+            SELECT mo.moduleid, mo.name
             FROM public.module mo, public.bedmodule bm
             WHERE mo.moduleid = bm.moduleid AND
                 bm.bedid = %s""", (bedid, ))
+        modules = []
         if colnames is not None:
-            for record in data:
-                MonitorList = ModuleMonitors(self.db).getModuleMonitorForModule(record[1])
-                module = Module(record[1], record[2], MonitorList)
-                # self.__modules__.append(module)
+            for counter, record in enumerate(data):
+                # create a module object from moduleid, modulename, monitors[]
+                module = Module(record[0], record[1], ModuleMonitors(self.db).getModuleMonitorForModule(record[0]))
+                modules.append(module)
+        return modules
 
 class Module():
     """module object"""
 
     """private attributes"""
-    __moduleid__ = None
-    __modulename__ = None
-    __monitors__ = []
+    _moduleid = None
+    _modulename = None
+    _monitortypes = []
 
-    def __init__(self, moduleid, modulename, monitors):
-        self.__moduleid__ = moduleid
-        self.__modulename__ = modulename
+    def __init__(self, moduleid, modulename, monitortypes):
+        self._moduleid = moduleid
+        self._modulename = modulename
+        self._monitortypes = monitortypes
 
     def displayTitles(self):
         """return a list of column names for display"""
@@ -76,10 +90,42 @@ class Module():
 
     def display(self):
         """return a displayable list of columns"""
-        """TODO finish call and return of monitors"""
-        return self.__moduleid__, self.__modulename__, ""
+        return self._moduleid, self._modulename, self.staticDisplay()
+
+    def displayLive(self):
+        """return a displayable list of columns"""
+        return self._moduleid, self._modulename, self.shortDisplay()
+
+    def staticDisplay(self):
+        """return just a string representing this object - name only"""
+        modulemonitorlist = []
+        for modulemonitor in self._monitortypes:
+            modulemonitorlist.append(modulemonitor.staticValues)
+        return '\n'.join(modulemonitorlist)
+
+    def shortDisplay(self):
+        """return just a string representing this object - active values"""
+        modulemonitorlist = []
+        for modulemonitor in self._monitortypes:
+            modulemonitorlist.append(modulemonitor.currentValues)
+        return '\n'.join(modulemonitorlist)
 
     def getCurrentValues(self):
         """get the current monitor values for a given module"""
         """TODO"""
         pass
+
+    def getMonitortypeids(self):
+        """return a list of all the monitortypes in this module"""
+        monitortypeids = []
+        for monitortype in self._monitortypes:
+            monitortypeids.append(monitortype.monitortypeid)
+        return monitortypeids
+
+    monitortypeids = property(getMonitortypeids)
+
+    def setMonitorTypeValue(self, monitortypeid, newvalue):
+        """search this module for the monitortype, if found set the value"""
+        for modulemonitor in self._monitortypes:
+            if modulemonitor.monitortypeid == monitortypeid:
+                modulemonitor.setCurrentValue(newvalue)

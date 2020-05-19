@@ -42,6 +42,15 @@
         <height>411</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -307,12 +316,12 @@ p, li { white-space: pre-wrap; }
       </property>
       <column>
        <property name="text">
-        <string>Staff member</string>
+        <string>id</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Date</string>
+        <string>Staff member</string>
        </property>
       </column>
       <column>
