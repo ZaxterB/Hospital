@@ -48,7 +48,7 @@ class coreWindow(QMainWindow):
         # initially load all classes from database
         self.loadTables(db)
         # show them to the user
-        self.populateTables()
+        # self.populateTables()
         # set up user interaction mechanisms
         self.setHandlers()
         # now begin to react
@@ -57,10 +57,10 @@ class coreWindow(QMainWindow):
     def loadTables(self, db):
         """initial load of all database data"""
         self.beds = Beds(db).getBeds()
-        self.monitortypes = MonitorTypes(db).getMonitorTypes()
-        self.modules = Modules(db).getModules()
-        self.patients = Patients(db).getPatients()
-        self.staff = Staffs(db).getStaff()
+        # self.monitortypes = MonitorTypes(db).getMonitorTypes()
+        # self.modules = Modules(db).getModules()
+        # self.patients = Patients(db).getPatients()
+        # self.staff = Staffs(db).getStaff()
 
     def populateTables(self):
         """initial load of all database data into display tables"""
