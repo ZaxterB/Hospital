@@ -48,7 +48,7 @@ class coreWindow(QMainWindow):
     def __init__(self, db, testFileName, parent=None):
         self._db = db
         QMainWindow.__init__(self, parent)
-        uic.loadUi('src/files/mainwindow.ui', self)
+        uic.loadUi('files/mainwindow.ui', self)
         self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
         # initially load all classes from database
         self.loadTables(db)
@@ -74,7 +74,7 @@ class coreWindow(QMainWindow):
 
     def populateTables(self):
         """initial load of all database data into display tables"""
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
+        # self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)

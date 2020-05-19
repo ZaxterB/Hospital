@@ -75,7 +75,7 @@ class ModuleMonitor():
             """raise alarm"""
             bed.alarmOn()
             pass
-        if self._current <= self._monitortype.dangerMin or self._current >= self._monitortype.dangerMax
+        if self._current <= self._monitortype.dangerMin or self._current >= self._monitortype.dangerMax:
             """raise critical alarm"""
             bed.critAlarmOn()
 

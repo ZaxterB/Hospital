@@ -48,9 +48,6 @@
         <bold>false</bold>
        </font>
       </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
