@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.2 (Ubuntu 12.2-4)
--- Dumped by pg_dump version 12.2 (Ubuntu 12.2-4)
+-- Dumped from database version 12.3 (Ubuntu 12.3-1.pgdg20.04+1)
+-- Dumped by pg_dump version 12.3 (Ubuntu 12.3-1.pgdg20.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -173,6 +173,20 @@ CREATE TABLE public.patient (
 ALTER TABLE public.patient OWNER TO postgres;
 
 --
+-- Name: shift; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.shift (
+    shiftid integer NOT NULL,
+    staffid integer NOT NULL,
+    start timestamp without time zone NOT NULL,
+    currentend timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.shift OWNER TO postgres;
+
+--
 -- Name: staff; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -221,7 +235,6 @@ COPY public.bedevent (bedeventid, eventtime, eventtype, patientid, bedid, monito
 COPY public.bedmodule (bedmoduleid, bedid, moduleid) FROM stdin;
 1	1	1
 2	1	2
-3	2	5
 4	2	3
 5	3	1
 6	3	2
@@ -275,6 +288,18 @@ COPY public.monitortype (monitortypeid, name, unit, defaultmax, defaultmin, dang
 --
 
 COPY public.patient (patientid, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: shift; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.shift (shiftid, staffid, start, currentend) FROM stdin;
+1	1	2020-05-16 16:00:00	2020-05-17 00:00:00
+2	2	2020-05-16 16:00:00	2020-05-17 00:00:00
+3	3	2020-05-16 16:00:00	2020-05-17 00:00:00
+4	4	2020-05-16 16:00:00	2020-05-17 00:00:00
 \.
 
 
@@ -371,6 +396,14 @@ ALTER TABLE ONLY public.modulemonitor
 
 
 --
+-- Name: shift shift_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.shift
+    ADD CONSTRAINT shift_pkey PRIMARY KEY (shiftid);
+
+
+--
 -- Name: bedevent bedevent_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -408,6 +441,14 @@ ALTER TABLE ONLY public.modulemonitor
 
 ALTER TABLE ONLY public.bedevent
     ADD CONSTRAINT patient_fk FOREIGN KEY (patientid) REFERENCES public.patient(patientid);
+
+
+--
+-- Name: shift staff_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.shift
+    ADD CONSTRAINT staff_fk FOREIGN KEY (staffid) REFERENCES public.staff(staffid);
 
 
 --

@@ -75,7 +75,7 @@ class Bed():
 
     def addModule(self, module):
         """add a module to the bed"""
-        # prevent more than the maximum deisng number of modules being added 
+        # prevent more than the maximum design number of modules being added 
         if len(self._modules) > MAX_MODULES_PER_BED - 1:
             raise ValueError('cannot have more than {0} modules per bed'.format(MAX_MODULES_PER_BED))
         self._modules.add(module)
@@ -106,4 +106,14 @@ class Bed():
         """set the monitortypeid for this bed to newvalue"""
         for module in self._modules:
             if monitortypeid in module.monitortypeids:
-                module.setMonitorTypeValue(monitortypeid, newvalue)
+                module.setMonitorTypeValue(monitortypeid, newvalue, self)
+
+    def alarmOn(self):
+        """receiving function for an alarm"""
+        """TODO"""
+        pass
+
+    def critAlarmOn(self):
+        """receiving function for a critial alarm"""
+        """TODO"""
+        pass

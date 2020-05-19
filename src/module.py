@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 # app-specific constants
 from monitortype import MonitorTypes
@@ -124,8 +124,9 @@ class Module():
 
     monitortypeids = property(getMonitortypeids)
 
-    def setMonitorTypeValue(self, monitortypeid, newvalue):
-        """search this module for the monitortype, if found set the value"""
+    def setMonitorTypeValue(self, monitortypeid, newvalue, bed):
+        """search this module for the monitortype, if found set the value
+            pass the bed object down so the alarms can be set if necessary"""
         for modulemonitor in self._monitortypes:
             if modulemonitor.monitortypeid == monitortypeid:
-                modulemonitor.setCurrentValue(newvalue)
+                modulemonitor.setCurrentValue(newvalue, bed)
