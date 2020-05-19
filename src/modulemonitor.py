@@ -4,7 +4,7 @@
 __author__ = "Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 from monitortype import MonitorTypes, MonitorType
 
@@ -68,11 +68,16 @@ class ModuleMonitor():
 
     currentValues = property(getCurrentValues)
 
-    def setCurrentValue(self, value):
+    def setCurrentValue(self, value, bed):
+        """set the current monitortype's value"""
         self._current = value
         if self._current <= self._minval or self._current >= self._maxval:
-            """TODO raise alarm"""
+            """raise alarm"""
+            bed.alarmOn()
             pass
+        if self._current <= self._monitortype.dangerMin or self._current >= self._monitortype.dangerMax
+            """raise critical alarm"""
+            bed.critAlarmOn()
 
     def getmonitortypeid(self):
         return self._monitortype.id

@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 """
 monitortype.py
@@ -95,3 +95,13 @@ class MonitorType():
         return self._monitortypeid
 
     id = property(getid)
+
+    def getDangerMin(self):
+        return self._dangerMin
+
+    dangerMin = property(getDangerMin)
+
+    def getDangerMax(self):
+        return self._dangerMax
+
+    dangerMax = property(getDangerMax)
