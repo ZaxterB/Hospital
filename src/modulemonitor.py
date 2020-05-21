@@ -7,6 +7,8 @@ __license__ = "Private"
 __version__ = "0.0.5"
 
 from monitortype import MonitorTypes, MonitorType
+# PyQt libraries
+from PyQt5 import QtGui, uic, QtCore, QtWidgets
 
 """
 modulemonitor.py
@@ -83,3 +85,28 @@ class ModuleMonitor():
         return self._monitortype.id
 
     monitortypeid = property(getmonitortypeid)
+
+    def UI(self, parentWidget):
+        MonitorGroupBox = QtWidgets.QGroupBox(parentWidget)
+        MonitorGroupBox.setObjectName("MonitorGroupBox" + str(self._modulemonitorid))
+        MonitorGroupBox.setFixedHeight(45)
+        MonitorGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", str(self._monitortype._name)))
+        MonitorValueScale = QtWidgets.QProgressBar(MonitorGroupBox)
+        MonitorValueScale.setGeometry(QtCore.QRect(0, 20, 118, 23))
+        MonitorValueScale.setProperty("value", 24)
+        MonitorValueScale.setObjectName("MonitorValueScale" + str(self._modulemonitorid))
+        MonitorCurrentValue = QtWidgets.QLCDNumber(MonitorGroupBox)
+        MonitorCurrentValue.setGeometry(QtCore.QRect(130, 20, 64, 23))
+        MonitorCurrentValue.setProperty("value", 30000.0)
+        MonitorCurrentValue.setObjectName("MonitorCurrentValue" + str(self._modulemonitorid))
+        MonitorUnits = QtWidgets.QTextBrowser(MonitorGroupBox)
+        MonitorUnits.setGeometry(QtCore.QRect(200, 20, 91, 23))
+        MonitorUnits.setObjectName("MonitorUnits" + str(self._modulemonitorid))
+        MonitorAlarm = QtWidgets.QRadioButton(MonitorGroupBox)
+        MonitorAlarm.setGeometry(QtCore.QRect(300, 20, 100, 20))
+        MonitorAlarm.setObjectName("MonitorAlarm" + str(self._modulemonitorid))
+        MonitorCritAlarm = QtWidgets.QRadioButton(MonitorGroupBox)
+        MonitorCritAlarm.setGeometry(QtCore.QRect(400, 20, 100, 20))
+        MonitorCritAlarm.setObjectName("MonitorCritAlarm" + str(self._modulemonitorid))
+
+        return MonitorGroupBox

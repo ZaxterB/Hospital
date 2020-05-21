@@ -9,6 +9,8 @@ __version__ = "0.0.7"
 # app-specific constants
 from monitortype import MonitorTypes
 from modulemonitor import ModuleMonitors, ModuleMonitor
+# PyQt libraries
+from PyQt5 import QtCore, QtWidgets
 
 """
 module.py
@@ -130,3 +132,26 @@ class Module():
         for modulemonitor in self._monitortypes:
             if modulemonitor.monitortypeid == monitortypeid:
                 modulemonitor.setCurrentValue(newvalue, bed)
+
+    def UI(self, parentWidget):
+            ModuleGroupBox = QtWidgets.QGroupBox(parentWidget)
+            ModuleGroupBox.setObjectName("ModuleGroupBox" + str(self._moduleid))
+            ModuleGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", self._modulename))
+            verticalLayoutWidget = QtWidgets.QWidget(ModuleGroupBox)
+            verticalLayoutWidget.setGeometry(QtCore.QRect(0, 20, 761, 0))
+            verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(self._moduleid))
+            verticalLayout = QtWidgets.QVBoxLayout(verticalLayoutWidget)
+            verticalLayout.setContentsMargins(0, 0, 0, 0)
+            verticalLayout.setObjectName("verticalLayout" + str(self._moduleid))
+            # call children
+            for monitor in self._monitortypes:
+                verticalLayout.addWidget(monitor.UI(verticalLayoutWidget))
+            # resize after adding children
+            heights = sum(
+                x.frameGeometry().height() for x in iter(
+                    verticalLayoutWidget.findChildren(QtWidgets.QGroupBox)
+                )
+            )  # ugly as sin generator to sum heights of children
+            verticalLayoutWidget.setMinimumHeight(heights)
+
+            return ModuleGroupBox
