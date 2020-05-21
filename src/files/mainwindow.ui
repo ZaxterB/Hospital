@@ -39,7 +39,7 @@
         <x>0</x>
         <y>60</y>
         <width>851</width>
-        <height>411</height>
+        <height>431</height>
        </rect>
       </property>
       <property name="font">
@@ -57,19 +57,20 @@
          <x>0</x>
          <y>0</y>
          <width>849</width>
-         <height>409</height>
+         <height>429</height>
         </rect>
        </property>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>851</width>
-          <height>411</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout"/>
+<!--       <widget class="QWidget" name="layoutWidget">-->
+<!--        <property name="geometry">-->
+<!--         <rect>-->
+<!--          <x>0</x>-->
+<!--          <y>0</y>-->
+<!--          <width>851</width>-->
+<!--          <height>411</height>-->
+<!--         </rect>-->
+<!--        </property>-->
+<!--        <layout class="QVBoxLayout" name="verticalLayout">-->
 <!--         <item>-->
 <!--          <widget class="QGroupBox" name="BedGroupBox">-->
 <!--           <property name="minimumSize">-->
@@ -229,8 +230,8 @@
 <!--           </widget>-->
 <!--          </widget>-->
 <!--         </item>-->
-        </layout>
-       </widget>
+<!--        </layout>-->
+<!--       </widget>-->
       </widget>
      </widget>
      <widget class="QPushButton" name="pushButton">

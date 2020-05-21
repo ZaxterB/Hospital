@@ -76,8 +76,8 @@ class coreWindow(QMainWindow):
         """initial load of all database data into display tables"""
         # self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
         for bed in self._beds:
-            print("bed:" + str(bed._bedid))
             self.BedUI(bed)
+        # self.BedUI(self._beds[0])
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
@@ -146,74 +146,97 @@ class coreWindow(QMainWindow):
         self.timer.start()
 
     def BedUI(self, bed):
-        #TODO add bedid into all relevant names and start inserting bed data
-        self.BedGroupBox = QtWidgets.QGroupBox(self.layoutWidget)
-        self.BedGroupBox.setMinimumSize(QtCore.QSize(849, 120))
-        self.BedGroupBox.setObjectName("BedGroupBox")
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.BedGroupBox)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(100, 20, 741, 381))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.BedAlarm = QtWidgets.QRadioButton(self.BedGroupBox)
-        self.BedAlarm.setGeometry(QtCore.QRect(0, 20, 101, 20))
-        self.BedAlarm.setObjectName("BedAlarm")
-        self.BedCritAlarm = QtWidgets.QRadioButton(self.BedGroupBox)
-        self.BedCritAlarm.setGeometry(QtCore.QRect(0, 40, 101, 20))
-        self.BedCritAlarm.setObjectName("BedCritAlarm")
-        self.BedAddModule = QtWidgets.QPushButton(self.BedGroupBox)
-        self.BedAddModule.setGeometry(QtCore.QRect(0, 60, 101, 32))
-        self.BedAddModule.setObjectName("BedAddModule")
-        self.verticalLayout.addWidget(self.BedGroupBox)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.BedAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "Alarm"))
-        self.BedCritAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "CritAlarm"))
-        self.BedAddModule.setText(QtCore.QCoreApplication.translate("MainWindow", "Add Module"))
-        self.BedGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", "Bed: " + str(bed._bedid)))
-
+        BedGroupBox = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
+        BedGroupBox.setFixedWidth(849)
+        BedGroupBox.setObjectName("BedGroupBox" + str(bed._bedid))
+        BedGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", "Bed: " + str(bed._bedid)))
+        verticalLayoutWidget = QtWidgets.QWidget(BedGroupBox)
+        verticalLayoutWidget.setGeometry(QtCore.QRect(100, 20, 741, 0))
+        verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(bed._bedid))
+        verticalLayout_2 = QtWidgets.QVBoxLayout(verticalLayoutWidget)
+        verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        verticalLayout_2.setObjectName("verticalLayout" + str(bed._bedid))
+        BedAlarm = QtWidgets.QRadioButton(BedGroupBox)
+        BedAlarm.setGeometry(QtCore.QRect(0, 20, 101, 20))
+        BedAlarm.setObjectName("BedAlarm" + str(bed._bedid))
+        BedAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "Alarm"))
+        BedCritAlarm = QtWidgets.QRadioButton(BedGroupBox)
+        BedCritAlarm.setGeometry(QtCore.QRect(0, 40, 101, 20))
+        BedCritAlarm.setObjectName("BedCritAlarm" + str(bed._bedid))
+        BedCritAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "CritAlarm"))
+        BedAddModule = QtWidgets.QPushButton(BedGroupBox)
+        BedAddModule.setGeometry(QtCore.QRect(0, 60, 101, 32))
+        BedAddModule.setObjectName("BedAddModule" + str(bed._bedid))
+        BedAddModule.setText(QtCore.QCoreApplication.translate("MainWindow", "Add Module"))
         #call children into view
         for mod in bed._modules:
-            self.ModuleUI(mod, self.verticalLayout_2)
+            self.ModuleUI(mod, verticalLayout_2, verticalLayoutWidget)
+        # resize after adding children
+        heights = sum(
+            x.frameGeometry().height() for x in iter(
+                verticalLayoutWidget.findChildren(QtWidgets.QGroupBox)
+            )
+        )  # ugly as sin generator to sum heights of children
+        if heights > 0:
+            verticalLayoutWidget.setMinimumHeight(heights)
+        else:
+            verticalLayoutWidget.setMinimumHeight(75)
+        BedGroupBox.setMinimumHeight(
+            BedGroupBox.findChild( #propagate height change to parent
+                QtWidgets.QWidget,"verticalLayoutWidget" + str(bed._bedid)
+            ).frameGeometry().height() + 25  # magic number padding is quick and dirty...
+        )
+        #appending to elements from module.ui
+        self.verticalLayout.addWidget(BedGroupBox)
 
-    def ModuleUI(self, module, VL2):
-        # TODO add bedid into all relevant names and start inserting bed data
-        self.ModulemonitorsGroupBox = QtWidgets.QGroupBox(self.verticalLayoutWidget)
-        self.ModulemonitorsGroupBox.setObjectName("ModulemonitorsGroupBox")
-        self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.ModulemonitorsGroupBox)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(0, 20, 761, 361))
-        self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.ModulemonitorsGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", module._modulename))
-        VL2.addWidget(self.ModulemonitorsGroupBox)
-        print(module._modulename)
-        print("length " + str(len(module._monitortypes)))
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+
+
+    def ModuleUI(self, module, BedLayout, BedLayoutWidget):
+        ModulemonitorsGroupBox = QtWidgets.QGroupBox(BedLayoutWidget)
+        ModulemonitorsGroupBox.setObjectName("ModulemonitorsGroupBox" + str(module._moduleid))
+        ModulemonitorsGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", module._modulename))
+        verticalLayoutWidget = QtWidgets.QWidget(ModulemonitorsGroupBox)
+        verticalLayoutWidget.setGeometry(QtCore.QRect(0, 20, 761, 0))
+        verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(module._moduleid))
+        verticalLayout = QtWidgets.QVBoxLayout(verticalLayoutWidget)
+        verticalLayout.setContentsMargins(0, 0, 0, 0)
+        verticalLayout.setObjectName("verticalLayout" + str(module._moduleid))
+        #call children
         for monitor in module._monitortypes:
-            print(monitor._monitortype._name)
-            self.MonitorUI(monitor, self.verticalLayout_3)
+            self.MonitorUI(monitor, verticalLayout, verticalLayoutWidget)
+        # resize after adding children
+        heights = sum(
+            x.frameGeometry().height() for x in iter(
+                verticalLayoutWidget.findChildren(QtWidgets.QGroupBox)
+            )
+        )# ugly as sin generator to sum heights of children
+        verticalLayoutWidget.setMinimumHeight(heights)
+        #add self to parent
+        BedLayout.addWidget(ModulemonitorsGroupBox)
 
-    def MonitorUI(self, monitor, VL3):
+    def MonitorUI(self, monitor, ModuleLayout, ModuleLayoutWidget):
         # TODO add bedid into all relevant names and start inserting bed data
-        self.MonitorGroupBox = QtWidgets.QGroupBox(self.verticalLayoutWidget_2)
-        self.MonitorGroupBox.setObjectName("MonitorGroupBox")
-        self.MonitorValueScale = QtWidgets.QProgressBar(self.MonitorGroupBox)
-        self.MonitorValueScale.setGeometry(QtCore.QRect(0, 20, 118, 23))
-        self.MonitorValueScale.setProperty("value", 24)
-        self.MonitorValueScale.setObjectName("MonitorValueScale")
-        self.MonitorCurrentValue = QtWidgets.QLCDNumber(self.MonitorGroupBox)
-        self.MonitorCurrentValue.setGeometry(QtCore.QRect(130, 20, 64, 23))
-        self.MonitorCurrentValue.setProperty("value", 30000.0)
-        self.MonitorCurrentValue.setObjectName("MonitorCurrentValue")
-        self.MonitorUnits = QtWidgets.QTextBrowser(self.MonitorGroupBox)
-        self.MonitorUnits.setGeometry(QtCore.QRect(200, 20, 91, 23))
-        self.MonitorUnits.setObjectName("MonitorUnits")
-        self.MonitorAlarm = QtWidgets.QRadioButton(self.MonitorGroupBox)
-        self.MonitorAlarm.setGeometry(QtCore.QRect(300, 20, 100, 20))
-        self.MonitorAlarm.setObjectName("MonitorAlarm")
-        self.MonitorCritAlarm = QtWidgets.QRadioButton(self.MonitorGroupBox)
-        self.MonitorCritAlarm.setGeometry(QtCore.QRect(400, 20, 100, 20))
-        self.MonitorCritAlarm.setObjectName("MonitorCritAlarm")
-        self.MonitorGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", str(monitor._monitortype._name)))
-        VL3.addWidget(self.MonitorGroupBox)
+        MonitorGroupBox = QtWidgets.QGroupBox(ModuleLayoutWidget)
+        MonitorGroupBox.setObjectName("MonitorGroupBox" + str(monitor._modulemonitorid))
+        MonitorGroupBox.setFixedHeight(45)
+        MonitorGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", str(monitor._monitortype._name)))
+        MonitorValueScale = QtWidgets.QProgressBar(MonitorGroupBox)
+        MonitorValueScale.setGeometry(QtCore.QRect(0, 20, 118, 23))
+        MonitorValueScale.setProperty("value", 24)
+        MonitorValueScale.setObjectName("MonitorValueScale" + str(monitor._modulemonitorid))
+        MonitorCurrentValue = QtWidgets.QLCDNumber(MonitorGroupBox)
+        MonitorCurrentValue.setGeometry(QtCore.QRect(130, 20, 64, 23))
+        MonitorCurrentValue.setProperty("value", 30000.0)
+        MonitorCurrentValue.setObjectName("MonitorCurrentValue" + str(monitor._modulemonitorid))
+        MonitorUnits = QtWidgets.QTextBrowser(MonitorGroupBox)
+        MonitorUnits.setGeometry(QtCore.QRect(200, 20, 91, 23))
+        MonitorUnits.setObjectName("MonitorUnits" + str(monitor._modulemonitorid))
+        MonitorAlarm = QtWidgets.QRadioButton(MonitorGroupBox)
+        MonitorAlarm.setGeometry(QtCore.QRect(300, 20, 100, 20))
+        MonitorAlarm.setObjectName("MonitorAlarm" + str(monitor._modulemonitorid))
+        MonitorCritAlarm = QtWidgets.QRadioButton(MonitorGroupBox)
+        MonitorCritAlarm.setGeometry(QtCore.QRect(400, 20, 100, 20))
+        MonitorCritAlarm.setObjectName("MonitorCritAlarm" + str(monitor._modulemonitorid))
+        ModuleLayout.addWidget(MonitorGroupBox)
