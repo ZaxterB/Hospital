@@ -122,7 +122,7 @@ class Bed():
 
     def UI(self, parentWidget):
         BedGroupBox = QtWidgets.QGroupBox(parentWidget)
-        BedGroupBox.setFixedWidth(849)
+        BedGroupBox.setFixedWidth(830)
         BedGroupBox.setObjectName("BedGroupBox" + str(self._bedid))
         BedGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", "Bed: " + str(self._bedid)))
         verticalLayoutWidget = QtWidgets.QWidget(BedGroupBox)
@@ -149,17 +149,15 @@ class Bed():
         # resize after adding children
         heights = sum(
             x.frameGeometry().height() for x in iter(
-                verticalLayoutWidget.findChildren(QtWidgets.QGroupBox)
+                verticalLayoutWidget.findChildren(QtWidgets.QGroupBox, QtCore.QRegExp("ModuleGroupBox.*")) # must regex out only the Module groupboxes otherwise it's comically oversized
             )
         )  # ugly as sin generator to sum heights of children
         if heights > 0:
-            verticalLayoutWidget.setMinimumHeight(heights)
+            print(heights)
+            verticalLayoutWidget.setFixedHeight(heights)
+            BedGroupBox.setFixedHeight(heights + 25)
         else:
-            verticalLayoutWidget.setMinimumHeight(75)
-        BedGroupBox.setMinimumHeight(
-            BedGroupBox.findChild( #propagate height change to parent
-                QtWidgets.QWidget,"verticalLayoutWidget" + str(self._bedid)
-            ).frameGeometry().height() + 25  # magic number padding is quick and dirty...
-        )
+            verticalLayoutWidget.setFixedHeight(75)
+            BedGroupBox.setFixedHeight(100)
         return BedGroupBox
 

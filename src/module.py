@@ -137,11 +137,14 @@ class Module():
             ModuleGroupBox = QtWidgets.QGroupBox(parentWidget)
             ModuleGroupBox.setObjectName("ModuleGroupBox" + str(self._moduleid))
             ModuleGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", self._modulename))
+            ModuleGroupBox.setContentsMargins(0, 0, 0, 0)
             verticalLayoutWidget = QtWidgets.QWidget(ModuleGroupBox)
             verticalLayoutWidget.setGeometry(QtCore.QRect(0, 20, 761, 0))
             verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(self._moduleid))
+            verticalLayoutWidget.setContentsMargins(0, 0, 0, 0)
             verticalLayout = QtWidgets.QVBoxLayout(verticalLayoutWidget)
             verticalLayout.setContentsMargins(0, 0, 0, 0)
+            verticalLayout.setSpacing(0)
             verticalLayout.setObjectName("verticalLayout" + str(self._moduleid))
             # call children
             for monitor in self._monitortypes:
@@ -152,6 +155,7 @@ class Module():
                     verticalLayoutWidget.findChildren(QtWidgets.QGroupBox)
                 )
             )  # ugly as sin generator to sum heights of children
-            verticalLayoutWidget.setMinimumHeight(heights)
+            verticalLayoutWidget.setFixedHeight(heights)
+            ModuleGroupBox.setFixedHeight(heights + 25)
 
             return ModuleGroupBox

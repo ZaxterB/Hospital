@@ -47,6 +47,7 @@ class ModuleMonitor():
     _minval = None
     _maxval = None
     _current = None
+    _parentWidget = None
 
     def __init__(self, modulemonitorid, monitortype, minval, maxval):
         self._modulemonitorid = modulemonitorid
@@ -80,33 +81,45 @@ class ModuleMonitor():
         if self._current <= self._monitortype.dangerMin or self._current >= self._monitortype.dangerMax:
             """raise critical alarm"""
             bed.critAlarmOn()
+        self.updateUI()
 
     def getmonitortypeid(self):
         return self._monitortype.id
 
     monitortypeid = property(getmonitortypeid)
 
+    def updateUI(self):
+        current = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorCurrentValue" + str(self._modulemonitorid))
+        current.setText(str(self._current))
+
     def UI(self, parentWidget):
+        self._parentWidget = parentWidget
         MonitorGroupBox = QtWidgets.QGroupBox(parentWidget)
         MonitorGroupBox.setObjectName("MonitorGroupBox" + str(self._modulemonitorid))
-        MonitorGroupBox.setFixedHeight(45)
+        MonitorGroupBox.setFixedHeight(43)
         MonitorGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", str(self._monitortype._name)))
+        MonitorGroupBox.setContentsMargins(0, 0, 0, 0)
+        MonitorGroupBox.setAlignment(QtCore.Qt.AlignCenter)
         MonitorValueScale = QtWidgets.QProgressBar(MonitorGroupBox)
         MonitorValueScale.setGeometry(QtCore.QRect(0, 20, 118, 23))
         MonitorValueScale.setProperty("value", 24)
         MonitorValueScale.setObjectName("MonitorValueScale" + str(self._modulemonitorid))
-        MonitorCurrentValue = QtWidgets.QLCDNumber(MonitorGroupBox)
+        MonitorCurrentValue = QtWidgets.QLabel(MonitorGroupBox)
         MonitorCurrentValue.setGeometry(QtCore.QRect(130, 20, 64, 23))
-        MonitorCurrentValue.setProperty("value", 30000.0)
+        MonitorCurrentValue.setText(str(30000.0))
         MonitorCurrentValue.setObjectName("MonitorCurrentValue" + str(self._modulemonitorid))
-        MonitorUnits = QtWidgets.QTextBrowser(MonitorGroupBox)
-        MonitorUnits.setGeometry(QtCore.QRect(200, 20, 91, 23))
+        MonitorUnits = QtWidgets.QLabel(MonitorGroupBox)
+        MonitorUnits.setGeometry(QtCore.QRect(200, 20, 51, 23))
         MonitorUnits.setObjectName("MonitorUnits" + str(self._modulemonitorid))
+        MonitorUnits.setText(self._monitortype._unit)
+        MonitorUnits.setAutoFillBackground(True)
         MonitorAlarm = QtWidgets.QRadioButton(MonitorGroupBox)
         MonitorAlarm.setGeometry(QtCore.QRect(300, 20, 100, 20))
         MonitorAlarm.setObjectName("MonitorAlarm" + str(self._modulemonitorid))
+        MonitorAlarm.setText("alarm")
         MonitorCritAlarm = QtWidgets.QRadioButton(MonitorGroupBox)
         MonitorCritAlarm.setGeometry(QtCore.QRect(400, 20, 100, 20))
         MonitorCritAlarm.setObjectName("MonitorCritAlarm" + str(self._modulemonitorid))
+        MonitorCritAlarm.setText("critical alarm")
 
         return MonitorGroupBox
