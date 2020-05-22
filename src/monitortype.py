@@ -105,3 +105,8 @@ class MonitorType():
         return self._dangerMax
 
     dangerMax = property(getDangerMax)
+
+    def getUnit(self):
+        return self._unit
+
+    unit = property(getUnit)

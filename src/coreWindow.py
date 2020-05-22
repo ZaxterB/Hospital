@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 # python modules
 import sys
@@ -21,6 +21,7 @@ from patient import Patients, Patient
 from staff import Staffs, Staff
 from shift import Shifts, Shift
 from testfile import TestFile
+from alarm import Alarm
 # PyQt libraries
 from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
@@ -43,25 +44,31 @@ class coreWindow(QMainWindow):
     _staff = None
     _shifts = None
     _testfile = None
+    _alarm = None
     _timer = None
 
     def __init__(self, db, testFileName, parent=None):
         self._db = db
         QMainWindow.__init__(self, parent)
-        uic.loadUi('files/mainwindow.ui', self)
-        self.setWindowIcon(QtGui.QIcon('src/files/hospital.png'))
+        uic.loadUi(constants.GRAPHICAL_FILES + 'mainwindow.ui', self)
+        self.setWindowIcon(QtGui.QIcon(constants.GRAPHICAL_FILES + 'hospital.png'))
+
         # initially load all classes from database
         self.loadTables(db)
+
         # show them to the user
         self.populateTables()
+
         # set up user interaction mechanisms
         self.setHandlers()
-        # open test file if supplied
 
+        # open test file if supplied
         if testFileName is not None:
             self._testfile = TestFile(testFileName)
+
         # now begin to react
         self.setTimer()
+        self._alarm = Alarm()
 
     def loadTables(self, db):
         """initial load of all database data"""
@@ -77,7 +84,7 @@ class coreWindow(QMainWindow):
         # self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
+        # self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self._staff)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblShifts"), self._shifts)
 
@@ -107,7 +114,7 @@ class coreWindow(QMainWindow):
 
     def close(self):
         """shut down timers"""
-        self.timer.cancel()
+        self._timer.cancel()
 
     def alert(self, index):
         """ TODO EXPERIMENTAL
@@ -115,20 +122,23 @@ class coreWindow(QMainWindow):
         print(index.row(), index.column())
 
     def pulse(self):
-        # set the timer off again since
+        # set the timer off again
         self.setTimer()
-        # TODO
+
+        # if we have test file data, process the next row
         if self._testfile:
             try:
                 data = next(self._testfile)
                 # validate
                 if len(data) != 3:
                     print('Error in pulse(): Row {} in test data file does not contain exactly three values'.format(data))
-                # inject the value
+                # find the bed
                 bed = Beds(self._db).getBed(int(data[0]))
                 if not bed:
                     print('Error in pulse(): Column 1 in row {} in test data file does not contain a valid bedid'.format(data))
-                bed.setMonitorTypeValue(int(data[1]), int(data[2]))
+                # inject the test data value into the monitor
+                print("setting monitortypeid = " + data[1] + " newvalue = " + data[2])
+                bed.setMonitorTypeValue(monitortypeid = int(data[1]), newvalue = int(data[2]))
             except StopIteration:
                 # test data file finished, ignore gracefully
                 pass
@@ -137,7 +147,23 @@ class coreWindow(QMainWindow):
                 raise RuntimeError("Error in main(): {0} at line {1}".
                                    format(str(exc_value), str(exc_traceback.tb_lineno)))
 
+        # send alarm messages
+        for bed in self._beds:
+            if bed.isAlarmOn or bed.isCritAlarmOn:
+                # build message string
+                message = "Bed monitoring system: "
+                if bed.isCritAlarmOn:
+                    message += "Critical "
+                message += "Alarm on bed " + str(bed.bednumber) + ": " + bed.alarms
+
+                # send the message by appropriate method
+                for staff in self._staff:
+                    if staff.type == STAFFTYPE_CONSULTANT:
+                        self._alarm.sendSMS(staff.telnumber)
+                    else:
+                        self._alarm.sendEmail(staff.email)
+
     def setTimer(self):
         """ start a timer to run the pulse function """
-        self.timer = threading.Timer(constants.PULSE_TIME, self.pulse)
-        self.timer.start()
+        self._timer = threading.Timer(constants.PULSE_TIME, self.pulse)
+        self._timer.start()

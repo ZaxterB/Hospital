@@ -68,4 +68,4 @@ class Shift():
 
     def display(self):
         """return a displayable list of columns"""
-        return self._shiftid, self._staff.getName(), self._start, self._currentend, self._currentend - self._start
+        return self._shiftid, self._staff.name, self._start, self._currentend, self._currentend - self._start

@@ -41,7 +41,7 @@ class ModuleMonitor():
 
     """private attributes"""
     _modulemonitorid = None
-    _monitortype = None
+    _monitortype = None # object
     _minval = None
     _maxval = None
     _current = None
@@ -71,13 +71,25 @@ class ModuleMonitor():
     def setCurrentValue(self, value, bed):
         """set the current monitortype's value"""
         self._current = value
-        if self._current <= self._minval or self._current >= self._maxval:
+        if self._current <= self._minval:
             """raise alarm"""
-            bed.alarmOn()
-            pass
-        if self._current <= self._monitortype.dangerMin or self._current >= self._monitortype.dangerMax:
+            bed.alarmOn(self._monitortype.id, self._monitortype.name, value, 'under', self._monitortype.unit)
+        elif self._current >= self._maxval:
+            """raise alarm"""
+            bed.alarmOn(self._monitortype.id, self._monitortype.name, value, 'over', self._monitortype.unit)
+        else:
+            """cancel alarm"""
+            bed.alarmOff(self._monitortype.id)
+
+        if self._current <= self._monitortype.dangerMin:
             """raise critical alarm"""
-            bed.critAlarmOn()
+            bed.critAlarmOn(self._monitortype.id, self._monitortype.name, value, 'under', self._monitortype.unit)
+        elif self._current >= self._monitortype.dangerMax:
+            """raise critical alarm"""
+            bed.critAlarmOn(self._monitortype.id, self._monitortype.name, value, 'over', self._monitortype.unit)
+        else:
+            """cancel critical alarm"""
+            bed.critAlarmOff(self._monitortype.id)
 
     def getmonitortypeid(self):
         return self._monitortype.id
