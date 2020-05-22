@@ -9,6 +9,8 @@ __version__ = "0.0.6"
 # app-specific constants
 import constants
 from module import Modules
+# PyQt libraries
+from PyQt5 import QtGui, uic, QtCore, QtWidgets
 
 """
 bed.py
@@ -196,3 +198,44 @@ class Bed():
         self._db.insert("""
             INSERT INTO public.bedevent (eventtime, eventtype, patientid, bedid, monitortypeid)
             VALUES (now(), %s, %s, %s, %s)""", (bedeventtype, self._patientid, self._bedid, monitortypeid, ))
+
+    def UI(self, parentWidget):
+        BedGroupBox = QtWidgets.QGroupBox(parentWidget)
+        BedGroupBox.setFixedWidth(830)
+        BedGroupBox.setObjectName("BedGroupBox" + str(self._bedid))
+        BedGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", "Bed: " + str(self._bedid)))
+        verticalLayoutWidget = QtWidgets.QWidget(BedGroupBox)
+        verticalLayoutWidget.setGeometry(QtCore.QRect(100, 20, 741, 0))
+        verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(self._bedid))
+        verticalLayout_2 = QtWidgets.QVBoxLayout(verticalLayoutWidget)
+        verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        verticalLayout_2.setObjectName("verticalLayout" + str(self._bedid))
+        BedAlarm = QtWidgets.QRadioButton(BedGroupBox)
+        BedAlarm.setGeometry(QtCore.QRect(0, 20, 101, 20))
+        BedAlarm.setObjectName("BedAlarm" + str(self._bedid))
+        BedAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "Alarm"))
+        BedCritAlarm = QtWidgets.QRadioButton(BedGroupBox)
+        BedCritAlarm.setGeometry(QtCore.QRect(0, 40, 101, 20))
+        BedCritAlarm.setObjectName("BedCritAlarm" + str(self._bedid))
+        BedCritAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "CritAlarm"))
+        BedAddModule = QtWidgets.QPushButton(BedGroupBox)
+        BedAddModule.setGeometry(QtCore.QRect(0, 60, 101, 32))
+        BedAddModule.setObjectName("BedAddModule" + str(self._bedid))
+        BedAddModule.setText(QtCore.QCoreApplication.translate("MainWindow", "Add Module"))
+        #call children into view
+        for module in self._modules:
+            verticalLayout_2.addWidget(module.UI(verticalLayoutWidget))
+        # resize after adding children
+        heights = sum(
+            x.frameGeometry().height() for x in iter(
+                verticalLayoutWidget.findChildren(QtWidgets.QGroupBox, QtCore.QRegExp("ModuleGroupBox.*")) # must regex out only the Module groupboxes otherwise it's comically oversized
+            )
+        )  # ugly as sin generator to sum heights of children
+        if heights > 0:
+            print(heights)
+            verticalLayoutWidget.setFixedHeight(heights)
+            BedGroupBox.setFixedHeight(heights + 25)
+        else:
+            verticalLayoutWidget.setFixedHeight(75)
+            BedGroupBox.setFixedHeight(100)
+        return BedGroupBox

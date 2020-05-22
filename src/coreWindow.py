@@ -23,7 +23,7 @@ from shift import Shifts, Shift
 from testfile import TestFile
 from alarm import Alarm
 # PyQt libraries
-from PyQt5 import QtGui, uic
+from PyQt5 import QtGui, uic, QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 
 """
@@ -82,6 +82,7 @@ class coreWindow(QMainWindow):
     def populateTables(self):
         """initial load of all database data into display tables"""
         # self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
+        self.BedsPopulate(self._beds)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
         # self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
@@ -167,3 +168,8 @@ class coreWindow(QMainWindow):
         """ start a timer to run the pulse function """
         self._timer = threading.Timer(constants.PULSE_TIME, self.pulse)
         self._timer.start()
+
+    def BedsPopulate(self, beds):
+        for bed in beds:
+            self.verticalLayout.addWidget(bed.UI(self.scrollAreaWidgetContents))
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
