@@ -74,12 +74,15 @@ class ModuleMonitor():
     def setCurrentValue(self, value, bed):
         """set the current monitortype's value"""
         self._current = value
+        alarmstatus = None
         if self._current <= self._minval:
             """raise alarm"""
             bed.alarmOn(self._monitortype.id, self._monitortype.name, value, 'under', self._monitortype.unit)
+            alarmstatus = "alarm"
         elif self._current >= self._maxval:
             """raise alarm"""
             bed.alarmOn(self._monitortype.id, self._monitortype.name, value, 'over', self._monitortype.unit)
+            alarmstatus = "alarm"
         else:
             """cancel alarm"""
             bed.alarmOff(self._monitortype.id)
@@ -87,13 +90,15 @@ class ModuleMonitor():
         if self._current <= self._monitortype.dangerMin:
             """raise critical alarm"""
             bed.critAlarmOn(self._monitortype.id, self._monitortype.name, value, 'under', self._monitortype.unit)
+            alarmstatus = "critalarm"
         elif self._current >= self._monitortype.dangerMax:
             """raise critical alarm"""
             bed.critAlarmOn(self._monitortype.id, self._monitortype.name, value, 'over', self._monitortype.unit)
+            alarmstatus = "critalarm"
         else:
             """cancel critical alarm"""
             bed.critAlarmOff(self._monitortype.id)
-        self.updateUI()
+        self.updateUI(alarmstatus)
 
     def getmonitortypeid(self):
         return self._monitortype.id
@@ -102,14 +107,19 @@ class ModuleMonitor():
 
     def updateUI(self, alarmstatus):
         MonitorCurrentValue = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorCurrentValue" + str(self._modulemonitorid))
-        MonitorCurrentValue.setText(str(self._current))
         MonitorValueScale = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorValueScale" + str(self._modulemonitorid))
-        MonitorValueScale.setProperty("value", 24)
         MonitorAlarm = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorAlarm" + str(self._modulemonitorid))
-        MonitorAlarm.setChecked(False)
         MonitorCritAlarm = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorCritAlarm" + str(self._modulemonitorid))
-        MonitorCritAlarm.setChecked(False)
-
+        MonitorCurrentValue.setText(str(self._current))
+        MonitorValueScale.setProperty("value", 24)
+        if alarmstatus:
+            if alarmstatus == "alarm":
+                MonitorAlarm.setChecked(True)
+            elif alarmstatus == "critalarm":
+                MonitorCritAlarm.setChecked(True)
+        else:
+            MonitorAlarm.setChecked(False)
+            MonitorCritAlarm.setChecked(False)
     def UI(self, parentWidget):
         self._parentWidget = parentWidget
         MonitorGroupBox = QtWidgets.QGroupBox(parentWidget)
