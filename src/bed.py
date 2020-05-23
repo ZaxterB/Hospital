@@ -125,7 +125,6 @@ class Bed():
 
     def alarmOn(self, monitortypeid, name, value, direction, unit):
         # only possible if there is a patient in the bed
-        print("ALARM ON", monitortypeid, type(monitortypeid))
         if self._patientid:
             """receiving function for an alarm"""
             self._alarm = True
@@ -196,9 +195,11 @@ class Bed():
     def _recordBedEvent(self, bedeventtype, monitortypeid ):
         """record a bed event in the audit trail in the database"""
         self._db.insert("""
-            INSERT INTO public.bedevent (eventtime, eventtype, patientid, bedid, monitortypeid)
-            VALUES (now(), {}, {}, {}, {})
-            """.format(bedeventtype, self._patientid, self._bedid, monitortypeid ))
+            INSERT INTO public.bedevent
+                (eventtime, eventtype, patientid, bedid, monitortypeid)
+            VALUES
+                (now(), %%s, %%s, %%s, %%s)
+            """, (bedeventtype, self._patientid, self._bedid, monitortypeid, ))
 
     def UI(self, parentWidget):
         BedGroupBox = QtWidgets.QGroupBox(parentWidget)

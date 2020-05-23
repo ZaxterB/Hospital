@@ -76,7 +76,6 @@ class Db(object):
         __functionname__ = 'insert'
 
         try:
-            print(sql, *args)
             if len(sql) < 1:
                 raise RuntimeError('Empty insert statement given')
             self.__cursor__.execute(sql, args)

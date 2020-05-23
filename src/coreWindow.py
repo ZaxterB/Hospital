@@ -145,7 +145,6 @@ class coreWindow(QMainWindow):
                 if not bed:
                     print('Error in pulse(): Column 1 in row {} in test data file does not contain a valid bedid'.format(data))
                 # inject the test data value into the monitor
-                print("setting monitortypeid = " + data[1] + " newvalue = " + data[2])
                 bed.setMonitorTypeValue(monitortypeid = int(data[1]), newvalue = int(data[2]))
             except StopIteration:
                 # test data file finished, ignore gracefully
