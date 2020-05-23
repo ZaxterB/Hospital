@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.9"
+__version__ = "0.0.8"
 
 # python modules
 import sys
@@ -63,6 +63,7 @@ class coreWindow(QMainWindow):
         self.setHandlers()
 
         # open test file if supplied
+
         if testFileName is not None:
             self._testfile = TestFile(testFileName)
 
@@ -147,22 +148,6 @@ class coreWindow(QMainWindow):
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 raise RuntimeError("Error in main(): {0} at line {1}".
                                    format(str(exc_value), str(exc_traceback.tb_lineno)))
-
-        # send alarm messages
-        for bed in self._beds:
-            if bed.isAlarmOn or bed.isCritAlarmOn:
-                # build message string
-                message = "Bed monitoring system: "
-                if bed.isCritAlarmOn:
-                    message += "Critical "
-                message += "Alarm on bed " + str(bed.bednumber) + ": " + bed.alarms
-
-                # send the message by appropriate method
-                for staff in self._staff:
-                    if staff.type == STAFFTYPE_CONSULTANT:
-                        self._alarm.sendSMS(staff.telnumber)
-                    else:
-                        self._alarm.sendEmail(staff.email)
 
     def setTimer(self):
         """ start a timer to run the pulse function """

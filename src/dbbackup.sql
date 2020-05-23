@@ -47,7 +47,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.bedevent (
-    bedeventid integer NOT NULL,
+    bedeventid serial NOT NULL,
     eventtime timestamp without time zone NOT NULL,
     eventtype smallint NOT NULL,
     patientid integer NOT NULL,
@@ -63,7 +63,7 @@ ALTER TABLE public.bedevent OWNER TO postgres;
 --
 
 CREATE TABLE public.staffevent (
-    staffeventid integer NOT NULL,
+    staffeventid serial NOT NULL,
     eventtime timestamp without time zone NOT NULL,
     type smallint NOT NULL,
     staffid integer NOT NULL
@@ -96,7 +96,7 @@ ALTER TABLE public."AllEvents" OWNER TO postgres;
 --
 
 CREATE TABLE public.bed (
-    bedid integer NOT NULL,
+    bedid serial NOT NULL,
     bednumber integer NOT NULL
 );
 
@@ -108,7 +108,7 @@ ALTER TABLE public.bed OWNER TO postgres;
 --
 
 CREATE TABLE public.bedmodule (
-    bedmoduleid integer NOT NULL,
+    bedmoduleid serial NOT NULL,
     bedid integer NOT NULL,
     moduleid integer NOT NULL
 );
@@ -121,7 +121,7 @@ ALTER TABLE public.bedmodule OWNER TO postgres;
 --
 
 CREATE TABLE public.module (
-    moduleid integer NOT NULL,
+    moduleid serial NOT NULL,
     name character varying NOT NULL
 );
 
@@ -133,7 +133,7 @@ ALTER TABLE public.module OWNER TO postgres;
 --
 
 CREATE TABLE public.modulemonitor (
-    modulemonitorid integer NOT NULL,
+    modulemonitorid serial NOT NULL,
     monitortypeid integer NOT NULL,
     moduleid integer NOT NULL,
     minval numeric NOT NULL,
@@ -148,7 +148,7 @@ ALTER TABLE public.modulemonitor OWNER TO postgres;
 --
 
 CREATE TABLE public.monitortype (
-    monitortypeid integer NOT NULL,
+    monitortypeid serial NOT NULL,
     name character varying NOT NULL,
     unit character varying NOT NULL,
     defaultmax numeric(5,2) NOT NULL,
@@ -165,7 +165,7 @@ ALTER TABLE public.monitortype OWNER TO postgres;
 --
 
 CREATE TABLE public.patient (
-    patientid integer NOT NULL,
+    patientid serial NOT NULL,
     name character varying NOT NULL
 );
 
@@ -177,7 +177,7 @@ ALTER TABLE public.patient OWNER TO postgres;
 --
 
 CREATE TABLE public.shift (
-    shiftid integer NOT NULL,
+    shiftid serial NOT NULL,
     staffid integer NOT NULL,
     start timestamp without time zone NOT NULL,
     currentend timestamp without time zone NOT NULL
@@ -191,7 +191,7 @@ ALTER TABLE public.shift OWNER TO postgres;
 --
 
 CREATE TABLE public.staff (
-    staffid integer NOT NULL,
+    staffid serial NOT NULL,
     name character varying NOT NULL,
     email character varying,
     telnumber character varying,
@@ -288,6 +288,8 @@ COPY public.monitortype (monitortypeid, name, unit, defaultmax, defaultmin, dang
 --
 
 COPY public.patient (patientid, name) FROM stdin;
+1   Alice
+2   Bob
 \.
 
 

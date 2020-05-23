@@ -151,7 +151,7 @@ class Bed():
         try:
             del self._alarmMonitorTypes[monitortypeid]
             # record the event for auditing
-            _recordBedEvent(constants.BEDEVT_ALARM_OFF, monitortypeid)
+            self._recordBedEvent(constants.BEDEVT_ALARM_OFF, monitortypeid)
         except KeyError:
             # ignore, this alarm was not set
             pass
@@ -188,16 +188,17 @@ class Bed():
         try:
             del self._critAlarmMonitorTypes[monitortypeid]
             # record the event for auditing
-            _recordBedEvent(constants.BEDEVT_CRITALARM_OFF, monitortypeid)
+            self._recordBedEvent(constants.BEDEVT_CRITALARM_OFF, monitortypeid)
         except KeyError:
             # ignore, this alarm was not set
             pass
 
-    def _recordBedEvent(self, bedeventtype, monitortypeid = None):
+    def _recordBedEvent(self, bedeventtype, monitortypeid ):
         """record a bed event in the audit trail in the database"""
         self._db.insert("""
             INSERT INTO public.bedevent (eventtime, eventtype, patientid, bedid, monitortypeid)
-            VALUES (now(), %s, %s, %s, %s)""", (bedeventtype, self._patientid, self._bedid, monitortypeid, ))
+            VALUES (now(), {}, {}, {}, {})
+            """.format(bedeventtype, self._patientid, self._bedid, monitortypeid ))
 
     def UI(self, parentWidget):
         BedGroupBox = QtWidgets.QGroupBox(parentWidget)
@@ -232,7 +233,6 @@ class Bed():
             )
         )  # ugly as sin generator to sum heights of children
         if heights > 0:
-            print(heights)
             verticalLayoutWidget.setFixedHeight(heights)
             BedGroupBox.setFixedHeight(heights + 25)
         else:

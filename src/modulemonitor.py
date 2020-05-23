@@ -100,9 +100,15 @@ class ModuleMonitor():
 
     monitortypeid = property(getmonitortypeid)
 
-    def updateUI(self):
-        current = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorCurrentValue" + str(self._modulemonitorid))
-        current.setText(str(self._current))
+    def updateUI(self, alarmstatus):
+        MonitorCurrentValue = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorCurrentValue" + str(self._modulemonitorid))
+        MonitorCurrentValue.setText(str(self._current))
+        MonitorValueScale = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorValueScale" + str(self._modulemonitorid))
+        MonitorValueScale.setProperty("value", 24)
+        MonitorAlarm = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorAlarm" + str(self._modulemonitorid))
+        MonitorAlarm.setChecked(False)
+        MonitorCritAlarm = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorCritAlarm" + str(self._modulemonitorid))
+        MonitorCritAlarm.setChecked(False)
 
     def UI(self, parentWidget):
         self._parentWidget = parentWidget
@@ -129,6 +135,7 @@ class ModuleMonitor():
         MonitorAlarm.setGeometry(QtCore.QRect(300, 20, 100, 20))
         MonitorAlarm.setObjectName("MonitorAlarm" + str(self._modulemonitorid))
         MonitorAlarm.setText("alarm")
+        MonitorAlarm.setCheckable(False)
         MonitorCritAlarm = QtWidgets.QRadioButton(MonitorGroupBox)
         MonitorCritAlarm.setGeometry(QtCore.QRect(400, 20, 100, 20))
         MonitorCritAlarm.setObjectName("MonitorCritAlarm" + str(self._modulemonitorid))
