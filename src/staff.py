@@ -78,3 +78,17 @@ class Staff():
     def getName(self):
         """return name"""
         return self._name
+
+    name = property(getName)
+
+    def getEmail(self):
+        """return email"""
+        return self._email
+
+    email = property(getEmail)
+
+    def getTelNumber(self):
+        """return telephone number"""
+        return self._telnumber
+
+    telnumber = property(getTelNumber)

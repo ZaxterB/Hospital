@@ -21,8 +21,9 @@ from patient import Patients, Patient
 from staff import Staffs, Staff
 from shift import Shifts, Shift
 from testfile import TestFile
+from alarm import Alarm
 # PyQt libraries
-from PyQt5 import QtGui, uic
+from PyQt5 import QtGui, uic, QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 
 """
@@ -43,13 +44,14 @@ class coreWindow(QMainWindow):
     _staff = None
     _shifts = None
     _testfile = None
+    _alarm = None
     _timer = None
 
     def __init__(self, db, testFileName, parent=None):
         self._db = db
         QMainWindow.__init__(self, parent)
-        uic.loadUi('src/files/mainwindow.ui', self)
-        self.setWindowIcon(QtGui.QIcon('files/hospital.png'))
+        uic.loadUi(constants.GRAPHICAL_FILES + 'mainwindow.ui', self)
+        self.setWindowIcon(QtGui.QIcon(constants.GRAPHICAL_FILES + 'hospital.png'))
 
         # initially load all classes from database
         self.loadTables(db)
@@ -66,6 +68,7 @@ class coreWindow(QMainWindow):
 
         # now begin to react
         self.setTimer()
+        self._alarm = Alarm()
 
     def loadTables(self, db):
         """initial load of all database data"""
@@ -78,10 +81,11 @@ class coreWindow(QMainWindow):
 
     def populateTables(self):
         """initial load of all database data into display tables"""
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
+        # self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
+        self.BedsPopulate(self._beds)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
-        self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
+        # self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblStaff"), self._staff)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblShifts"), self._shifts)
 
@@ -125,20 +129,24 @@ class coreWindow(QMainWindow):
 
     def pulse(self):
         """repeated process timer handler"""
+
         # set the timer off again
         self.setTimer()
-        # TODO
+
+        # if we have test file data, process the next row
         if self._testfile:
             try:
                 data = next(self._testfile)
-                # validate 
+                # validate
                 if len(data) != 3:
                     print('Error in pulse(): Row {} in test data file does not contain exactly three values'.format(data))
-                # inject the value
+                # find the bed
                 bed = Beds(self._db).getBed(int(data[0]))
                 if not bed:
                     print('Error in pulse(): Column 1 in row {} in test data file does not contain a valid bedid'.format(data))
-                bed.setMonitorTypeValue(int(data[1]), int(data[2]))
+                # inject the test data value into the monitor
+                print("setting monitortypeid = " + data[1] + " newvalue = " + data[2])
+                bed.setMonitorTypeValue(monitortypeid = int(data[1]), newvalue = int(data[2]))
             except StopIteration:
                 # test data file finished, ignore gracefully
                 pass
@@ -146,3 +154,7 @@ class coreWindow(QMainWindow):
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 raise RuntimeError("Error in main(): {0} at line {1}".
                                    format(str(exc_value), str(exc_traceback.tb_lineno)))
+    def BedsPopulate(self, beds):
+        for bed in beds:
+            self.verticalLayout.addWidget(bed.UI(self.scrollAreaWidgetContents))
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)

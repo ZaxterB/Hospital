@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 import sys
 import psycopg2
@@ -47,7 +47,7 @@ class Db(object):
                                       str(exc_traceback.tb_lineno)))
 
     def query(self, sql, *args):
-        """execute sql statement with variable number of arguments
+        """execute select statement with variable number of arguments
             returns: list of column names, list of lists of row data
             """
         __functionname__ = 'query'
@@ -62,6 +62,24 @@ class Db(object):
                 # get column names from query
                 colnames = [desc[0] for desc in self.__cursor__.description]
                 return colnames, self.__cursor__.fetchall()
+        except Exception:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            raise RuntimeError("Error in {0}.{1}(): {2} at line {3}".
+                               format(self.__modulename__, __functionname__,
+                                      str(exc_value),
+                                      str(exc_traceback.tb_lineno)))
+
+    def insert(self, sql, *args):
+        """execute insert statement with variable number of arguments
+            returns: nothing
+            """
+        __functionname__ = 'insert'
+
+        try:
+            print(sql, *args)
+            if len(sql) < 1:
+                raise RuntimeError('Empty insert statement given')
+            self.__cursor__.execute(sql, args)
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             raise RuntimeError("Error in {0}.{1}(): {2} at line {3}".

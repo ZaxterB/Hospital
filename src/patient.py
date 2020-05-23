@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 """
 patient.py
@@ -56,3 +56,9 @@ class Patient():
     def __init__(self, patientid, name):
         _patientid = patientid
         _name = name
+
+    def getId(self):
+        """get patient id"""
+        return self._patientid
+
+    id = property(getId)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>955</width>
-    <height>600</height>
+    <height>915</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>60</x>
       <y>50</y>
-      <width>821</width>
-      <height>501</height>
+      <width>861</width>
+      <height>831</height>
      </rect>
     </property>
     <property name="tabPosition">
@@ -33,13 +33,13 @@
      <attribute name="title">
       <string>Beds</string>
      </attribute>
-     <widget class="QTableWidget" name="tblBeds">
+     <widget class="QScrollArea" name="scrollArea">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>70</y>
-        <width>581</width>
-        <height>331</height>
+        <x>0</x>
+        <y>60</y>
+        <width>851</width>
+        <height>741</height>
        </rect>
       </property>
       <property name="font">
@@ -48,36 +48,66 @@
         <bold>false</bold>
        </font>
       </property>
-      <property name="alternatingRowColors">
+      <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="rowCount">
-       <number>0</number>
-      </property>
-      <property name="columnCount">
-       <number>3</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>id</string>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>849</width>
+         <height>739</height>
+        </rect>
        </property>
-      </column>
-      <column>
+       <layout class="QVBoxLayout" name="verticalLayout"/>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>112</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add Bed</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>10</y>
+        <width>91</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <item>
        <property name="text">
-        <string>Number</string>
+        <string>Bay 1</string>
        </property>
-      </column>
-      <column>
+      </item>
+      <item>
        <property name="text">
-        <string>Status</string>
+        <string>Bay 2</string>
        </property>
-      </column>
+      </item>
+     </widget>
+     <widget class="Line" name="line">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>851</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tabShifts">
@@ -89,8 +119,8 @@
        <rect>
         <x>50</x>
         <y>70</y>
-        <width>581</width>
-        <height>331</height>
+        <width>751</width>
+        <height>721</height>
        </rect>
       </property>
       <property name="lineWidth">
@@ -147,8 +177,8 @@
        <rect>
         <x>50</x>
         <y>70</y>
-        <width>581</width>
-        <height>331</height>
+        <width>801</width>
+        <height>721</height>
        </rect>
       </property>
       <property name="lineWidth">
@@ -200,8 +230,8 @@
        <rect>
         <x>50</x>
         <y>70</y>
-        <width>711</width>
-        <height>331</height>
+        <width>801</width>
+        <height>721</height>
        </rect>
       </property>
       <property name="lineWidth">
@@ -248,6 +278,32 @@
        </property>
       </column>
      </widget>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>10</y>
+        <width>121</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Register/sign-in</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>10</y>
+        <width>131</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Manager console</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tabMonitor">
      <attribute name="title">
@@ -258,8 +314,8 @@
        <rect>
         <x>50</x>
         <y>70</y>
-        <width>711</width>
-        <height>331</height>
+        <width>801</width>
+        <height>731</height>
        </rect>
       </property>
       <property name="lineWidth">
@@ -326,8 +382,8 @@
        <rect>
         <x>50</x>
         <y>70</y>
-        <width>581</width>
-        <height>331</height>
+        <width>801</width>
+        <height>731</height>
        </rect>
       </property>
       <property name="lineWidth">
