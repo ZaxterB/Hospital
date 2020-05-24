@@ -113,7 +113,6 @@ class Bed():
     bednumber = property(getBedNumber)
 
     def setMonitorTypeValue(self, monitortypeid, newvalue):
-        print("bed.setMonitorTypeValue", monitortypeid, newvalue)
         """set the monitortypeid for this bed to newvalue"""
         for module in self._modules:
             if monitortypeid in module.monitortypeids:
