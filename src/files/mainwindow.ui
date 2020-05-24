@@ -278,7 +278,7 @@
        </property>
       </column>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="Register">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -291,7 +291,7 @@
        <string>Register/sign-in</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="Manager">
       <property name="geometry">
        <rect>
         <x>170</x>

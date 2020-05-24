@@ -125,7 +125,7 @@ class Bed():
 
     def alarmOn(self, monitortypeid, name, value, direction, unit):
         # only possible if there is a patient in the bed
-        print("ALARM ON", monitortypeid, type(monitortypeid))
+        # print("ALARM ON", monitortypeid, type(monitortypeid))
         if self._patientid:
             """receiving function for an alarm"""
             self._alarm = True
@@ -211,11 +211,11 @@ class Bed():
         verticalLayout_2 = QtWidgets.QVBoxLayout(verticalLayoutWidget)
         verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         verticalLayout_2.setObjectName("verticalLayout" + str(self._bedid))
-        BedAlarm = QtWidgets.QRadioButton(BedGroupBox)
+        BedAlarm = QtWidgets.QCheckBox(BedGroupBox)
         BedAlarm.setGeometry(QtCore.QRect(0, 20, 101, 20))
         BedAlarm.setObjectName("BedAlarm" + str(self._bedid))
         BedAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "Alarm"))
-        BedCritAlarm = QtWidgets.QRadioButton(BedGroupBox)
+        BedCritAlarm = QtWidgets.QCheckBox(BedGroupBox)
         BedCritAlarm.setGeometry(QtCore.QRect(0, 40, 101, 20))
         BedCritAlarm.setObjectName("BedCritAlarm" + str(self._bedid))
         BedCritAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "CritAlarm"))
