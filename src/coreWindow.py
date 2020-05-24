@@ -166,9 +166,9 @@ class coreWindow(QMainWindow):
                 # send the message by appropriate method
                 for staff in self._staff:
                     if staff.type == STAFFTYPE_CONSULTANT:
-                        self._alarm.sendSMS(staff.telnumber)
+                        self._alarm.sendSMS(staff.telnumber, message)
                     else:
-                        self._alarm.sendEmail(staff.email)
+                        self._alarm.sendEmail(staff.email, message)
 
     def BedsPopulate(self, beds):
         for bed in beds:

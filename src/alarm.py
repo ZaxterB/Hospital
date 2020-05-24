@@ -28,10 +28,10 @@ class Alarm():
         """TODO needed?"""
         pass
         
-    def sendSMS(self, telnumber):
+    def sendSMS(self, telnumber, message):
         """TODO"""
         pass
 
-    def sendEmail(self, email):
+    def sendEmail(self, email, message):
         """TODO"""
         pass
