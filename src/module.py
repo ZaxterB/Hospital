@@ -112,11 +112,6 @@ class Module():
             modulemonitorlist.append(modulemonitor.currentValues)
         return '\n'.join(modulemonitorlist)
 
-    def getCurrentValues(self):
-        """get the current monitor values for a given module"""
-        """TODO"""
-        pass
-
     def getMonitortypeids(self):
         """return a list of all the monitortypes in this module"""
         monitortypeids = []
@@ -134,28 +129,31 @@ class Module():
                 modulemonitor.setCurrentValue(newvalue, bed)
 
     def UI(self, parentWidget):
-            ModuleGroupBox = QtWidgets.QGroupBox(parentWidget)
-            ModuleGroupBox.setObjectName("ModuleGroupBox" + str(self._moduleid))
-            ModuleGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", self._modulename))
-            ModuleGroupBox.setContentsMargins(0, 0, 0, 0)
-            verticalLayoutWidget = QtWidgets.QWidget(ModuleGroupBox)
-            verticalLayoutWidget.setGeometry(QtCore.QRect(0, 20, 761, 0))
-            verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(self._moduleid))
-            verticalLayoutWidget.setContentsMargins(0, 0, 0, 0)
-            verticalLayout = QtWidgets.QVBoxLayout(verticalLayoutWidget)
-            verticalLayout.setContentsMargins(0, 0, 0, 0)
-            verticalLayout.setSpacing(0)
-            verticalLayout.setObjectName("verticalLayout" + str(self._moduleid))
-            # call children
-            for monitor in self._monitortypes:
-                verticalLayout.addWidget(monitor.UI(verticalLayoutWidget))
-            # resize after adding children
-            heights = sum(
-                x.frameGeometry().height() for x in iter(
-                    verticalLayoutWidget.findChildren(QtWidgets.QGroupBox)
-                )
-            )  # ugly as sin generator to sum heights of children
-            verticalLayoutWidget.setFixedHeight(heights)
-            ModuleGroupBox.setFixedHeight(heights + 25)
+        """create a QtWidget with all the module related ui components required"""
+        #create groupbox to fill with monitors
+        ModuleGroupBox = QtWidgets.QGroupBox(parentWidget)
+        ModuleGroupBox.setObjectName("ModuleGroupBox" + str(self._moduleid))
+        ModuleGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", self._modulename))
+        ModuleGroupBox.setContentsMargins(0, 0, 0, 0)
+        #create vertical layout to add monitors to
+        verticalLayoutWidget = QtWidgets.QWidget(ModuleGroupBox)
+        verticalLayoutWidget.setGeometry(QtCore.QRect(0, 20, 761, 0))
+        verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(self._moduleid))
+        verticalLayoutWidget.setContentsMargins(0, 0, 0, 0)
+        verticalLayout = QtWidgets.QVBoxLayout(verticalLayoutWidget)
+        verticalLayout.setContentsMargins(0, 0, 0, 0)
+        verticalLayout.setSpacing(0)
+        verticalLayout.setObjectName("verticalLayout" + str(self._moduleid))
+        # call children
+        for monitor in self._monitortypes:
+            verticalLayout.addWidget(monitor.UI(verticalLayoutWidget))
+        # resize after adding children
+        heights = sum(
+            x.frameGeometry().height() for x in iter(
+                verticalLayoutWidget.findChildren(QtWidgets.QGroupBox)
+            )
+        )  # ugly as sin generator to sum heights of children
+        verticalLayoutWidget.setFixedHeight(heights)
+        ModuleGroupBox.setFixedHeight(heights + 25)
 
-            return ModuleGroupBox
+        return ModuleGroupBox

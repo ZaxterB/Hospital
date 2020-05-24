@@ -173,11 +173,13 @@ class coreWindow(QMainWindow):
                         self._alarm.sendEmail(staff.email, message)
 
     def bedsPopulate(self, beds):
+        """add all bed ui components to the scrollable area of the main window"""
         for bed in beds:
             self.verticalLayout.addWidget(bed.UI(self.scrollAreaWidgetContents))
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
     def createregistrationDialog(self):
+        """open new dialog window for registration"""
         Dialog = registrationDialog(self)
         Dialog.show()
 
@@ -195,6 +197,7 @@ class registrationDialog(QtWidgets.QDialog):
         self.UI()
 
     def submit(self):
+        """ insert relavant details from class to the shift table in database"""
         start = self.findChild(QtWidgets.QDateTimeEdit, "dteStart").dateTime().toPyDateTime()
         end = self.findChild(QtWidgets.QDateTimeEdit, "dteEnd").dateTime().toPyDateTime()
         staffname = self.findChild(QtWidgets.QComboBox,"cboStaff").currentText()
@@ -205,6 +208,7 @@ class registrationDialog(QtWidgets.QDialog):
                     """.format(id=staffid, start=str(start), end=str(end)))
 
     def calculateHrs(self):
+        """validate sensible shift times and display hours in ui"""
         startTime = self.findChild(QtWidgets.QDateTimeEdit, "dteStart")
         endTime = self.findChild(QtWidgets.QDateTimeEdit, "dteEnd")
         delta = endTime.dateTime().toPyDateTime() - startTime.dateTime().toPyDateTime()
@@ -216,14 +220,19 @@ class registrationDialog(QtWidgets.QDialog):
 
 
     def UI(self):
+        """create all the shift related ui components required for dialog"""
+        #add staff names and ids to combobox
         staffList = self.findChild(QtWidgets.QComboBox, "cboStaff")
         staffList.addItems(str(staff._staffid) + ":" + staff._name for staff in self._staff)
+        #set start time to now and connect it to validation method
         startTime = self.findChild(QtWidgets.QDateTimeEdit, "dteStart")
         startTime.setDateTime(QtCore.QDateTime.currentDateTime())
         startTime.dateTimeChanged.connect(self.calculateHrs)
+        #set end time to now and connect it to validation method
         endTime = self.findChild(QtWidgets.QDateTimeEdit, "dteEnd")
         endTime.setDateTime(QtCore.QDateTime.currentDateTime())
         endTime.dateTimeChanged.connect(self.calculateHrs)
+        #connect dialog controls to their respective methods
         buttonbox = self.findChild(QtWidgets.QDialogButtonBox, "buttonBox")
         buttonbox.accepted.connect(self.submit)
         buttonbox.rejected.connect(self.close)

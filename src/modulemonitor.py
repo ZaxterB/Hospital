@@ -109,13 +109,17 @@ class ModuleMonitor():
     monitortypeid = property(getmonitortypeid)
 
     def updateUI(self, alarmstatus):
+        """update ui when values change so that changes are reflected"""
+        #assign relevant components to variable
         MonitorCurrentValue = self._parentWidget.findChild(QtWidgets.QLabel, "MonitorCurrentValue" + str(self._modulemonitorid))
+        #TODO: debug segfaults from updating this component
         # MonitorValueScale = self._parentWidget.findChild(QtWidgets.QProgressBar, "MonitorValueScale" + str(self._modulemonitorid))
         MonitorAlarm = self._parentWidget.findChild(QtWidgets.QCheckBox, "MonitorAlarm" + str(self._modulemonitorid))
         MonitorCritAlarm = self._parentWidget.findChild(QtWidgets.QCheckBox, "MonitorCritAlarm" + str(self._modulemonitorid))
-
+        # update current value ui to reflect current value
         MonitorCurrentValue.setText(str(self._current))
         # MonitorValueScale.setValue(self._current)
+        #change stylings of components depenting on alarm status
         if alarmstatus != None:
             if alarmstatus == "alarm":
                 MonitorAlarm.setChecked(True)
@@ -126,34 +130,42 @@ class ModuleMonitor():
         else:
             MonitorAlarm.setChecked(False)
             MonitorCritAlarm.setChecked(False)
-            MonitorCurrentValue.setStyleSheet('color: white')
+            MonitorCurrentValue.setStyleSheet('color: black')
 
     def UI(self, parentWidget):
+        """create a QtWidget with all the monitor related ui components required"""
+        #allocate parent to variable for ease of access later
         self._parentWidget = parentWidget
+        #create groupbox to hold controls and readouts
         MonitorGroupBox = QtWidgets.QGroupBox(parentWidget)
         MonitorGroupBox.setObjectName("MonitorGroupBox" + str(self._modulemonitorid))
         MonitorGroupBox.setFixedHeight(43)
         MonitorGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", str(self._monitortype._name)))
         MonitorGroupBox.setContentsMargins(0, 0, 0, 0)
         MonitorGroupBox.setAlignment(QtCore.Qt.AlignCenter)
+        #TODO debug why this element causes segmentation faults
         # MonitorValueScale = QtWidgets.QProgressBar(MonitorGroupBox)
         # MonitorValueScale.setGeometry(QtCore.QRect(0, 20, 118, 23))
         # MonitorValueScale.setRange(self._monitortype.dangerMin - 5, self._monitortype.dangerMax + 5)
         # MonitorValueScale.setValue(self._monitortype.dangerMin)
         # MonitorValueScale.setObjectName("MonitorValueScale" + str(self._modulemonitorid))
+        #create lable to display current value
         MonitorCurrentValue = QtWidgets.QLabel(MonitorGroupBox)
         MonitorCurrentValue.setGeometry(QtCore.QRect(130, 20, 64, 23))
         MonitorCurrentValue.setText(str(self._monitortype.dangerMin))
         MonitorCurrentValue.setObjectName("MonitorCurrentValue" + str(self._modulemonitorid))
+        #create lable for currentvalues scientific units
         MonitorUnits = QtWidgets.QLabel(MonitorGroupBox)
         MonitorUnits.setGeometry(QtCore.QRect(200, 20, 51, 23))
         MonitorUnits.setObjectName("MonitorUnits" + str(self._modulemonitorid))
         MonitorUnits.setText(self._monitortype._unit)
         MonitorUnits.setAutoFillBackground(True)
+        #create checkbox to indicate alarm
         MonitorAlarm = QtWidgets.QCheckBox(MonitorGroupBox)
         MonitorAlarm.setGeometry(QtCore.QRect(300, 20, 100, 20))
         MonitorAlarm.setObjectName("MonitorAlarm" + str(self._modulemonitorid))
         MonitorAlarm.setText("alarm")
+        #create checkbox to indicate critical alarm
         MonitorCritAlarm = QtWidgets.QCheckBox(MonitorGroupBox)
         MonitorCritAlarm.setGeometry(QtCore.QRect(400, 20, 100, 20))
         MonitorCritAlarm.setObjectName("MonitorCritAlarm" + str(self._modulemonitorid))

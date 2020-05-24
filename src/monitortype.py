@@ -87,26 +87,31 @@ class MonitorType():
         return self._monitortypeid, self._name, self._unit, self._defaultmax, self._defaultmin, self._dangerMax, self._dangerMin
 
     def getName(self):
+        """returns name string"""
         return self._name
 
     name = property(getName)
 
     def getid(self):
+        """returns id int"""
         return self._monitortypeid
 
     id = property(getid)
 
     def getDangerMin(self):
+        """returns dangerMin int"""
         return self._dangerMin
 
     dangerMin = property(getDangerMin)
 
     def getDangerMax(self):
+        """returns dangerMax int"""
         return self._dangerMax
 
     dangerMax = property(getDangerMax)
 
     def getUnit(self):
+        """returns unit string"""
         return self._unit
 
     unit = property(getUnit)

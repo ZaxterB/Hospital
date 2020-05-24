@@ -194,24 +194,30 @@ class Bed():
             VALUES (now(), {}, {}, {}, {})""".format(bedeventtype, self._patientid, self._bedid, monitortypeid ))
 
     def UI(self, parentWidget):
+        """create a QtWidget with all the bed related ui components required"""
+        #create groupbox in parent, size and title appropriately
         BedGroupBox = QtWidgets.QGroupBox(parentWidget)
         BedGroupBox.setFixedWidth(830)
         BedGroupBox.setObjectName("BedGroupBox" + str(self._bedid))
         BedGroupBox.setTitle(QtCore.QCoreApplication.translate("MainWindow", "Bed: " + str(self._bedid)))
+        #create vertical layout inside groupbox to put monitors and controls in
         verticalLayoutWidget = QtWidgets.QWidget(BedGroupBox)
         verticalLayoutWidget.setGeometry(QtCore.QRect(100, 20, 741, 0))
         verticalLayoutWidget.setObjectName("verticalLayoutWidget" + str(self._bedid))
         verticalLayout_2 = QtWidgets.QVBoxLayout(verticalLayoutWidget)
         verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         verticalLayout_2.setObjectName("verticalLayout" + str(self._bedid))
+        #create checkbox to indicate alarms
         BedAlarm = QtWidgets.QCheckBox(BedGroupBox)
         BedAlarm.setGeometry(QtCore.QRect(0, 20, 101, 20))
         BedAlarm.setObjectName("BedAlarm" + str(self._bedid))
         BedAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "Alarm"))
+        #create checkbox to indicate critical alarms
         BedCritAlarm = QtWidgets.QCheckBox(BedGroupBox)
         BedCritAlarm.setGeometry(QtCore.QRect(0, 40, 101, 20))
         BedCritAlarm.setObjectName("BedCritAlarm" + str(self._bedid))
         BedCritAlarm.setText(QtCore.QCoreApplication.translate("MainWindow", "CritAlarm"))
+        #create button to add a module to a bed TODO: wire up a method for it.
         BedAddModule = QtWidgets.QPushButton(BedGroupBox)
         BedAddModule.setGeometry(QtCore.QRect(0, 60, 101, 32))
         BedAddModule.setObjectName("BedAddModule" + str(self._bedid))
