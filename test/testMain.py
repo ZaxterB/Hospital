@@ -25,17 +25,17 @@ def bed_alarm_high(self):
     """set monitor type to high value
         return alarm status"""
     beds = Beds(db).getBeds()
+    print("about to set")
     beds[0].setMonitorTypeValue(monitortypeid = 1, newvalue = 9999)
     return beds[0].isAlarmOn
 
 class hospitaltests(unittest.TestCase):
     def test(self):
-        self.assertEqual(bed_alarm_high, True)
+        self.assertTrue(bed_alarm_high)
 
 if __name__ == '__main__':
     # change to the application root directory so we can get all files
     appDir = os.path.dirname(os.path.realpath(__file__))
-    print("appDir", appDir)
     if appDir != os.getcwd():
         os.chdir(appDir)
         os.chdir('..')
