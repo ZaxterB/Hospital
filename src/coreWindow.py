@@ -9,6 +9,7 @@ __version__ = "0.0.8"
 # python modules
 import sys
 import threading
+from datetime import datetime, timedelta
 # app-specific constants
 import constants
 # app-specific database interface class
@@ -82,7 +83,7 @@ class coreWindow(QMainWindow):
     def populateTables(self):
         """initial load of all database data into display tables"""
         # self.QtTablePopulate(self.findChild(QTableWidget, "tblBeds"), self._beds)
-        self.BedsPopulate(self._beds)
+        self.bedsPopulate(self._beds)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblMonitorTypes"), self._monitortypes)
         self.QtTablePopulate(self.findChild(QTableWidget, "tblModules"), self._modules)
         # self.QtTablePopulate(self.findChild(QTableWidget, "tblPatients"), self._patients)
@@ -112,6 +113,7 @@ class coreWindow(QMainWindow):
         if tblWidget is not None:
             tblWidget.setEnabled(False)
             tblWidget.clicked.connect(self.alert)
+        self.findChild(QtWidgets.QPushButton, "Register").clicked.connect(self.createregistrationDialog)
 
     def close(self):
         """shut down timers"""
@@ -154,7 +156,63 @@ class coreWindow(QMainWindow):
                 raise RuntimeError("Error in main(): {0} at line {1}".
                                    format(str(exc_value), str(exc_traceback.tb_lineno)))
 
-    def BedsPopulate(self, beds):
+    def setTimer(self):
+        """ start a timer to run the pulse function """
+        self._timer = threading.Timer(constants.PULSE_TIME, self.pulse)
+        self._timer.start()
+
+    def bedsPopulate(self, beds):
         for bed in beds:
             self.verticalLayout.addWidget(bed.UI(self.scrollAreaWidgetContents))
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+    def createregistrationDialog(self):
+        Dialog = registrationDialog(self)
+        Dialog.show()
+
+class registrationDialog(QtWidgets.QDialog):
+    """private variables"""
+    _db = None  # database object
+    _staff = None
+
+    def __init__(self, parent):
+        self._db = parent._db
+        self._staff = parent._staff
+        QtWidgets.QDialog.__init__(self, parent)
+        uic.loadUi(constants.GRAPHICAL_FILES + 'shift.ui', self)
+        self.setWindowIcon(QtGui.QIcon(constants.GRAPHICAL_FILES + 'hospital.png'))
+        self.UI()
+
+    def submit(self):
+        start = self.findChild(QtWidgets.QDateTimeEdit, "dteStart").dateTime().toPyDateTime()
+        end = self.findChild(QtWidgets.QDateTimeEdit, "dteEnd").dateTime().toPyDateTime()
+        staffname = self.findChild(QtWidgets.QComboBox,"cboStaff").currentText()
+        staffid = staffname.split(":")[0] # this feels crude but people need to see their name and id
+        self._db.insert("""
+                    INSERT INTO public.shift (staffid, start, currentend)
+                    VALUES ({id}, '{start}', '{end}')
+                    """.format(id=staffid, start=str(start), end=str(end)))
+
+    def calculateHrs(self):
+        startTime = self.findChild(QtWidgets.QDateTimeEdit, "dteStart")
+        endTime = self.findChild(QtWidgets.QDateTimeEdit, "dteEnd")
+        delta = endTime.dateTime().toPyDateTime() - startTime.dateTime().toPyDateTime()
+        if delta.total_seconds() < 0: # time travelers are better employed in physics institutes than medical ones
+            startTime.setDateTime(QtCore.QDateTime.currentDateTime())
+            endTime.setDateTime(QtCore.QDateTime.currentDateTime())
+        else:
+            self.findChild(QtWidgets.QLabel, "lblHours").setText(str(delta))
+
+
+    def UI(self):
+        staffList = self.findChild(QtWidgets.QComboBox, "cboStaff")
+        staffList.addItems(str(staff._staffid) + ":" + staff._name for staff in self._staff)
+        startTime = self.findChild(QtWidgets.QDateTimeEdit, "dteStart")
+        startTime.setDateTime(QtCore.QDateTime.currentDateTime())
+        startTime.dateTimeChanged.connect(self.calculateHrs)
+        endTime = self.findChild(QtWidgets.QDateTimeEdit, "dteEnd")
+        endTime.setDateTime(QtCore.QDateTime.currentDateTime())
+        endTime.dateTimeChanged.connect(self.calculateHrs)
+        buttonbox = self.findChild(QtWidgets.QDialogButtonBox, "buttonBox")
+        buttonbox.accepted.connect(self.submit)
+        buttonbox.rejected.connect(self.close)

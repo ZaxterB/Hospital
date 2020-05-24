@@ -1,0 +1,14 @@
+2020-05-23 15:33:05.969 BST [98093] LOG:  starting PostgreSQL 12.1 on x86_64-apple-darwin18.7.0, compiled by Apple clang version 11.0.0 (clang-1100.0.33.16), 64-bit
+2020-05-23 15:33:05.971 BST [98093] LOG:  could not bind IPv6 address "::1": Address already in use
+2020-05-23 15:33:05.971 BST [98093] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2020-05-23 15:33:05.971 BST [98093] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2020-05-23 15:33:05.971 BST [98093] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2020-05-23 15:33:05.971 BST [98093] WARNING:  could not create listen socket for "localhost"
+2020-05-23 15:33:05.971 BST [98093] FATAL:  could not create any TCP/IP sockets
+2020-05-23 15:33:05.971 BST [98093] LOG:  database system is shut down
+2020-05-23 15:41:11.297 BST [98534] FATAL:  lock file "postmaster.pid" already exists
+2020-05-23 15:41:11.297 BST [98534] HINT:  Is another postmaster (PID 98095) running in data directory "/usr/local/var/postgres"?
+2020-05-23 15:41:27.096 BST [98539] FATAL:  lock file "postmaster.pid" already exists
+2020-05-23 15:41:27.096 BST [98539] HINT:  Is another postmaster (PID 98095) running in data directory "/usr/local/var/postgres"?
+2020-05-23 15:43:37.166 BST [98552] FATAL:  lock file "postmaster.pid" already exists
+2020-05-23 15:43:37.166 BST [98552] HINT:  Is another postmaster (PID 98095) running in data directory "/usr/local/var/postgres"?
