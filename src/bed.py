@@ -100,11 +100,6 @@ class Bed():
             modules.append(module.shortDisplay())
         return self._bedid, self._bednumber, '\n'.join(modules)
 
-    def getMonitorValues(self):
-        """query all the beds for their monitor values"""
-        """TODO"""
-        pass
-
     def getBedid(self):
         """return bedid"""
         return self._bedid
