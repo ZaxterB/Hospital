@@ -69,7 +69,6 @@ class coreWindow(QMainWindow):
 
         # now begin to react
         self.setTimer()
-        self._alarm = Alarm()
 
     def loadTables(self, db):
         """initial load of all database data"""
@@ -112,17 +111,11 @@ class coreWindow(QMainWindow):
         tblWidget = self.findChild(QTableWidget, 'tblShifts')
         if tblWidget is not None:
             tblWidget.setEnabled(False)
-            tblWidget.clicked.connect(self.alert)
         self.findChild(QtWidgets.QPushButton, "Register").clicked.connect(self.createregistrationDialog)
 
     def close(self):
         """shut down timers"""
         self._timer.cancel()
-
-    def alert(self, index):
-        """ TODO EXPERIMENTAL
-            argmuents: self=MainWindow, index=QModelIndex of clicked """
-        print(index.row(), index.column())
 
     def setTimer(self):
         """ start a timer to run the pulse function """
@@ -166,11 +159,11 @@ class coreWindow(QMainWindow):
                 message += "Alarm on bed " + str(bed.bednumber) + ": " + bed.alarms
 
                 # send the message by appropriate method
-                for staff in self._staff:
-                    if staff.type == STAFFTYPE_CONSULTANT:
-                        self._alarm.sendSMS(staff.telnumber, message)
-                    else:
-                        self._alarm.sendEmail(staff.email, message)
+                # for staff in self._staff:
+                #     if staff._stafftype == constants.STAFFTYPE_CONSULTANT:
+                #         self._alarm.sendSMS(staff.telnumber, message)
+                #     else:
+                #         self._alarm.sendEmail(staff.email, message)
 
     def bedsPopulate(self, beds):
         """add all bed ui components to the scrollable area of the main window"""

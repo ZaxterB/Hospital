@@ -90,12 +90,10 @@ class ModuleMonitor():
         if self._current <= self._monitortype.dangerMin:
             """raise critical alarm"""
             bed.critAlarmOn(self._monitortype.id, self._monitortype.name, value, 'under', self._monitortype.unit)
-            print(str(value) + "under" + str(self._monitortype.dangerMin))
             alarmstatus = "critalarm"
         elif self._current >= self._monitortype.dangerMax:
             """raise critical alarm"""
             bed.critAlarmOn(self._monitortype.id, self._monitortype.name, value, 'over', self._monitortype.unit)
-            print(str(value) + "over" + str(self._monitortype.dangerMax))
             alarmstatus = "critalarm"
         else:
             """cancel critical alarm"""

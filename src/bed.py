@@ -153,7 +153,7 @@ class Bed():
     def getAlarms(self):
         """return displayable list of current alarms"""
         display = ''
-        for key, value in _alarmMonitorTypes.items():
+        for key, value in self._alarmMonitorTypes.items():
             # assemble the name, the value, the direction and the unit
             display += str(value[0]) + value[1] + ' ' + value[2] + ' '
         return display
