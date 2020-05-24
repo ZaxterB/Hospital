@@ -187,8 +187,8 @@ class registrationDialog(QtWidgets.QDialog):
         staffid = staffname.split(":")[0] # this feels crude but people need to see their name and id
         self._db.insert("""
                     INSERT INTO public.shift (staffid, start, currentend)
-                    VALUES ({id}, {start}, {end})
-                    """.format(id=staffid,start=start,end=end))
+                    VALUES ({id}, '{start}', '{end}')
+                    """.format(id=staffid, start=str(start), end=str(end)))
 
     def calculateHrs(self):
         startTime = self.findChild(QtWidgets.QDateTimeEdit, "dteStart")
@@ -202,7 +202,7 @@ class registrationDialog(QtWidgets.QDialog):
 
 
     def UI(self):
-        staffList = self.findChild(QtWidgets.QComboBox,"cboStaff")
+        staffList = self.findChild(QtWidgets.QComboBox, "cboStaff")
         staffList.addItems(str(staff._staffid) + ":" + staff._name for staff in self._staff)
         startTime = self.findChild(QtWidgets.QDateTimeEdit, "dteStart")
         startTime.setDateTime(QtCore.QDateTime.currentDateTime())
