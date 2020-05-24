@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 """
 alarm.py
@@ -28,10 +28,10 @@ class Alarm():
         """TODO needed?"""
         pass
         
-    def sendSMS(self):
+    def sendSMS(self, telnumber, message):
         """TODO"""
         pass
 
-    def sendEmail(self):
+    def sendEmail(self, email, message):
         """TODO"""
         pass

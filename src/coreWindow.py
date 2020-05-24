@@ -156,10 +156,21 @@ class coreWindow(QMainWindow):
                 raise RuntimeError("Error in main(): {0} at line {1}".
                                    format(str(exc_value), str(exc_traceback.tb_lineno)))
 
-    def setTimer(self):
-        """ start a timer to run the pulse function """
-        self._timer = threading.Timer(constants.PULSE_TIME, self.pulse)
-        self._timer.start()
+        # send alarm messages
+        for bed in self._beds:
+            if bed.isAlarmOn or bed.isCritAlarmOn:
+                # build message string
+                message = "Bed monitoring system: "
+                if bed.isCritAlarmOn:
+                    message += "Critical "
+                message += "Alarm on bed " + str(bed.bednumber) + ": " + bed.alarms
+
+                # send the message by appropriate method
+                for staff in self._staff:
+                    if staff.type == STAFFTYPE_CONSULTANT:
+                        self._alarm.sendSMS(staff.telnumber, message)
+                    else:
+                        self._alarm.sendEmail(staff.email, message)
 
     def bedsPopulate(self, beds):
         for bed in beds:
