@@ -4,7 +4,7 @@
 __author__ = "Tim Clarke/Zach Beed"
 __copyright__ = "Copyright 2020, Tim Clarke/Zach Beed"
 __license__ = "Private"
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 """
 constants.py
@@ -42,6 +42,10 @@ BEDEVT_ALARM_CANC = 6       # alarm cancelled by user
 BEDEVT_ALARM_OFF = 7        # alarm set off
 BEDEVT_CRITALARM_ON = 8     # critical alarm set on
 BEDEVT_CRITALARM_OFF = 9    # critical alarm set off
+BEDEVT_THRESH_CHG = 10      # monitor threshold changed
+# staff event types
+STFEVT_ONSHIFT = 100        # staff began shift
+STFEVT_OFFSHIFT = 101       # staff left shift
 
 # staff types
 STAFFTYPE_NURSE = 1         # staff - nurse

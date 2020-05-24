@@ -118,6 +118,7 @@ class Bed():
     bednumber = property(getBedNumber)
 
     def setMonitorTypeValue(self, monitortypeid, newvalue):
+        print("bed.setMonitorTypeValue", monitortypeid, newvalue)
         """set the monitortypeid for this bed to newvalue"""
         for module in self._modules:
             if monitortypeid in module.monitortypeids:
@@ -195,11 +196,8 @@ class Bed():
     def _recordBedEvent(self, bedeventtype, monitortypeid ):
         """record a bed event in the audit trail in the database"""
         self._db.insert("""
-            INSERT INTO public.bedevent
-                (eventtime, eventtype, patientid, bedid, monitortypeid)
-            VALUES
-                (now(), %%s, %%s, %%s, %%s)
-            """, (bedeventtype, self._patientid, self._bedid, monitortypeid, ))
+            INSERT INTO public.bedevent (eventtime, eventtype, patientid, bedid, monitortypeid)
+            VALUES (now(), {}, {}, {}, {})""".format(bedeventtype, self._patientid, self._bedid, monitortypeid ))
 
     def UI(self, parentWidget):
         BedGroupBox = QtWidgets.QGroupBox(parentWidget)

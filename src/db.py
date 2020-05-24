@@ -23,26 +23,28 @@ db.py
 
 
 class Db(object):
-    __modulename__ = 'Db'
-    __instance__ = None
-    __conn__ = ''  # psycopg2 database connection
-    __cursor__ = ''  # psycopg2 database cursor
+    """singleton database interaction interface"""
+    # private variables
+    _modulename = 'Db'
+    _instance = None
+    _conn = ''  # psycopg2 database connection
+    _cursor = ''  # psycopg2 database cursor
 
     def __new__(self, *args, **kwargs):
         """singleton override"""
-        if not self.__instance__:
-            self.__instance__ = object.__new__(self)
-        return self.__instance__
+        if not self._instance:
+            self._instance = object.__new__(self)
+        return self._instance
 
     def __init__(self, host, database):
-        __functionname__ = '__init__'
+        _functionname = '__init__'
         try:
-            self.__conn__ = psycopg2.connect(host=host, database=database)
-            self.__cursor__ = self.__conn__.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            self._conn = psycopg2.connect(host=host, database=database)
+            self._cursor = self._conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             raise RuntimeError("Error in {0}.{1}(): {2} at line {3}".
-                               format(self.__modulename__, __functionname__,
+                               format(self._modulename, _functionname,
                                       str(exc_value),
                                       str(exc_traceback.tb_lineno)))
 
@@ -50,22 +52,22 @@ class Db(object):
         """execute select statement with variable number of arguments
             returns: list of column names, list of lists of row data
             """
-        __functionname__ = 'query'
+        _functionname = 'query'
 
         try:
             if len(sql) < 1:
                 raise RuntimeError('Empty query statement given')
-            self.__cursor__.execute(sql, args)
-            if self.__cursor__.rowcount < 1:
+            self._cursor.execute(sql, args)
+            if self._cursor.rowcount < 1:
                 return None, None
             else:
                 # get column names from query
-                colnames = [desc[0] for desc in self.__cursor__.description]
-                return colnames, self.__cursor__.fetchall()
+                colnames = [desc[0] for desc in self._cursor.description]
+                return colnames, self._cursor.fetchall()
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             raise RuntimeError("Error in {0}.{1}(): {2} at line {3}".
-                               format(self.__modulename__, __functionname__,
+                               format(self._modulename, _functionname,
                                       str(exc_value),
                                       str(exc_traceback.tb_lineno)))
 
@@ -73,15 +75,16 @@ class Db(object):
         """execute insert statement with variable number of arguments
             returns: nothing
             """
-        __functionname__ = 'insert'
+        _functionname = 'insert'
 
         try:
             if len(sql) < 1:
                 raise RuntimeError('Empty insert statement given')
-            self.__cursor__.execute(sql, args)
+            self._cursor.execute(sql, args)
+            self._conn.commit()
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             raise RuntimeError("Error in {0}.{1}(): {2} at line {3}".
-                               format(self.__modulename__, __functionname__,
+                               format(self._modulename, _functionname,
                                       str(exc_value),
                                       str(exc_traceback.tb_lineno)))

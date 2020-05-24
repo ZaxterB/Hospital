@@ -153,6 +153,7 @@ class coreWindow(QMainWindow):
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 raise RuntimeError("Error in main(): {0} at line {1}".
                                    format(str(exc_value), str(exc_traceback.tb_lineno)))
+
     def BedsPopulate(self, beds):
         for bed in beds:
             self.verticalLayout.addWidget(bed.UI(self.scrollAreaWidgetContents))
